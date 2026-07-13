@@ -18,16 +18,25 @@ const featured = [
 ];
 
 // Maps each featured handle to its premium hero image, falling back to the
-// live Shopify product image for anything not explicitly listed here.
+// live Shopify product image for anything not explicitly listed here. These
+// premium images are full-bleed lifestyle photography (people, scenes, desks)
+// rather than product-on-white shots, so they need object-cover with no
+// padding instead of the object-contain+padding treatment used for the
+// Shopify fallback images.
+const PREMIUM_IMAGES: Record<string, string> = {
+  'micro-thu-am-shure-mv7-plus': shureImg,
+  'kef-lsx-ii-lt-wireless-speakers': kefImg,
+  'micro-thu-am-blink500-b2': blink500Img,
+  'satechi-165w-usb-c-4-port-pd-gan-charger': satechiImg,
+  'loa-soundbar-may-tinh-blueant-soundblade-120w': soundbladeImg,
+};
+
 function getHeroImage(handle: string, fallback: string): string {
-  switch (handle) {
-    case 'micro-thu-am-shure-mv7-plus': return shureImg;
-    case 'kef-lsx-ii-lt-wireless-speakers': return kefImg;
-    case 'micro-thu-am-blink500-b2': return blink500Img;
-    case 'satechi-165w-usb-c-4-port-pd-gan-charger': return satechiImg;
-    case 'loa-soundbar-may-tinh-blueant-soundblade-120w': return soundbladeImg;
-    default: return fallback;
-  }
+  return PREMIUM_IMAGES[handle] ?? fallback;
+}
+
+function isLifestylePhoto(handle: string): boolean {
+  return handle in PREMIUM_IMAGES;
 }
 
 type FeaturedProduct = Product & { label: string; labelIcon: React.ElementType; labelColor: string };
@@ -91,6 +100,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
           {featuredProducts.slice(0, 3).map((product, i) => {
             const LabelIcon = product.labelIcon;
             const imgSrc = getHeroImage(product.handle, product.images[0]);
+            const isLifestyle = isLifestylePhoto(product.handle);
             const isThird = i === 2;
             return (
               <div
@@ -102,7 +112,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
                   <img
                     src={imgSrc}
                     alt={product.title}
-                    className="w-full h-full object-contain p-4 md:p-6 group-hover:scale-105 transition duration-500"
+                    className={`w-full h-full group-hover:scale-105 transition duration-500 ${isLifestyle ? 'object-cover' : 'object-contain p-4 md:p-6'}`}
                     onError={e => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80'; }}
                   />
                   <div className={`absolute top-2 left-2 md:top-4 md:left-4 ${product.labelColor} text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold flex items-center gap-1 md:gap-1.5`}>
@@ -135,6 +145,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
           {featuredProducts.slice(3).map(product => {
             const LabelIcon = product.labelIcon;
             const imgSrc = getHeroImage(product.handle, product.images[0]);
+            const isLifestyle = isLifestylePhoto(product.handle);
             return (
               <div
                 key={product.handle}
@@ -146,7 +157,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
                     <img
                       src={imgSrc}
                       alt={product.title}
-                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition duration-500"
+                      className={`w-full h-full group-hover:scale-105 transition duration-500 ${isLifestyle ? 'object-cover' : 'object-contain p-4'}`}
                       onError={e => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80'; }}
                     />
                     <div className={`absolute top-2 left-2 md:top-4 md:left-4 ${product.labelColor} text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold flex items-center gap-1 md:gap-1.5`}>
