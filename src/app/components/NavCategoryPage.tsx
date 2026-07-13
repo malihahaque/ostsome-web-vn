@@ -21,7 +21,9 @@ type NavCategoryPageProps = {
 
 export function NavCategoryPage({ category, onBack, onSelectProduct }: NavCategoryPageProps) {
   const { products, loading } = useProducts();
-  const categoryProducts = products.filter(p => p.navCategory === category);
+  // Hide sold-out products — same rule as "Shop All Products". Reappears
+  // automatically once restocked since availableForSale is live from Shopify.
+  const categoryProducts = products.filter(p => p.navCategory === category && p.availableForSale);
   const meta = categoryMeta[category];
 
   return (

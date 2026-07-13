@@ -22,7 +22,7 @@ type HeaderProps = {
 };
 
 const announcementMessages = [
-  "🇸🇬 Singapore's home for tech gadgets, audio & lifestyle gear",
+  "🇻🇳 Vietnam's home for tech gadgets, audio & lifestyle gear",
   "⚡ Be The First To Get What's Next",
   "🔥 Latest of the Latest",
 ];
@@ -40,16 +40,16 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
     {
       icon: '🔔',
       label: 'Just Dropped',
-      title: 'Hohem iSteady MT3 Pro',
-      sub: 'SGD 639 · View now →',
-      productHandle: 'hohem-isteady-mt3-pro-and-mt3-pro-kit',
+      title: 'Shure MV7+ Podcast Mic',
+      sub: '10.100.000₫ · View now →',
+      productHandle: 'micro-thu-am-shure-mv7-plus',
     },
     {
       icon: '🔥',
-      label: 'Deal · 30% Off',
-      title: 'Skullcandy Crusher 540 Active',
-      sub: 'SGD 219.90 · Shop now →',
-      productHandle: 'skullcandy-crusher-540-active-wireless-sensory-bass-headphone',
+      label: 'Deal',
+      title: 'KEF LSX II LT Speakers',
+      sub: '28.100.000₫ · Shop now →',
+      productHandle: 'kef-lsx-ii-lt-wireless-speakers',
     },
     {
       icon: '👑',
@@ -484,11 +484,11 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                     </div>
                     {Boolean(user) ? (
                       <div className="flex flex-col items-end shrink-0">
-                        <span className="text-sm font-bold text-[#F16C10]">SGD {getFostPrice(product.price).toFixed(2)}</span>
-                        <span className="text-[10px] text-neutral-400 line-through">SGD {product.price.toFixed(2)}</span>
+                        <span className="text-sm font-bold text-[#F16C10]">{getFostPrice(product.price).toLocaleString('vi-VN')}₫</span>
+                        <span className="text-[10px] text-neutral-400 line-through">{product.price.toLocaleString('vi-VN')}₫</span>
                       </div>
                     ) : (
-                      <span className="text-sm font-bold text-black shrink-0">SGD {product.price.toFixed(2)}</span>
+                      <span className="text-sm font-bold text-black shrink-0">{product.price.toLocaleString('vi-VN')}₫</span>
                     )}
                   </button>
                 ))}
