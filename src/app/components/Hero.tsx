@@ -11,21 +11,23 @@ import banner4 from "../../imports/THERABODY - VNG.png";
 
 const banners = [heroBanner, banner1, banner2, banner3, banner4];
 
-// Real VN product each banner links through to when clicked.
-const bannerHandles = [
-  'satechi-165w-usb-c-4-port-pd-gan-charger', // "Banner Looki.png" — repurposed slot, currently pointed at Satechi's GaN charger; confirm this is the right product for this banner's actual image
-  'satechi-slim-x1-bluetooth-keyboard',
-  'micro-thu-am-shure-mv7-plus',
-  'skullcandy-crusher-anc-2',
-  'sung-massage-theragun-pro-plus',
+// Real VN product each banner links through to when clicked. `null` means
+// no matching product exists in the VN catalog yet — that banner is
+// intentionally left unclickable rather than pointing to the wrong item.
+const bannerHandles: (string | null)[] = [
+  null, // Banner 1 "Looki L1" — Looki is not a brand carried in the VN store; no real product to link to yet
+  'satechi-165w-usb-c-4-port-pd-gan-charger', // Banner 2 "Satechi products" — generic Satechi banner, points to the flagship GaN charger
+  'micro-thu-am-shure-mv7-plus', // Banner 3 "Shure MV7+"
+  null, // Banner 4 "Skullcandy Method 360 ANC" — no matching product found in the VN Skullcandy collection; confirm correct product name/handle
+  null, // Banner 5 "TheraFace Mask" — no matching product exists in the VN catalog; left unclickable
 ];
 
 const bannerLabels = [
-  "Satechi GaN Charger",
-  "Satechi Slim X1 Keyboard",
+  "Looki L1",
+  "Satechi",
   "Shure MV7+",
-  "Skullcandy Crusher ANC 2",
-  "Theragun Pro Plus",
+  "Skullcandy Method 360 ANC",
+  "TheraFace Pro",
 ];
 
 type HeroProps = {
@@ -51,7 +53,9 @@ export function Hero({ onSelectProduct }: HeroProps) {
   }, []);
 
   function handleBannerClick(index: number) {
-    const product = products.find(p => p.handle === bannerHandles[index]);
+    const handle = bannerHandles[index];
+    if (!handle) return; // no real product mapped yet — banner is inert
+    const product = products.find(p => p.handle === handle);
     if (product) onSelectProduct(product);
   }
 
