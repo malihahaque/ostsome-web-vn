@@ -49,6 +49,9 @@ const BRAND_DOMAINS: Record<string, string> = {
   Kospet:         'kospet.com',          // best guess
   'SP Connect':   'sp-connect.com',      // verified — note the hyphen
   Kandao:         'kandaovr.com',        // best guess
+  Therabody:      'therabody.com',
+  Saramonic:      'saramonic.com',
+  Satechi:        'satechi.com',
   // Looki and LOONA intentionally omitted — Looki is OSTSOME's own in-house
   // brand (no outside company domain). LOONA's manufacturer domain
   // (keyirobot.com) resolves to the parent company's corporate logo, not
@@ -142,6 +145,9 @@ const brandMeta: Record<string, { description: string }> = {
   Enabot:            { description: 'Home companion robots' },
   LARQ:              { description: 'Self-cleaning water bottles' },
   Dometic:           { description: 'Portable cooling & outdoor gear' },
+  Therabody:         { description: 'Percussive therapy & recovery tech' },
+  Saramonic:         { description: 'Wireless mics for creators' },
+  Satechi:           { description: 'Sleek accessories for Apple & beyond' },
 };
 
 // Only these brands should appear on the Our Brands page.
@@ -154,6 +160,7 @@ const ALLOWED_BRANDS = [
   'SKULLCANDY', 'BUTTONS', 'SENNHEISER', 'CLEER', 'OBSBOT', 'LOOKI', 'KANDAO',
   'HOHEM', 'POLAROID', 'KOSPET', 'SPCONNECT', 'DOMETIC', 'JACKERY', 'ARZOPA',
   'EDIZARD', 'TURTLEBEACH', 'SWITCHBOT', 'ENABOT', 'LOONA', 'LARQ',
+  'THERABODY', 'SARAMONIC', 'SATECHI',
 ];
 const normalize = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, '');
 

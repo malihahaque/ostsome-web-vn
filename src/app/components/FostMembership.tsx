@@ -1,15 +1,14 @@
-import { Crown, Tag, Zap, Users, Gift, CalendarHeart, Heart } from 'lucide-react';
-import obsbotFOST from '../../imports/obsbotFOST.png';
-import kandaoFOST from '../../imports/kandaoFOST.png';
-import skullcandyFOST from '../../imports/skullcandyFOST.png';
-import layoutImg from '../../imports/layout.png';
+import { Crown, Tag, Zap, Users, Gift, Heart } from 'lucide-react';
+import polaroidFOST from '../../imports/polaroidFOST.png';
+import shureFOST from '../../imports/shureFOST.png';
+import jetbootsFOST from '../../imports/jetbootsFOST.png';
 
 const perks = [
-  { icon: Tag, title: 'Member-only pricing', description: 'Unlock exclusive prices on selected products.' },
-  { icon: Zap, title: 'Early access to launches', description: 'Be the first to shop new drops & restocks.' },
-  { icon: Users, title: 'Product testing opportunities', description: "Test upcoming products and help shape what's next." },
-  { icon: Gift, title: 'Surprise member flash sales', description: 'Enjoy surprise deals and member-only offers.' },
-  { icon: CalendarHeart, title: 'Invitations to exclusive events', description: 'Get invites to launch events, collabs and behind-the-scenes access.' },
+  { icon: Tag, title: 'Giảm giá 5% tự động', description: 'Áp dụng ngay khi thanh toán, không cần mã.' },
+  { icon: Zap, title: 'SNAG DEAL 2 tuần 1 lần', description: 'Ưu đãi số lượng có hạn dành riêng cho hội viên.' },
+  { icon: Gift, title: 'Miễn phí giao hàng', description: 'Cho mọi đơn hàng, không giới hạn giá trị tối thiểu.' },
+  { icon: Users, title: 'Cộng đồng FOST Vietnam', description: 'Kết nối và chia sẻ cùng những người yêu công nghệ.' },
+  { icon: Crown, title: 'Ưu đãi giới thiệu bạn bè', description: 'Giới thiệu 3 thành viên mới, nhận mã riêng cho bạn.' },
 ];
 
 export function FostMembership({ onJoin, onLearnMore, onLogin }: { onJoin?: () => void; onLearnMore?: () => void; onLogin?: () => void }) {
@@ -22,15 +21,15 @@ export function FostMembership({ onJoin, onLearnMore, onLogin }: { onJoin?: () =
           <div>
             <div className="inline-flex items-center gap-2 bg-[#F16C10]/10 border border-[#F16C10]/30 px-4 py-2 rounded-full mb-6">
               <Crown className="text-[#F16C10]" size={16} />
-              <span className="text-[#F16C10] font-semibold text-xs uppercase tracking-wider">FOST Membership</span>
+              <span className="text-[#F16C10] font-semibold text-xs uppercase tracking-wider">Hội Viên FOST</span>
             </div>
 
             <h2 className="text-[32px] lg:text-5xl font-bold text-black mb-4 leading-tight">
-              Friends Get More.
+              Là Bạn Của OSTSOME, Nhận Nhiều Hơn.
             </h2>
 
             <p className="text-[15px] text-neutral-600 mb-8 leading-relaxed">
-              The people who hear about it first, pay less, and get access before everyone else.
+              Những người biết tin sớm nhất, trả giá thấp hơn, và được ưu tiên trước tất cả mọi người.
             </p>
 
             <div className="flex flex-col gap-5 mb-8">
@@ -52,97 +51,86 @@ export function FostMembership({ onJoin, onLearnMore, onLogin }: { onJoin?: () =
 
             <div className="inline-flex items-center gap-2 border border-neutral-200 px-4 py-2 rounded-full mb-8">
               <Heart className="text-[#F16C10]" size={14} />
-              <span className="text-black text-sm font-medium">Free to join. Always.</span>
+              <span className="text-black text-sm font-medium">Miễn phí tham gia. Luôn luôn.</span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <button onClick={onJoin} className="bg-[#F16C10] hover:bg-[#d65f0e] text-white px-8 py-4 rounded-xl font-bold text-base transition w-full sm:w-auto">
-                Join FOST
+                Tham Gia FOST
               </button>
               <button onClick={onLearnMore} className="border-2 border-neutral-200 hover:border-neutral-400 text-black px-8 py-4 rounded-xl font-semibold text-base transition w-full sm:w-auto">
-                Learn More
+                Tìm Hiểu Thêm
               </button>
             </div>
 
             <p className="text-neutral-400 text-xs">
-              Already a member?{' '}
-              <button onClick={onLogin} className="text-[#F16C10] font-semibold hover:underline">Log in</button>{' '}
-              to unlock your perks.
+              Đã là hội viên?{' '}
+              <button onClick={onLogin} className="text-[#F16C10] font-semibold hover:underline">Đăng nhập</button>{' '}
+              để nhận ưu đãi của bạn.
             </p>
           </div>
 
-          {/* RIGHT */}
-          <div className="relative" style={{ height: '720px' }}>
+          {/* RIGHT — 3 trendy products, no bottom flat-lay */}
+          <div className="relative" style={{ height: '620px' }}>
 
-            {/* OBSBOT photo — narrower so person shows on right side */}
+            {/* Polaroid I-2 — top left photo */}
             <div className="absolute top-0 left-0 rounded-2xl overflow-hidden shadow-lg" style={{ width: '50%', zIndex: 1 }}>
               <img
-                src={obsbotFOST}
-                alt="OBSBOT"
+                src={polaroidFOST}
+                alt="Polaroid I-2"
                 className="w-full object-cover object-center"
                 style={{ height: '240px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             </div>
 
-            {/* Member Pricing card — top right */}
+            {/* Member Pricing card — top right, tied to Polaroid I-2 */}
             <div className="absolute top-0 right-0 bg-white border border-neutral-200 rounded-2xl shadow-md p-4" style={{ width: '46%', zIndex: 2 }}>
-              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-widest mb-2">Member Pricing</p>
-              <p className="text-black text-xs font-bold mb-3 leading-snug">OBSBOT Tiny 3 Lite 4K Webcam</p>
-              <p className="text-neutral-400 text-[10px] mb-0.5">Public Price</p>
-              <p className="text-neutral-400 text-sm line-through mb-2">SGD 379</p>
-              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-0.5">FOST Price</p>
-              <p className="text-[#F16C10] text-2xl font-bold mb-2">SGD 329</p>
+              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-widest mb-2">Giá Hội Viên</p>
+              <p className="text-black text-xs font-bold mb-3 leading-snug">Polaroid I-2 Instant Camera</p>
+              <p className="text-neutral-400 text-[10px] mb-0.5">Giá Niêm Yết</p>
+              <p className="text-neutral-400 text-sm line-through mb-2">15.500.000₫</p>
+              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-0.5">Giá FOST</p>
+              <p className="text-[#F16C10] text-2xl font-bold mb-2">14.725.000₫</p>
               <div className="bg-[#F16C10]/10 text-[#F16C10] text-[9px] font-bold px-2 py-1 rounded-full inline-block">
-                You save SGD 50
+                Tiết kiệm 775.000₫
               </div>
             </div>
 
-            {/* Kandao photo */}
-            <div className="absolute rounded-2xl overflow-hidden shadow-lg" style={{ top: '210px', left: '0', width: '50%', zIndex: 3 }}>
+            {/* Shure MV7+ — mid-left photo */}
+            <div className="absolute rounded-2xl overflow-hidden shadow-lg" style={{ top: '260px', left: '0', width: '50%', zIndex: 3 }}>
               <img
-                src={kandaoFOST}
-                alt="Kandao"
+                src={shureFOST}
+                alt="Shure MV7+"
                 className="w-full object-cover"
                 style={{ height: '200px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             </div>
 
-            {/* First Access card */}
-            <div className="absolute bg-white border border-neutral-200 rounded-2xl shadow-md p-3" style={{ top: '418px', left: '0', width: '48%', zIndex: 4 }}>
-              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-1">First Access</p>
-              <p className="text-black text-xs font-bold">Kandao QooCam 3 Ultra</p>
-              <p className="text-neutral-500 text-[10px]">Members saw it first.</p>
+            {/* Trending card — tied to Shure */}
+            <div className="absolute bg-white border border-neutral-200 rounded-2xl shadow-md p-3" style={{ top: '468px', left: '0', width: '48%', zIndex: 4 }}>
+              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-1">Đang Thịnh Hành</p>
+              <p className="text-black text-xs font-bold">Shure MV7+</p>
+              <p className="text-neutral-500 text-[10px]">Lựa chọn hàng đầu cho content creator.</p>
             </div>
 
-            {/* Skullcandy photo */}
-            <div className="absolute rounded-2xl overflow-hidden shadow-lg" style={{ top: '260px', right: '0', width: '48%', zIndex: 3 }}>
+            {/* RecoveryAir JetBoots — bottom right photo */}
+            <div className="absolute rounded-2xl overflow-hidden shadow-lg" style={{ top: '310px', right: '0', width: '48%', zIndex: 3 }}>
               <img
-                src={skullcandyFOST}
-                alt="Skullcandy"
+                src={jetbootsFOST}
+                alt="RecoveryAir JetBoots"
                 className="w-full object-cover"
                 style={{ height: '200px' }}
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             </div>
 
-            {/* Product Testing card */}
-            <div className="absolute bg-white border border-neutral-200 rounded-2xl shadow-md p-3" style={{ top: '468px', right: '0', width: '48%', zIndex: 4 }}>
-              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-1">Product Testing</p>
-              <p className="text-black text-xs font-bold">Skullcandy Aviator 900 ANC</p>
-              <p className="text-neutral-500 text-[10px]">New launch preview. Invitation sent.</p>
-            </div>
-
-            {/* Bottom flat lay */}
-            <div className="absolute rounded-2xl overflow-hidden shadow-sm" style={{ top: '560px', left: '0', right: '0', zIndex: 2 }}>
-              <img
-                src={layoutImg}
-                alt="FOST products"
-                className="w-full object-cover object-center"
-                style={{ height: '160px' }}
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+            {/* SNAG DEAL card — tied to JetBoots */}
+            <div className="absolute bg-white border border-neutral-200 rounded-2xl shadow-md p-3" style={{ top: '518px', right: '0', width: '48%', zIndex: 4 }}>
+              <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-1">SNAG DEAL</p>
+              <p className="text-black text-xs font-bold">RecoveryAir JetBoots</p>
+              <p className="text-neutral-500 text-[10px]">Ưu đãi 2 tuần 1 lần dành cho hội viên.</p>
             </div>
 
           </div>
