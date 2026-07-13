@@ -19,7 +19,9 @@ export function ProductListing({ onSelectProduct, initialSearch = '' }: ProductL
   const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
-    let list = [...products];
+    // Hide sold-out products — automatically reappear once restocked,
+    // since availableForSale is recomputed live from Shopify on every load.
+    let list = [...products].filter(p => p.availableForSale);
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
       const words = q.split(/\s+/).filter(Boolean);
@@ -40,8 +42,10 @@ export function ProductListing({ onSelectProduct, initialSearch = '' }: ProductL
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const topVendors = useMemo(() => {
+    // Only count vendors that have at least one currently-available product,
+    // so the brand filter pills don't show brands that are entirely sold out.
     const counts: Record<string, number> = {};
-    products.forEach(p => { counts[p.vendor] = (counts[p.vendor] || 0) + 1; });
+    products.filter(p => p.availableForSale).forEach(p => { counts[p.vendor] = (counts[p.vendor] || 0) + 1; });
     return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([v]) => v);
   }, [products]);
 
