@@ -89,8 +89,7 @@ function AppInner() {
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const { products: liveProducts } = useProducts();
-  const heshAncProduct = liveProducts.find(p => p.handle === 'skullcandy-hesh-anc-noise-canceling-wireless-headphones');
-  const lookiProduct = liveProducts.find(p => p.handle === 'looki-l1');
+
 
   // Mirrors current nav-relevant state without triggering re-renders — used
   // so goTo() always has the latest values even though React state updates
@@ -315,13 +314,7 @@ function AppInner() {
 
       {page === 'home' && (
         <>
-          <Hero
-            onNavToAllProducts={handleNavToProducts}
-            onNavToHeshAnc={() => { if (heshAncProduct) handleSelectProduct(heshAncProduct); }}
-            onNavToFostSignup={() => setAuthModal({ open: true, view: 'signup' })}
-            onNavToClearance={() => goTo({ page: 'one-season-off' })}
-            onNavToLooki={() => { if (lookiProduct) handleSelectProduct(lookiProduct); }}
-          />
+          <Hero onSelectProduct={handleSelectProduct} />
           <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
           <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
           <FostMembership

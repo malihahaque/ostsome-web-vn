@@ -1,46 +1,40 @@
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import heroBanner from "../../imports/banner Skullcandy.png";
+import { useProducts } from "../hooks/useProducts";
+import type { Product } from "../data/products";
+import heroBanner from "../../imports/Banner Looki.png";
 import banner1 from "../../imports/banner Satechi.png";
 import banner2 from "../../imports/Banner SHURE.png";
-import banner3 from "../../imports/Banner Looki.png";
+import banner3 from "../../imports/banner Skullcandy.png";
 import banner4 from "../../imports/THERABODY - VNG.png";
 
 const banners = [heroBanner, banner1, banner2, banner3, banner4];
 
+// Real VN product each banner links through to when clicked.
+const bannerHandles = [
+  'satechi-165w-usb-c-4-port-pd-gan-charger', // "Banner Looki.png" — repurposed slot, currently pointed at Satechi's GaN charger; confirm this is the right product for this banner's actual image
+  'satechi-slim-x1-bluetooth-keyboard',
+  'micro-thu-am-shure-mv7-plus',
+  'skullcandy-crusher-anc-2',
+  'sung-massage-theragun-pro-plus',
+];
+
+const bannerLabels = [
+  "Satechi GaN Charger",
+  "Satechi Slim X1 Keyboard",
+  "Shure MV7+",
+  "Skullcandy Crusher ANC 2",
+  "Theragun Pro Plus",
+];
+
 type HeroProps = {
-  onNavToAllProducts: () => void;
-  onNavToHeshAnc: () => void;
-  onNavToFostSignup: () => void;
-  onNavToClearance: () => void;
-  onNavToLooki: () => void;
+  onSelectProduct: (product: Product) => void;
 };
 
-export function Hero({
-  onNavToAllProducts,
-  onNavToHeshAnc,
-  onNavToFostSignup,
-  onNavToClearance,
-  onNavToLooki,
-}: HeroProps) {
+export function Hero({ onSelectProduct }: HeroProps) {
+  const { products } = useProducts();
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Each banner's click destination, in the same order as `banners`
-  const bannerActions = [
-    onNavToAllProducts,
-    onNavToHeshAnc,
-    onNavToFostSignup,
-    onNavToClearance,
-    onNavToLooki,
-  ];
-  const bannerLabels = [
-    "All Products",
-    "Skullcandy Hesh ANC",
-    "Join FOST",
-    "Clearance",
-    "Looki L1",
-  ];
 
   const goToSlide = (index: number) => setCurrentSlide(index);
   const goToPrevious = () =>
@@ -56,6 +50,11 @@ export function Hero({
     return () => clearInterval(timer);
   }, []);
 
+  function handleBannerClick(index: number) {
+    const product = products.find(p => p.handle === bannerHandles[index]);
+    if (product) onSelectProduct(product);
+  }
+
   return (
     <section className="relative bg-neutral-900 group w-full">
       <div className="relative w-full aspect-[2/1] sm:aspect-[3/1] overflow-hidden">
@@ -69,7 +68,7 @@ export function Hero({
             }`}
           >
             <button
-              onClick={bannerActions[index]}
+              onClick={() => handleBannerClick(index)}
               className="block w-full h-full cursor-pointer"
               aria-label={`Go to ${bannerLabels[index]}`}
             >

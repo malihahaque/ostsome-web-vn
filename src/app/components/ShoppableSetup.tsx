@@ -2,8 +2,8 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useState } from 'react';
 import { useProducts } from '../hooks/useProducts';
 import type { Product as AppProduct } from '../data/products';
-import deskSetup from '../../imports/desk_study_setup_.png';
-import beachProducts from '../../imports/beach_products_figma.png';
+import cafeSetup from '../../imports/ost viet cafe.png';
+import yogaSetup from '../../imports/ost viet yoga.png';
 
 const ChevronLeftIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -36,80 +36,86 @@ interface Scene {
   products: Product[];
 }
 
+// Positions estimated against the 1800x600px source images, matching each
+// hotspot to where the physical product sits in the photo.
 const scenes: Scene[] = [
   {
-    id: 'desk-setup',
-    image: deskSetup,
-    navigatorText: 'DEFINE YOUR WORKSPACE',
-    navigatorTextShort: 'YOUR WORKSPACE',
+    id: 'work-anywhere',
+    image: cafeSetup,
+    navigatorText: 'SET UP ANYWHERE YOU WORK',
+    navigatorTextShort: 'WORK ANYWHERE',
     products: [
       {
         id: 1,
-        name: 'Arzopa D10 Digital Photo Frame',
-        price: 114,
-        handle: 'arzopa-d10-10-1-digital-photo-frame',
-        position: { top: '58%', left: '15%' },
+        name: 'Satechi Slim X1 Bluetooth Keyboard',
+        price: 1590000,
+        handle: 'satechi-slim-x1-bluetooth-keyboard',
+        position: { top: '73%', left: '30%' },
       },
       {
         id: 2,
-        name: 'Arzopa Portable Monitor',
-        price: 172,
-        handle: 'arzopa-ar-a1-gamut-15-6-fhd-portable-monitor-ips-1920-1080p-freq-60hz-type-c-hdmi-w-smart-cover-copy',
-        position: { top: '33%', left: '44%' },
+        name: 'Satechi Aluminum Stand & Hub for iPad Pro',
+        price: 2290000,
+        handle: 'satechi-aluminum-stand-and-hub-ipad-pro',
+        position: { top: '28%', left: '41%' },
       },
       {
         id: 3,
-        name: 'Skullcandy Crusher ANC 2 Wireless Headphones',
-        price: 279,
-        handle: 'skullcandy-crusher-anc-2-wireless-headphones',
-        position: { top: '62%', left: '73%' },
+        name: 'Matador ReFraction Packable Backpack',
+        price: 1990000,
+        handle: 'ba-lo-du-lich-matador-refraction-packable-backpack',
+        position: { top: '32%', left: '66%' },
       },
       {
         id: 4,
-        name: 'LARQ Water Bottle',
-        price: 69,
-        handle: 'larq-bottle-swig-top-680ml',
-        position: { top: '54%', left: '85%' },
+        name: 'Skullcandy Crusher ANC 2',
+        price: 6500000,
+        handle: 'skullcandy-crusher-anc-2',
+        position: { top: '76%', left: '63%' },
       },
     ],
   },
   {
-    id: 'beach-setup',
-    image: beachProducts,
-    navigatorText: 'WITH YOU, WHEREVER YOU GO',
-    navigatorTextShort: 'WHEREVER YOU GO',
+    id: 'recovery-ritual',
+    image: yogaSetup,
+    navigatorText: 'YOUR RECOVERY RITUAL, ANYWHERE',
+    navigatorTextShort: 'RECOVERY RITUAL',
     products: [
       {
         id: 5,
-        name: 'Polaroid Camera',
-        price: 229,
-        handle: 'polaroid-now-instant-camera-gen3',
-        position: { top: '64%', left: '24%' },
-      },
-      {
-        id: 8,
-        name: 'Dometic Cooler',
-        price: 1349,
-        handle: 'dometic-cfx5-35-performance-compressor-cooler',
-        position: { top: '42%', left: '34%' },
+        name: 'Theragun Relief',
+        price: 4290000,
+        handle: 'sung-massage-theragun-relief',
+        position: { top: '55%', left: '31%' },
       },
       {
         id: 6,
-        name: 'Otterbox Tumbler',
-        price: 18,
-        handle: 'otterbox-elevation-hot-cold-tumbler-20-fluid-oz-591ml',
-        position: { top: '50%', left: '69%' },
+        name: 'Theracup',
+        price: 3990000,
+        handle: 'therabody-theracup',
+        position: { top: '40%', left: '50%' },
       },
       {
         id: 7,
-        name: 'Sennheiser Headphones',
-        price: 179,
-        handle: 'sennheiser-accentum-wireless-headphone',
-        position: { top: '45%', left: '86%' },
+        name: 'Theragun Mini Gen 2',
+        price: 6500000,
+        handle: 'theragun-mini-gen-2',
+        position: { top: '73%', left: '53%' },
+      },
+      {
+        id: 8,
+        name: 'SmartGoggles',
+        price: 6490000,
+        handle: 'therabody-smart-goggles',
+        position: { top: '52%', left: '73%' },
       },
     ],
   },
 ];
+
+function formatVND(amount: number): string {
+  return `${amount.toLocaleString('vi-VN')}₫`;
+}
 
 export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product: AppProduct) => void }) {
   const { products: catalogProducts } = useProducts();
@@ -185,7 +191,7 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
                           }}
                         >
                           <div className="text-[14px] md:text-sm font-bold text-black mb-1">{product.name}</div>
-                          <div className="text-[16px] md:text-lg font-bold text-[#F16C10]">${product.price}</div>
+                          <div className="text-[16px] md:text-lg font-bold text-[#F16C10]">{formatVND(product.price)}</div>
                           {realProduct && (
                             <div className="text-[11px] font-semibold text-[#F16C10] mt-1">View Product →</div>
                           )}
