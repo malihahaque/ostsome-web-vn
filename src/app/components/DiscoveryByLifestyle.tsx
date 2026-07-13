@@ -1,9 +1,9 @@
 import { Briefcase, BookOpen, Headphones, Gift, Camera } from 'lucide-react';
-import workAnywhereImg from '../../imports/Cafe_Setup.png';
-import captureLifeImg from '../../imports/Creator_Tools.png';
-import studyImg from '../../imports/Study_Hard.png';
-import audioImg from '../../imports/Audio_Everywhere.png';
-import giftImg from '../../imports/Gift_Guide.png';
+import workAnywhereImg from '../../imports/Cafe Setup.png';
+import captureLifeImg from '../../imports/Creator Tools.png';
+import studyImg from '../../imports/Study Hard.png';
+import audioImg from '../../imports/Audio Everywhere.png';
+import giftImg from '../../imports/Gift Guide.png';
 
 const lifestyles = [
   {
