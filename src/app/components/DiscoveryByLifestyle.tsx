@@ -1,9 +1,9 @@
 import { Briefcase, BookOpen, Headphones, Gift, Camera } from 'lucide-react';
-import captureLifeImg from '../../imports/image-1.png';
-import workAnywhereImg from '../../imports/image.png';
-import gamerImg from '../../imports/image-2.png';
-import studyImg from '../../imports/image-4.png';
-import giftImg from '../../imports/image-5.png';
+import workAnywhereImg from '../../imports/Cafe_Setup.png';
+import captureLifeImg from '../../imports/Creator_Tools.png';
+import studyImg from '../../imports/Study_Hard.png';
+import audioImg from '../../imports/Audio_Everywhere.png';
+import giftImg from '../../imports/Gift_Guide.png';
 
 const lifestyles = [
   {
@@ -35,17 +35,17 @@ const lifestyles = [
   },
   {
     id: 4,
-    title: 'Game Face',
-    description: 'Your setup. Your edge.',
+    title: 'Audio Everywhere',
+    description: 'Sound that fills every room.',
     icon: Headphones,
-    image: gamerImg,
+    image: audioImg,
     products: '15 products',
-    navCategory: 'Gaming',
+    navCategory: 'Mobile Audio',
   },
   {
     id: 5,
-    title: 'Their Best Christmas Ever',
-    description: 'The tech gifts that light up the room.',
+    title: 'Tết Gift Guide',
+    description: 'Thoughtful tech gifts for the ones you love.',
     icon: Gift,
     image: giftImg,
     products: '22 products',
