@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ShoppingCart, Star, Shield, Truck, RefreshCw, Check, X } from 'lucide-react';
 import type { Product } from '../data/products';
-import { getVariants } from '../data/productVariants';
 import { useCart } from './CartContext';
 import { useAuth } from './AuthContext';
 import { fetchProductByHandle } from '../data/shopify';
+import type { ShopifyProduct } from '../data/shopify';
 import { getFostPrice } from '../data/pricing';
 import luckyDrawImg from '../../imports/rubyoung-lucky-draw.jpg';
 
@@ -31,6 +31,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
   const [shopifyVariants, setShopifyVariants] = useState<Record<string, string>>({});
   const [shopifyAvailability, setShopifyAvailability] = useState<Record<string, boolean>>({});
   const [shopifyQuantity, setShopifyQuantity] = useState<Record<string, number | null>>({});
+  const [shopifyVariantNodes, setShopifyVariantNodes] = useState<ShopifyProduct['variants']['edges'][number]['node'][]>([]);
   const [variantsLoaded, setVariantsLoaded] = useState(false);
   const [stockWarning, setStockWarning] = useState<{ requested: number; available: number; intent: 'cart' | 'checkout' } | null>(null);
 
@@ -65,11 +66,34 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
       setShopifyVariants(idMap);
       setShopifyAvailability(availMap);
       setShopifyQuantity(qtyMap);
+      setShopifyVariantNodes(sp.variants.edges.map(e => e.node));
       setVariantsLoaded(true);
     }).catch(() => setVariantsLoaded(true));
   }, [product.handle]);
 
-  const variants = getVariants(product.handle);
+  // Derived directly from live Shopify data instead of the old static
+  // (SG-only) productVariants.ts file, which had no entries for VN products
+  // and was causing every variant product to fail to link to a real
+  // Shopify variant ID at checkout. Kept in the same shape the rest of
+  // this component already expects, so nothing downstream needed to change.
+  const variants = useMemo(() => {
+    return shopifyVariantNodes
+      .map(node => {
+        const opts = node.selectedOptions.filter(
+          o => o.name !== 'Title' && o.value !== 'Default Title'
+        );
+        if (opts.length === 0) return null;
+        return {
+          option1Name: opts[0]?.name ?? null,
+          option1Value: opts[0]?.value ?? '',
+          option2Name: opts[1]?.name,
+          option2Value: opts[1]?.value,
+          price: parseFloat(node.price.amount),
+          image: node.image?.url,
+        };
+      })
+      .filter((v): v is NonNullable<typeof v> => v !== null);
+  }, [shopifyVariantNodes]);
 
   const hasDiscount = product.comparePrice && product.comparePrice > product.price;
   const discountPct = hasDiscount
@@ -518,19 +542,19 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
             {isFostMember ? (
               <div className="mb-1">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-bold text-[#F16C10]">SGD {getFostPrice(activePrice).toFixed(2)}</span>
-                  <span className="text-lg text-neutral-400 line-through">SGD {activePrice.toFixed(2)}</span>
+                  <span className="text-3xl font-bold text-[#F16C10]">{getFostPrice(activePrice).toLocaleString('vi-VN')}₫</span>
+                  <span className="text-lg text-neutral-400 line-through">{activePrice.toLocaleString('vi-VN')}₫</span>
                   <span className="text-[10px] font-bold text-white bg-[#F16C10] px-2 py-0.5 rounded-full uppercase tracking-wide">FOST Price</span>
                 </div>
                 {hasDiscount && (
-                  <p className="text-xs text-neutral-400 mt-1">Original price SGD {product.comparePrice!.toFixed(2)} — now with an extra 5% FOST member discount</p>
+                  <p className="text-xs text-neutral-400 mt-1">Original price {product.comparePrice!.toLocaleString('vi-VN')}₫ — now with an extra 5% FOST member discount</p>
                 )}
               </div>
             ) : (
               <div className="flex items-baseline gap-3 mb-1">
-                <span className="text-3xl font-bold text-black">SGD {activePrice.toFixed(2)}</span>
+                <span className="text-3xl font-bold text-black">{activePrice.toLocaleString('vi-VN')}₫</span>
                 {hasDiscount && (
-                  <span className="text-lg text-neutral-400 line-through">SGD {product.comparePrice!.toFixed(2)}</span>
+                  <span className="text-lg text-neutral-400 line-through">{product.comparePrice!.toLocaleString('vi-VN')}₫</span>
                 )}
               </div>
             )}
@@ -542,7 +566,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
             {isFostMember && <div className="mb-5" />}
 
             <p className="text-xs text-neutral-500 mb-6 bg-neutral-50 border border-neutral-100 rounded-lg px-3 py-2">
-              Or 3 payments of <strong className="text-black">SGD {((isFostMember ? getFostPrice(activePrice) : activePrice) / 3).toFixed(2)}</strong> with Atome. Taxes included.
+              Or 3 payments of <strong className="text-black">{Math.round((isFostMember ? getFostPrice(activePrice) : activePrice) / 3).toLocaleString('vi-VN')}₫</strong> with Atome. Taxes included.
             </p>
 
             {/* Option 1 */}
@@ -734,7 +758,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
 
             <div className="grid grid-cols-3 gap-3 mb-8">
               {[
-                { icon: Truck, label: 'Free shipping', sub: 'Orders over SGD 150' },
+                { icon: Truck, label: 'Free shipping', sub: 'Orders over 2.000.000₫' },
                 { icon: Shield, label: 'Warranty', sub: '1-year coverage' },
                 { icon: RefreshCw, label: 'Easy returns', sub: '30-day policy' },
               ].map(({ icon: Icon, label, sub }) => (

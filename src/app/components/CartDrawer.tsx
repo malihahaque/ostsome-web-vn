@@ -8,7 +8,7 @@ export function CartDrawer() {
     goToShopifyCheckout, checkoutLoading, isFostMember, fostSubtotal, fostSavings,
   } = useCart();
 
-  const shippingThreshold = 150;
+  const shippingThreshold = 2000000;
   const freeShipping = fostSubtotal >= shippingThreshold;
   const shippingGap = shippingThreshold - fostSubtotal;
 
@@ -57,7 +57,7 @@ export function CartDrawer() {
             ) : (
               <div>
                 <p className="text-xs text-neutral-500 mb-2 text-center">
-                  Add <span className="font-bold text-black">SGD {shippingGap.toFixed(2)}</span> more for free shipping
+                  Add <span className="font-bold text-black">{shippingGap.toLocaleString('vi-VN')}₫</span> more for free shipping
                 </p>
                 <div className="w-full bg-neutral-200 rounded-full h-1.5">
                   <div
@@ -133,15 +133,15 @@ export function CartDrawer() {
                         {isFostMember ? (
                           <div className="flex flex-col items-end">
                             <span className="text-sm font-bold text-[#F16C10]">
-                              SGD {(getFostPrice(item.variantPrice) * item.qty).toFixed(2)}
+                              {(getFostPrice(item.variantPrice) * item.qty).toLocaleString('vi-VN')}₫
                             </span>
                             <span className="text-[10px] text-neutral-400 line-through">
-                              SGD {(item.variantPrice * item.qty).toFixed(2)}
+                              {(item.variantPrice * item.qty).toLocaleString('vi-VN')}₫
                             </span>
                           </div>
                         ) : (
                           <span className="text-sm font-bold text-black">
-                            SGD {(item.variantPrice * item.qty).toFixed(2)}
+                            {(item.variantPrice * item.qty).toLocaleString('vi-VN')}₫
                           </span>
                         )}
                         <button onClick={() => removeItem(idx)} className="text-neutral-300 hover:text-red-400 transition">
@@ -162,23 +162,23 @@ export function CartDrawer() {
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm text-neutral-500">Subtotal</span>
               <span className={`text-base font-bold ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>
-                SGD {subtotal.toFixed(2)}
+                {subtotal.toLocaleString('vi-VN')}₫
               </span>
             </div>
             {isFostMember && (
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-[#F16C10] font-semibold">FOST member savings (5%)</span>
-                <span className="text-sm font-bold text-[#F16C10]">– SGD {fostSavings.toFixed(2)}</span>
+                <span className="text-sm font-bold text-[#F16C10]">– {fostSavings.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             {isFostMember && (
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-black font-semibold">FOST total</span>
-                <span className="text-base font-bold text-black">SGD {fostSubtotal.toFixed(2)}</span>
+                <span className="text-base font-bold text-black">{fostSubtotal.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             <p className="text-xs text-neutral-400 mb-4">
-              {freeShipping ? 'Free shipping applied' : `+ SGD ${(8.90).toFixed(2)} estimated shipping`}
+              {freeShipping ? 'Free shipping applied' : `+ 30.000₫ estimated shipping`}
             </p>
             <button
               onClick={handleCheckout}
