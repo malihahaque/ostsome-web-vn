@@ -3,6 +3,11 @@ import { useProducts } from '../hooks/useProducts';
 import type { Product } from '../data/products';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
+import shureImg from '../../imports/SHURE MV7+.png';
+import kefImg from '../../imports/KEF speaker.png';
+import blink500Img from '../../imports/Blink500 microphone.png';
+import satechiImg from '../../imports/Satechi charging dock.png';
+import soundbladeImg from '../../imports/Soundblade BlueAnt.png';
 
 const featured = [
   { handle: 'micro-thu-am-shure-mv7-plus', label: 'Staff Pick', labelIcon: Star, labelColor: 'bg-amber-500' },
@@ -11,6 +16,19 @@ const featured = [
   { handle: 'satechi-165w-usb-c-4-port-pd-gan-charger', label: 'New Arrival', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
   { handle: 'loa-soundbar-may-tinh-blueant-soundblade-120w', label: 'Staff Pick', labelIcon: Star, labelColor: 'bg-amber-500' },
 ];
+
+// Maps each featured handle to its premium hero image, falling back to the
+// live Shopify product image for anything not explicitly listed here.
+function getHeroImage(handle: string, fallback: string): string {
+  switch (handle) {
+    case 'micro-thu-am-shure-mv7-plus': return shureImg;
+    case 'kef-lsx-ii-lt-wireless-speakers': return kefImg;
+    case 'micro-thu-am-blink500-b2': return blink500Img;
+    case 'satechi-165w-usb-c-4-port-pd-gan-charger': return satechiImg;
+    case 'loa-soundbar-may-tinh-blueant-soundblade-120w': return soundbladeImg;
+    default: return fallback;
+  }
+}
 
 type FeaturedProduct = Product & { label: string; labelIcon: React.ElementType; labelColor: string };
 
@@ -72,7 +90,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {featuredProducts.slice(0, 3).map((product, i) => {
             const LabelIcon = product.labelIcon;
-            const imgSrc = product.images[0];
+            const imgSrc = getHeroImage(product.handle, product.images[0]);
             const isThird = i === 2;
             return (
               <div
@@ -116,7 +134,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
         <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6 mt-3 md:mt-6">
           {featuredProducts.slice(3).map(product => {
             const LabelIcon = product.labelIcon;
-            const imgSrc = product.images[0];
+            const imgSrc = getHeroImage(product.handle, product.images[0]);
             return (
               <div
                 key={product.handle}

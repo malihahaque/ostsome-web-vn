@@ -13,32 +13,13 @@ interface DealConfig {
   promo: number;
 }
 
+// All 5 launch exclusive deals at a flat 15% off SRP, from real VN catalog prices
 const ALL_DEALS: DealConfig[] = [
-  // BUTTONS — Black & Gold both $229, collapsed to one card
-  { handle: 'buttons-clip',                         label: 'BUTTONS', name: 'BUTTONS Clip OWS Earphone',              srp: 285, promo: 229 },
-
-  // LOOKI — all colours $299, collapsed to one card
-  { handle: 'looki-l1',                             label: 'LOOKI',   name: 'Looki L1',                               srp: 349, promo: 299 },
-
-  // LOONA
-  { handle: 'loona-smart-pet-robot',                label: 'LOONA',   name: 'Petbot Premium (with Charging Dock)',     srp: 758, promo: 649 },
-
-  // KOSPET — T4 Black & Silver both $249, collapsed
-  { handle: 'kospet-tank-t4-smartwatch-black-silver', label: 'KOSPET', name: 'TANK T4',                               srp: 298, promo: 249 },
-  // KOSPET — T4C Black & Silver both $189, collapsed
-  { handle: 'kospet-tank-t4c-smartwatch',           label: 'KOSPET', name: 'TANK T4C',                                srp: 228, promo: 189 },
-
-  // ARZOPA monitors — all different prices, each its own card
-  { handle: 'arzopa-ar-a1-gamut-15-6-fhd-portable-monitor-ips-1920-1080p-freq-60hz-type-c-hdmi-w-smart-cover-copy', label: 'ARZOPA', name: '15.6" Portable Monitor (with Smart Cover)', srp: 129, promo: 99  },
-  { handle: 'arzopa-ar-a1t-15-6-touch-screen-portable-monitor-fhd-1920-1080p-60hz-type-c-hdmi-copy-1',              label: 'ARZOPA', name: '15.6" Portable Monitor (Touchscreen)',      srp: 189, promo: 159 },
-  { handle: 'arzopa-z1rc-2-5k-16-portable-monitor-brilliant-qhd-500nits-8bit-display-qhd-2560-1600-60hz-copy',      label: 'ARZOPA', name: '17.3" Portable Monitor',                   srp: 226, promo: 189 },
-  { handle: 'arzopa-z1rc-2-5k-16-portable-monitor-brilliant-qhd-500nits-8bit-display-qhd-2560-1600-60hz-copy',      label: 'ARZOPA', name: '16.1" Portable Monitor 144Hz',              srp: 184, promo: 149 },
-  { handle: 'arzopa-z1rc-2-5k-16-portable-monitor-brilliant-qhd-500nits-8bit-display-qhd-2560-1600-60hz-copy',      label: 'ARZOPA', name: '16.0" Portable Monitor 2K',                 srp: 192, promo: 159 },
-
-  // ARZOPA digital frames — Brown $89, Gold 10" $99, Gold 14" $169 — all different
-  { handle: 'arzopa-e1-dual-screen-portable-monitor', label: 'ARZOPA', name: '10.1" Digital Frame Brown',             srp: 120, promo: 89  },
-  { handle: 'arzopa-e1-dual-screen-portable-monitor', label: 'ARZOPA', name: '10.1" Digital Frame Gold',              srp: 135, promo: 99  },
-  { handle: 'arzopa-e1-dual-screen-portable-monitor', label: 'ARZOPA', name: '14.0" Digital Frame Gold',              srp: 229, promo: 169 },
+  { handle: 'may-massage-b\u1EAFp-chan-nen-khi-recoveryair-jetboots', label: 'THERABODY', name: 'RecoveryAir JetBoots',        srp: 24890000, promo: 21157000 },
+  { handle: 'box-di-d\u1ED9ng-ssd-m2-nvme-gen4x4-satechi-usb4-pro',   label: 'SATECHI',   name: 'USB4 PRO SSD Enclosure',      srp: 2990000,  promo: 2542000  },
+  { handle: 'micro-thu-am-shure-mv7-plus',                            label: 'SHURE',     name: 'MV7+ Podcast Mic',            srp: 10100000, promo: 8585000  },
+  { handle: 'sung-massage-theragun-pro-plus',                         label: 'THERABODY', name: 'Theragun Pro Plus',           srp: 18890000, promo: 16057000 },
+  { handle: 'satechi-m1-wireless-mouse',                              label: 'SATECHI',   name: 'M1 Wireless Mouse',           srp: 790000,   promo: 672000   },
 ];
 
 type Props = {
@@ -81,7 +62,7 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
             <div className="text-left md:text-right shrink-0">
               <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Early Bird Off</div>
               <div className="text-6xl md:text-7xl font-black text-[#F16C10] leading-none">Up to</div>
-              <div className="text-6xl md:text-7xl font-black text-white leading-none">27%</div>
+              <div className="text-6xl md:text-7xl font-black text-white leading-none">15%</div>
             </div>
           </div>
         </div>
@@ -90,7 +71,7 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
       {/* Disclaimer */}
       <div className="bg-[#FFF4EC] border-b border-orange-100 py-2 px-4 text-center">
         <p className="text-xs text-[#F16C10] font-medium">
-          ⏱ Launch pricing is for a limited time only. While stocks last. All prices include GST.
+          ⏱ Launch pricing is for a limited time only. While stocks last. All prices include VAT.
         </p>
       </div>
 
@@ -108,7 +89,7 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
               const product = products.find(p => p.handle === deal.handle);
               if (!product) return null;
               const pct = Math.round(((deal.srp - deal.promo) / deal.srp) * 100);
-              const saving = (deal.srp - deal.promo).toFixed(2);
+              const saving = (deal.srp - deal.promo).toLocaleString('vi-VN');
               return (
                 <div
                   key={`${deal.handle}-${idx}`}
@@ -135,18 +116,18 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
                     {isFostMember ? (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-base font-black text-[#F16C10]">SGD {getFostPrice(deal.promo).toFixed(2)}</span>
-                          <span className="text-xs text-neutral-400 line-through">SGD {deal.promo.toFixed(2)}</span>
+                          <span className="text-base font-black text-[#F16C10]">{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
+                          <span className="text-xs text-neutral-400 line-through">{deal.promo.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save SGD {(deal.srp - getFostPrice(deal.promo)).toFixed(2)}</p>
+                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save {(deal.srp - getFostPrice(deal.promo)).toLocaleString('vi-VN')}₫</p>
                       </>
                     ) : (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-base font-black text-black">SGD {deal.promo.toFixed(2)}</span>
-                          <span className="text-xs text-neutral-400 line-through">SGD {deal.srp.toFixed(2)}</span>
+                          <span className="text-base font-black text-black">{deal.promo.toLocaleString('vi-VN')}₫</span>
+                          <span className="text-xs text-neutral-400 line-through">{deal.srp.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save SGD {saving}</p>
+                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save {saving}₫</p>
                       </>
                     )}
                   </div>

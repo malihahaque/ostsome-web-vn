@@ -2,13 +2,12 @@ import React from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const story = {
-  country: "SINGAPORE",
-  year: "2014",
-  title: "Where it all began.",
+  country: "VIỆT NAM",
+  title: "Mang OSTSOME đến Việt Nam.",
   description:
-    "OSTSOME is StreamCast Asia's platform built for people who care about what they own. We didn't create just another online store—we built a home for enthusiasts who want to be first. Discover the latest technology, return for upgrades, repairs, or simply to see what's just arrived. Join our events, talks, and hands-on experiences where the community comes alive. And if you're a FOST member? Every interaction becomes even more rewarding. This is tech, done right.",
+    "OSTSOME website được xây dựng và phát triển bởi công ty StreamCast Asia, chuyên phân phối các thương hiệu cao cấp trên thế giới. Đến với OSTSOME, bạn sẽ được trải nghiệm những sản phẩm và công nghệ tiên phong, giúp chất lượng cuộc sống của bạn được nâng tầm. OSTSOME cam kết sản phẩm chính hãng 100%, bảo hành minh bạch cùng dịch vụ tận tâm, giúp khách hàng an tâm trong từng quyết định mua sắm. Tham gia các sự kiện, buổi chia sẻ cùng những trải nghiệm thực tế, nơi cộng đồng yêu công nghệ cùng kết nối và phát triển. Hãy nhanh đăng ký để trở thành thành viên FOST, bạn sẽ nhận được những ưu đãi độc quyền vô cùng hấp dẫn.",
   image:
-    "https://images.unsplash.com/photo-1696617712300-5373ad8b0fa4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxTaW5nYXBvcmUlMjBjaXR5JTIwbmlnaHQlMjBza3lsaW5lfGVufDF8fHx8MTc3OTY5MTcyOHww&ixlib=rb-4.1.0&q=80&w=1080"
+    "https://images.unsplash.com/photo-1583417319070-4a69db38a482?fm=jpg&q=60&w=1080&auto=format&fit=crop"
 };
 
 export function OurStory() {
@@ -26,10 +25,10 @@ export function OurStory() {
       <div className="relative z-10 h-full flex flex-col justify-between max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-10">
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
-            Our Story
+            Câu Chuyện Của Chúng Tôi
           </h2>
           <p className="text-white/50 text-sm md:text-base">
-            Curating tomorrow's technology, today.
+            Kiến tạo công nghệ của ngày mai, ngay hôm nay.
           </p>
         </div>
 
@@ -37,10 +36,6 @@ export function OurStory() {
           <div className="flex items-center gap-3 mb-3">
             <span className="text-xs font-bold tracking-widest text-white uppercase">
               {story.country}
-            </span>
-            <span className="text-[#F16C10] font-bold">—</span>
-            <span className="text-xs font-bold text-[#F16C10]">
-              {story.year}
             </span>
           </div>
 

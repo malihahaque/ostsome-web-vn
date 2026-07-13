@@ -12,12 +12,13 @@ interface DealConfig {
   label: string; // display vendor name
 }
 
+// Same 5 launch exclusive deals as LaunchExclusivePage.tsx, flat 15% off SRP
 const FEATURED_DEALS: DealConfig[] = [
-  { handle: 'buttons-clip',                                    srp: 285, promo: 229, label: 'BUTTONS' },
-  { handle: 'looki-l1',                                        srp: 349, promo: 299, label: 'LOOKI'   },
-  { handle: 'loona-smart-pet-robot',                           srp: 758, promo: 649, label: 'LOONA'   },
-  { handle: 'kospet-tank-t4c-smartwatch',                      srp: 228, promo: 189, label: 'KOSPET'  }, // T4C = 17%, higher than T4's 16%
-  { handle: 'arzopa-ar-a1-gamut-15-6-fhd-portable-monitor-ips-1920-1080p-freq-60hz-type-c-hdmi-w-smart-cover-copy', srp: 129, promo: 99, label: 'ARZOPA' }, // -23%, highest Arzopa
+  { handle: 'may-massage-b\u1EAFp-chan-nen-khi-recoveryair-jetboots', srp: 24890000, promo: 21157000, label: 'THERABODY' },
+  { handle: 'box-di-d\u1ED9ng-ssd-m2-nvme-gen4x4-satechi-usb4-pro',   srp: 2990000,  promo: 2542000,  label: 'SATECHI'   },
+  { handle: 'micro-thu-am-shure-mv7-plus',                            srp: 10100000, promo: 8585000,  label: 'SHURE'     },
+  { handle: 'sung-massage-theragun-pro-plus',                         srp: 18890000, promo: 16057000, label: 'THERABODY' },
+  { handle: 'satechi-m1-wireless-mouse',                              srp: 790000,   promo: 672000,   label: 'SATECHI'   },
 ];
 
 type Props = {
@@ -49,7 +50,7 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
             </p>
           </div>
           <div className="hidden md:flex flex-col items-end text-right shrink-0 ml-6">
-            <span className="text-4xl font-black text-[#F16C10]">Up to 27%</span>
+            <span className="text-4xl font-black text-[#F16C10]">Up to 15%</span>
             <span className="text-xs text-neutral-400 uppercase tracking-widest">Early Bird Off</span>
             {onViewAll && (
               <button
@@ -93,13 +94,13 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
                   <h3 className="text-xs md:text-sm font-bold text-black line-clamp-2 mb-2">{product.title}</h3>
                   {isFostMember ? (
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-base md:text-lg font-black text-[#F16C10]">SGD {getFostPrice(deal.promo).toFixed(2)}</span>
-                      <span className="text-xs text-neutral-400 line-through">SGD {deal.promo.toFixed(2)}</span>
+                      <span className="text-base md:text-lg font-black text-[#F16C10]">{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
+                      <span className="text-xs text-neutral-400 line-through">{deal.promo.toLocaleString('vi-VN')}₫</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-base md:text-lg font-black text-black">SGD {deal.promo.toFixed(2)}</span>
-                      <span className="text-xs text-neutral-400 line-through">SGD {deal.srp.toFixed(2)}</span>
+                      <span className="text-base md:text-lg font-black text-black">{deal.promo.toLocaleString('vi-VN')}₫</span>
+                      <span className="text-xs text-neutral-400 line-through">{deal.srp.toLocaleString('vi-VN')}₫</span>
                     </div>
                   )}
                 </div>

@@ -45,7 +45,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
             <div className="text-left md:text-right shrink-0">
               <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Clearance Off</div>
               <div className="text-6xl md:text-7xl font-black leading-none" style={{ color: '#FF1F1F' }}>Up to</div>
-              <div className="text-6xl md:text-7xl font-black text-white leading-none">78%</div>
+              <div className="text-6xl md:text-7xl font-black text-white leading-none">50%</div>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
       {/* Disclaimer */}
       <div className="bg-red-50 border-b border-red-100 py-2 px-4 text-center">
         <p className="text-xs font-medium" style={{ color: '#FF1F1F' }}>
-          ⚠️ Clearance prices are final. No further discounts apply. While stocks last. All prices include GST.
+          ⚠️ Clearance prices are final. No further discounts apply. While stocks last. All prices include VAT.
         </p>
       </div>
 
@@ -72,7 +72,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
               const product = products.find(p => p.handle === deal.handle);
               if (!product) return null;
               const pct = Math.round(((deal.srp - deal.promo) / deal.srp) * 100);
-              const saving = (deal.srp - deal.promo).toFixed(2);
+              const saving = (deal.srp - deal.promo).toLocaleString('vi-VN');
               return (
                 <div
                   key={`${deal.handle}-${idx}`}
@@ -99,18 +99,18 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
                     {isFostMember ? (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-base font-black" style={{ color: '#F16C10' }}>SGD {getFostPrice(deal.promo).toFixed(2)}</span>
-                          <span className="text-xs line-through" style={{ color: '#6F6A63' }}>SGD {deal.promo.toFixed(2)}</span>
+                          <span className="text-base font-black" style={{ color: '#F16C10' }}>{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
+                          <span className="text-xs line-through" style={{ color: '#6F6A63' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save SGD {(deal.srp - getFostPrice(deal.promo)).toFixed(2)}</p>
+                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save {(deal.srp - getFostPrice(deal.promo)).toLocaleString('vi-VN')}₫</p>
                       </>
                     ) : (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-base font-black" style={{ color: '#111111' }}>SGD {deal.promo.toFixed(2)}</span>
-                          <span className="text-xs line-through" style={{ color: '#6F6A63' }}>SGD {deal.srp.toFixed(2)}</span>
+                          <span className="text-base font-black" style={{ color: '#111111' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
+                          <span className="text-xs line-through" style={{ color: '#6F6A63' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save SGD {saving}</p>
+                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save {saving}₫</p>
                       </>
                     )}
                   </div>
