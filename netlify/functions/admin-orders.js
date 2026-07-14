@@ -1,8 +1,8 @@
 // netlify/functions/admin-orders.js
 // Proxies requests to Shopify's Admin API so the access token never reaches the browser.
 
-const SHOPIFY_STORE_DOMAIN = 'outdoor-sports-travel.myshopify.com';
-const API_VERSION = '2024-04';
+const SHOPIFY_STORE_DOMAIN = '454e76.myshopify.com';
+const API_VERSION = '2025-10';
 
 exports.handler = async function (event) {
   const token = process.env.SHOPIFY_ADMIN_TOKEN;
