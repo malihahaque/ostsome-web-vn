@@ -15,11 +15,11 @@ const banners = [heroBanner, banner1, banner2, banner3, banner4];
 // no matching product exists in the VN catalog yet — that banner is
 // intentionally left unclickable rather than pointing to the wrong item.
 const bannerHandles: (string | null)[] = [
-  null, // Banner 1 "Looki L1" — Looki is not a brand carried in the VN store; no real product to link to yet
+  'looki-l1-ai-multimodal-wearable-thiết-bị-deo-ai-ghi-hinh-rảnh-tay-32g-quay-video-full-hd-1080p-3-micro-ai-tạo-vlog-comics-bộ-nhớ-32gb-bảo-mật-quyền-rieng-tư-mau-trắng', // Banner 1 "Looki L1" — confirmed real handle
   'satechi-165w-usb-c-4-port-pd-gan-charger', // Banner 2 "Satechi products" — generic Satechi banner, points to the flagship GaN charger
   'micro-thu-am-shure-mv7-plus', // Banner 3 "Shure MV7+"
-  null, // Banner 4 "Skullcandy Method 360 ANC" — no matching product found in the VN Skullcandy collection; confirm correct product name/handle
-  null, // Banner 5 "TheraFace Mask" — no matching product exists in the VN catalog; left unclickable
+  'tai-nghe-bluetooth-skullcandy-method-360-anc-bảo-hanh-1-nam-chống-ồn-pin-40-giờ-chống-ồn-chủ-dộng', // Banner 4 "Skullcandy Method 360 ANC" — confirmed real handle
+  'theraface-pro', // Banner 5 — linked to TheraFace Pro facial massage device
 ];
 
 const bannerLabels = [

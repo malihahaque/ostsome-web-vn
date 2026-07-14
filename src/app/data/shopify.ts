@@ -2,7 +2,7 @@
 // Using the Storefront API to fetch products, collections, and handle cart/checkout
 
 const SHOPIFY_STORE_DOMAIN = '454e76.myshopify.com';
-const SHOPIFY_STOREFRONT_TOKEN = '99ef7b2939202b6fac0e2cdfe8042a41';
+const SHOPIFY_STOREFRONT_TOKEN = '461ffb4a40277d2269aad7cb91e4e7ac';
 const SHOPIFY_API_VERSION = '2024-04';
 
 const STOREFRONT_API_URL = `https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
