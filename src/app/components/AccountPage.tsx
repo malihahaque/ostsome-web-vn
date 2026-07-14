@@ -183,7 +183,7 @@ function MyOrders() {
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <p className="text-sm font-bold text-black">SGD {order.total.toFixed(2)}</p>
+                <p className="text-sm font-bold text-black">{order.total.toLocaleString('vi-VN')}₫</p>
                 <ChevronRight size={16} className={`text-neutral-300 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
               </div>
             </button>
@@ -207,7 +207,7 @@ function MyOrders() {
                         <p className="text-sm font-semibold text-black line-clamp-1">{item.title}</p>
                         <p className="text-xs text-neutral-400">Qty: {item.qty}</p>
                       </div>
-                      <p className="text-sm font-bold text-black shrink-0">SGD {item.price.toFixed(2)}</p>
+                      <p className="text-sm font-bold text-black shrink-0">{item.price.toLocaleString('vi-VN')}₫</p>
                     </div>
                   ))}
                 </div>
@@ -525,8 +525,8 @@ function SavedItems({ onSelectProduct }: { onSelectProduct: (p: Product) => void
             <p className="text-[9px] font-bold text-[#F16C10] uppercase tracking-widest mb-0.5">{product.vendor}</p>
             <p className="text-xs font-semibold text-black line-clamp-2 flex-1 leading-snug mb-2">{product.title}</p>
             <div className="flex items-center gap-1.5">
-              <p className="text-sm font-bold text-[#F16C10]">SGD {getFostPrice(product.price).toFixed(2)}</p>
-              <p className="text-[10px] text-neutral-400 line-through">SGD {product.price.toFixed(2)}</p>
+              <p className="text-sm font-bold text-[#F16C10]">{getFostPrice(product.price).toLocaleString('vi-VN')}₫</p>
+              <p className="text-[10px] text-neutral-400 line-through">{product.price.toLocaleString('vi-VN')}₫</p>
             </div>
           </div>
         </div>

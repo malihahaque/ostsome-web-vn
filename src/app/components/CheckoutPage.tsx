@@ -113,11 +113,11 @@ function OrderSummary({ compact = false }: { compact?: boolean }) {
                 </div>
                 {isFostMember ? (
                   <div className="flex flex-col items-end shrink-0">
-                    <span className="text-xs font-bold text-[#F16C10]">SGD {(getFostPrice(item.variantPrice) * item.qty).toFixed(2)}</span>
-                    <span className="text-[10px] text-neutral-400 line-through">SGD {(item.variantPrice * item.qty).toFixed(2)}</span>
+                    <span className="text-xs font-bold text-[#F16C10]">{(getFostPrice(item.variantPrice) * item.qty).toLocaleString('vi-VN')}₫</span>
+                    <span className="text-[10px] text-neutral-400 line-through">{(item.variantPrice * item.qty).toLocaleString('vi-VN')}₫</span>
                   </div>
                 ) : (
-                  <span className="text-xs font-bold text-black shrink-0">SGD {(item.variantPrice * item.qty).toFixed(2)}</span>
+                  <span className="text-xs font-bold text-black shrink-0">{(item.variantPrice * item.qty).toLocaleString('vi-VN')}₫</span>
                 )}
               </div>
             ))}
@@ -126,21 +126,21 @@ function OrderSummary({ compact = false }: { compact?: boolean }) {
           <div className="border-t border-neutral-200 pt-3 flex flex-col gap-2">
             <div className="flex justify-between text-sm text-neutral-500">
               <span>Subtotal</span>
-              <span className={`font-medium ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>SGD {subtotal.toFixed(2)}</span>
+              <span className={`font-medium ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>{subtotal.toLocaleString('vi-VN')}₫</span>
             </div>
             {isFostMember && (
               <div className="flex justify-between text-sm text-[#F16C10] font-semibold">
-                <span>FOST member savings (5%)</span><span>– SGD {fostSavings.toFixed(2)}</span>
+                <span>FOST member savings (5%)</span><span>– {fostSavings.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             <div className="flex justify-between text-sm text-neutral-500">
               <span>Shipping</span>
               <span className={freeShipping ? 'text-green-600 font-medium' : 'text-black font-medium'}>
-                {freeShipping ? 'Free' : `SGD ${shipping.toFixed(2)}`}
+                {freeShipping ? 'Free' : `${shipping.toLocaleString('vi-VN')}₫`}
               </span>
             </div>
             <div className="flex justify-between text-base font-bold text-black border-t border-neutral-200 pt-2 mt-1">
-              <span>Total</span><span>SGD {total.toFixed(2)}</span>
+              <span>Total</span><span>{total.toLocaleString('vi-VN')}₫</span>
             </div>
           </div>
         </div>
@@ -199,11 +199,11 @@ function ReviewStep({ onNext }: { onNext: () => void }) {
                   <div className="flex items-center gap-3">
                     {isFostMember ? (
                       <div className="flex flex-col items-end">
-                        <span className="text-sm font-bold text-[#F16C10]">SGD {(getFostPrice(item.variantPrice) * item.qty).toFixed(2)}</span>
-                        <span className="text-[10px] text-neutral-400 line-through">SGD {(item.variantPrice * item.qty).toFixed(2)}</span>
+                        <span className="text-sm font-bold text-[#F16C10]">{(getFostPrice(item.variantPrice) * item.qty).toLocaleString('vi-VN')}₫</span>
+                        <span className="text-[10px] text-neutral-400 line-through">{(item.variantPrice * item.qty).toLocaleString('vi-VN')}₫</span>
                       </div>
                     ) : (
-                      <span className="text-sm font-bold text-black">SGD {(item.variantPrice * item.qty).toFixed(2)}</span>
+                      <span className="text-sm font-bold text-black">{(item.variantPrice * item.qty).toLocaleString('vi-VN')}₫</span>
                     )}
                     <button onClick={() => removeItem(idx)} className="text-neutral-300 hover:text-red-400 transition p-1">
                       <X size={14} />
@@ -240,21 +240,21 @@ function ReviewStep({ onNext }: { onNext: () => void }) {
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex justify-between text-neutral-500">
               <span>Subtotal</span>
-              <span className={`font-medium ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>SGD {subtotal.toFixed(2)}</span>
+              <span className={`font-medium ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>{subtotal.toLocaleString('vi-VN')}₫</span>
             </div>
             {isFostMember && (
               <div className="flex justify-between text-[#F16C10] font-semibold">
-                <span>FOST member savings (5%)</span><span>– SGD {fostSavings.toFixed(2)}</span>
+                <span>FOST member savings (5%)</span><span>– {fostSavings.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             <div className="flex justify-between text-neutral-500">
               <span>Shipping</span>
               <span className={freeShipping ? 'text-green-600 font-medium' : 'text-black font-medium'}>
-                {freeShipping ? 'Free' : `SGD ${shipping.toFixed(2)}`}
+                {freeShipping ? 'Free' : `${shipping.toLocaleString('vi-VN')}₫`}
               </span>
             </div>
             <div className="flex justify-between text-base font-bold text-black border-t border-neutral-200 pt-3 mt-1">
-              <span>Total</span><span>SGD {total.toFixed(2)}</span>
+              <span>Total</span><span>{total.toLocaleString('vi-VN')}₫</span>
             </div>
           </div>
         </div>
@@ -328,8 +328,8 @@ function ShippingStep({ onNext, onBack, info, setInfo }: {
           <h3 className="text-base font-bold text-black mb-3">Delivery Method</h3>
           <div className="flex flex-col gap-3">
             {[
-              { label: 'Standard Delivery', sub: '3–5 business days', price: 'SGD 8.90' },
-              { label: 'Express Delivery', sub: '1–2 business days', price: 'SGD 15.00' },
+              { label: 'Standard Delivery', sub: '3–5 business days', price: '30.000₫' },
+              { label: 'Express Delivery', sub: '1–2 business days', price: '60.000₫' },
               { label: 'Self Collection', sub: 'Collect at Ostsome HQ', price: 'Free' },
             ].map((opt, i) => (
               <label key={i} className="flex items-center gap-4 p-4 border border-neutral-200 rounded-xl cursor-pointer hover:border-[#F16C10] transition group has-[:checked]:border-[#F16C10] has-[:checked]:bg-[#F16C10]/5">

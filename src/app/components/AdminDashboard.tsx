@@ -176,7 +176,7 @@ function Dashboard() {
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <StatCard label="Total Orders" value={String(orders.length)} sub={`${filtered.length} matching filters`} icon={ShoppingBag} color="bg-[#F16C10]/10 text-[#F16C10]" />
-          <StatCard label="Revenue" value={`SGD ${totalRevenue.toFixed(0)}`} sub="All orders in period" icon={DollarSign} color="bg-green-50 text-green-600" />
+          <StatCard label="Revenue" value={`${totalRevenue.toLocaleString('vi-VN')}₫`} sub="All orders in period" icon={DollarSign} color="bg-green-50 text-green-600" />
           <StatCard label="Processing" value={String(processing)} sub="Awaiting fulfilment" icon={Clock} color="bg-amber-50 text-amber-600" />
           <StatCard label="Delivered" value={String(delivered)} sub={`${shipped} in transit`} icon={CheckCircle} color="bg-blue-50 text-blue-600" />
         </div>
@@ -267,7 +267,7 @@ function Dashboard() {
                         <p className="text-xs text-neutral-400">{order.financial_status}</p>
                       </div>
                       <div className="text-right sm:text-left">
-                        <p className="text-sm font-bold text-black">SGD {parseFloat(order.total_price).toFixed(2)}</p>
+                        <p className="text-sm font-bold text-black">{parseFloat(order.total_price).toLocaleString('vi-VN')}₫</p>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${status.color}`}>
                           {status.label}
                         </span>
@@ -308,7 +308,7 @@ function Dashboard() {
                               {item.vendor && <p className="text-xs text-[#F16C10] font-semibold">{item.vendor}</p>}
                             </div>
                             <div className="text-right">
-                              <p className="text-sm font-bold text-black">SGD {parseFloat(item.price).toFixed(2)}</p>
+                              <p className="text-sm font-bold text-black">{parseFloat(item.price).toLocaleString('vi-VN')}₫</p>
                               <p className="text-xs text-neutral-400">Qty: {item.quantity}</p>
                             </div>
                           </div>
