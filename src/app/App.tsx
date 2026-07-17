@@ -27,6 +27,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { LaunchExclusivePage } from './components/LaunchExclusivePage';
 import { CategoryGrid } from './components/CategoryGrid';
 import { CategoryProductsPage } from './components/CategoryProductsPage';
+import { FostQuickPerks } from './components/FostQuickPerks';
 import type { Tab as AccountTab } from './components/AccountPage';
 import { useProducts } from './hooks/useProducts';
 import type { Product } from './data/products';
@@ -343,13 +344,17 @@ function AppInner() {
             onSelectProduct={handleSelectProduct}
             onViewAll={() => goTo({ page: 'one-season-off' })}
           />
-          <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
-          <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
+          <FostQuickPerks
+            onJoin={() => setAuthModal({ open: true, view: 'signup' })}
+            onLogin={() => setAuthModal({ open: true, view: 'login' })}
+          />
           <FostMembership
             onJoin={() => setAuthModal({ open: true, view: 'signup' })}
             onLogin={() => setAuthModal({ open: true, view: 'login' })}
             onLearnMore={() => goTo({ page: 'fost-membership' })}
           />
+          <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
+          <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
           <WhyEnthusiasts />
           <ShoppableSetup onSelectProduct={handleSelectProduct} />
           <OurStory />
