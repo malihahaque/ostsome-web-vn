@@ -29,12 +29,14 @@ import { CategoryGrid } from './components/CategoryGrid';
 import { CategoryProductsPage } from './components/CategoryProductsPage';
 import { FostQuickPerks } from './components/FostQuickPerks';
 import { ContactAndTrust } from './components/ContactAndTrust';
+import { FlashSaleSection } from './components/FlashSaleSection';
+import { FlashSalePage } from './components/FlashSalePage';
 import type { Tab as AccountTab } from './components/AccountPage';
 import { useProducts } from './hooks/useProducts';
 import type { Product } from './data/products';
 import type { GenericCategoryKey } from './data/genericCategories';
 
-type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership';
+type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'flash-sale' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership';
 
 // Everything needed to fully restore a screen — this is what gets stored in
 // browser history so the back/forward buttons can actually move between
@@ -65,6 +67,8 @@ function buildUrl(state: NavState): string {
       return state.navCategory ? `/category/${encodeURIComponent(state.navCategory)}` : '/';
     case 'generic-category':
       return state.genericCategory ? `/c/${state.genericCategory}` : '/';
+    case 'flash-sale':
+      return '/flash-sale';
     case 'account':
       return state.accountTab ? `/account?tab=${state.accountTab}` : '/account';
     case 'admin':
@@ -255,6 +259,8 @@ function AppInner() {
       goTo({ page: 'one-season-off' }, { replace: true, scroll: false });
     } else if (path === '/fost') {
       goTo({ page: 'fost-membership' }, { replace: true, scroll: false });
+    } else if (path === '/flash-sale') {
+      goTo({ page: 'flash-sale' }, { replace: true, scroll: false });
     } else if (window.location.hash !== '#admin') {
       // Establish an initial history entry for the home page so that
       // pressing "back" from the very first navigation has somewhere
@@ -338,6 +344,10 @@ function AppInner() {
         <>
           <Hero onSelectProduct={handleSelectProduct} />
           <CategoryGrid onNavToGenericCategory={handleNavToGenericCategory} />
+          <FlashSaleSection
+            onSelectProduct={handleSelectProduct}
+            onViewAll={() => goTo({ page: 'flash-sale' })}
+          />
           <LaunchExclusive
             onSelectProduct={handleSelectProduct}
             onViewAll={() => goTo({ page: 'launch-exclusive' })}
@@ -403,6 +413,13 @@ function AppInner() {
       {page === 'generic-category' && selectedGenericCategory && (
         <CategoryProductsPage
           category={selectedGenericCategory}
+          onBack={() => goTo({ page: 'home' })}
+          onSelectProduct={handleSelectProduct}
+        />
+      )}
+
+      {page === 'flash-sale' && (
+        <FlashSalePage
           onBack={() => goTo({ page: 'home' })}
           onSelectProduct={handleSelectProduct}
         />
