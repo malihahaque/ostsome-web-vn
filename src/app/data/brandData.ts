@@ -136,15 +136,35 @@ export const brandMeta: Record<string, { description: string }> = {
   Satechi:           { description: 'Sleek accessories for Apple & beyond' },
 };
 
-// Longer "brand history" paragraphs — ONLY added for brands where this is
-// real copy, paraphrased from ostsome.com.vn's own live brand sections
-// (browsed directly, not invented). Every other brand intentionally has no
-// entry here rather than fabricated history; BrandDetail falls back to the
-// one-line tagline above when a brand isn't listed.
+// Longer "brand history" paragraphs — paraphrased from real sources (each
+// brand's own site, Wikipedia, trade press) rather than invented. Therabody,
+// Saramonic, and Satechi are paraphrased from ostsome.com.vn's own live
+// brand sections; everything else is paraphrased from web research done
+// July 2026. Worth a periodic sanity check against each brand's own current
+// "About" page, since founding dates and positioning can shift.
 export const brandHistory: Record<string, string> = {
-  Therabody: 'Therabody believes everyone deserves to feel better and live life on their own terms — the philosophy behind their percussive therapy and recovery devices.',
-  Saramonic: "Great audio is the foundation of every podcast. Saramonic builds a range of wireless microphone solutions built to capture your voice at its best.",
-  Satechi: 'Satechi was one of the first consumer electronics brands to design and manufacture USB-C products, and has since grown into an industry leader — today making sleek, well-crafted accessories for people worldwide.',
+  Skullcandy: "Founded in 2003 by Rick Alden in Park City, Utah, Skullcandy grew out of action-sports and youth culture, pairing bold designs with headphone technology to become one of the most recognizable audio brands in snowboarding, skating, and street style.",
+  Sennheiser: 'Founded in 1945 in a farmhouse near Hanover, Germany, Sennheiser remains a family-run company across three generations, known for German engineering excellence in headphones, microphones, and professional audio.',
+  Cleer: 'Founded in San Diego in 2012 by audio industry veterans, Cleer designs headphones, earbuds, and speakers with a minimalist, engineering-first approach — best known for pioneering the open-ear ARC series.',
+  Obsbot: 'Founded in 2016, OBSBOT is an AI camera brand built around intelligent auto-tracking webcams and cameras that make video creation, live streaming, and virtual meetings effortless.',
+  Hohem: 'Founded in Shenzhen in 2014, Hohem pioneered AI face-tracking gimbal stabilizers, debuting the world\u2019s first smartphone stabilizer with face tracking at CES in 2016, and has led the category ever since.',
+  Polaroid: 'Founded in 1937 by Edwin Land, Polaroid invented instant photography in 1947 and remains the icon of the format today, blending nostalgic analog charm with modern instant camera technology.',
+  Kospet: 'Founded in 2018, KOSPET specializes in rugged, outdoor-ready smartwatches built to handle extreme conditions while tracking sports and health.',
+  'SP Connect': 'Founded in Germany in 1988 and headquartered in Vienna since the 1990s, SP Connect\u2019s twist-to-lock smartphone mounting system, launched in 2016, has become a go-to for motorcycle, bike, and outdoor riders worldwide.',
+  Dometic: 'With roots in 1920s Swedish absorption-cooling technology, Dometic has grown into a global leader in portable refrigeration and outdoor comfort for RV, marine, and off-grid living.',
+  Jackery: 'Founded in California in 2012 by a former Apple battery engineer, Jackery launched the world\u2019s first outdoor lithium portable power station in 2016, pioneering accessible solar generators for outdoor adventure and emergency backup.',
+  Arzopa: 'Founded in 2020, Arzopa quickly became a leading portable monitor brand, shipping millions of lightweight, minimalist displays worldwide for remote work, gaming, and creators on the move.',
+  Edizard: 'A 2024-founded travel-tech brand now part of Streamcast Asia\u2019s portfolio, Edizard designs charging accessories like the multi-device PowerCube organizer to simplify life for business travelers and digital nomads.',
+  'Turtle Beach': 'With roots stretching back to 1975 in audio technology, Turtle Beach pioneered console gaming headsets in 2005 and has sold more than 85 million headsets to become one of the top names in gaming audio.',
+  SWITCHBOT: 'Founded in Shenzhen around 2015\u20132016, SwitchBot began with a simple robotic button-pusher for existing light switches and has grown into a full smart home ecosystem of locks, curtains, sensors, and cleaning robots \u2014 all designed to retrofit onto homes without rewiring.',
+  Enabot: 'Enabot designs the EBO family of mobile home camera robots, built around the idea of staying connected \u2014 keeping family and pets watched over and in touch from anywhere.',
+  Kandao: 'Founded in Shenzhen in 2016, Kandao is a pioneer in 360-degree and 3D VR imaging, known for its QooCam and Obsidian camera lines and its intelligent 360\u00b0 video conferencing cameras.',
+  LOONA: 'Made by KEYi Tech, Loona is an AI companion "petbot" that blends an expressive, pet-like personality with ChatGPT-powered conversation for interactive companionship and play.',
+  LARQ: 'Founded in 2017\u20132018 by Justin Wang, LARQ created the world\u2019s first self-cleaning water bottle, using UV-C LED light to purify water and cut down on single-use plastic.',
+  BUTTONS: 'BUTTONS is an audio brand exploring the meeting point of art, technology, and everyday life, creating lightweight open-ear earbuds that keep wearers connected to their music while staying aware of the world around them.',
+  Therabody: 'Therabody believes everyone deserves to feel better and live life on their own terms \u2014 the philosophy behind their percussive therapy and recovery devices.',
+  Saramonic: 'Great audio is the foundation of every podcast. Saramonic builds a range of wireless microphone solutions built to capture your voice at its best.',
+  Satechi: 'Satechi was one of the first consumer electronics brands to design and manufacture USB-C products, and has since grown into an industry leader \u2014 today making sleek, well-crafted accessories for people worldwide.',
 };
 
 function getBrandImage(vendor: string): string {

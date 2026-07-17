@@ -12,7 +12,9 @@ type BrandDetailProps = {
 
 export function BrandDetail({ brand, onBack, onSelectProduct }: BrandDetailProps) {
   const { products, loading } = useProducts();
-  const brandProducts = products.filter(p => normalize(p.vendor) === normalize(brand));
+  // Match ProductListing.tsx, CategoryGrid.tsx, etc.: hide sold-out products
+  // everywhere so counts agree across the whole site.
+  const brandProducts = products.filter(p => p.availableForSale && normalize(p.vendor) === normalize(brand));
 
   const logoSrc = getBrandImage(brand);
   const isVectorLogo = hasVectorLogo(brand);

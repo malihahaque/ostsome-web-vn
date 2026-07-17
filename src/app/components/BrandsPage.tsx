@@ -28,6 +28,7 @@ export function BrandsPage({ onSelectBrand }: BrandsPageProps) {
   // products.ts having perfectly consistent casing.
   const brandGroups = new Map<string, { display: string; count: number }>();
   for (const p of products) {
+    if (!p.availableForSale) continue;
     const key = normalize(p.vendor);
     if (!allowedSet.has(key)) continue;
     const existing = brandGroups.get(key);
