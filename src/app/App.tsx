@@ -335,6 +335,14 @@ function AppInner() {
         <>
           <Hero onSelectProduct={handleSelectProduct} />
           <CategoryGrid onNavToGenericCategory={handleNavToGenericCategory} />
+          <LaunchExclusive
+            onSelectProduct={handleSelectProduct}
+            onViewAll={() => goTo({ page: 'launch-exclusive' })}
+          />
+          <OneSeasonOff
+            onSelectProduct={handleSelectProduct}
+            onViewAll={() => goTo({ page: 'one-season-off' })}
+          />
           <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
           <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
           <FostMembership
@@ -342,15 +350,7 @@ function AppInner() {
             onLogin={() => setAuthModal({ open: true, view: 'login' })}
             onLearnMore={() => goTo({ page: 'fost-membership' })}
           />
-          <LaunchExclusive
-            onSelectProduct={handleSelectProduct}
-            onViewAll={() => goTo({ page: 'launch-exclusive' })}
-          />
           <WhyEnthusiasts />
-          <OneSeasonOff
-            onSelectProduct={handleSelectProduct}
-            onViewAll={() => goTo({ page: 'one-season-off' })}
-          />
           <ShoppableSetup onSelectProduct={handleSelectProduct} />
           <OurStory />
         </>
