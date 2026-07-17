@@ -19,27 +19,26 @@ type FlashSaleEntry = {
   handle: string;
   note: string;
   // Fallback used ONLY if the exact handle doesn't match — matches by
-  // vendor + a title keyword instead. This exists because Vietnamese
-  // handles with multiple diacritics (e.g. Skullcandy's) have already
-  // caused two separate hand-transcription mismatches; matching on
-  // vendor+keyword is far more forgiving than an exact 90-character slug.
-  fallbackVendor?: string;
-  fallbackTitleIncludes?: string;
+  // title keywords instead of vendor, since some products in this catalog
+  // have their vendor field mistagged as "OSTSOME" (a known issue —
+  // BrandsPage.tsx notes the same bug for Looki L1 and the SwitchBot Lock
+  // Adapter; Skullcandy Method 360 ANC turns out to be a third instance).
+  // Title text is reliable even when vendor isn't, since the brand name
+  // appears directly in the product title.
+  fallbackTitleIncludesAll?: string[];
 };
 
 export const FLASH_SALE_HANDLES: FlashSaleEntry[] = [
   {
     handle: 'tai-nghe-bluetooth-skullcandy-method-360-anc-bảo-hanh-1-nam-chống-ồn-pin-40-giờ-chống-ồn-chủ-động',
-    note: 'Handle has repeatedly mismatched due to diacritics — fallback matching added below',
-    fallbackVendor: 'Skullcandy',
-    fallbackTitleIncludes: 'Method 360',
+    note: 'CONFIRMED via live screenshot — vendor field is mistagged "OSTSOME" so matching falls back to title keywords',
+    fallbackTitleIncludesAll: ['skullcandy', 'method 360'],
   },
   { handle: 'sung-massage-theragun-sense', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
   {
     handle: 'ba-lo-du-lịch-matador-refraction-packable-backpack',
     note: 'CONFIRMED — seen live on ostsome.com.vn',
-    fallbackVendor: 'Matador',
-    fallbackTitleIncludes: 'ReFraction',
+    fallbackTitleIncludesAll: ['matador', 'refraction'],
   },
   { handle: 'recoverytherm-cube', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
   { handle: 'satechi-thunderbolt-4-pro-cable', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
@@ -58,12 +57,13 @@ export function findFlashSaleProduct<T extends { handle: string; vendor: string;
   const strippedMatch = products.find(p => stripDiacritics(p.handle) === stripDiacritics(entry.handle));
   if (strippedMatch) return strippedMatch;
 
-  // Last resort: vendor + title keyword.
-  if (entry.fallbackVendor && entry.fallbackTitleIncludes) {
-    return products.find(p =>
-      stripDiacritics(p.vendor) === stripDiacritics(entry.fallbackVendor!) &&
-      stripDiacritics(p.title).includes(stripDiacritics(entry.fallbackTitleIncludes!))
-    );
+  // Last resort: every keyword must appear in the title. Deliberately does
+  // NOT check vendor, since vendor is unreliable for some products here.
+  if (entry.fallbackTitleIncludesAll) {
+    return products.find(p => {
+      const title = stripDiacritics(p.title);
+      return entry.fallbackTitleIncludesAll!.every(kw => title.includes(stripDiacritics(kw)));
+    });
   }
   return undefined;
 }
