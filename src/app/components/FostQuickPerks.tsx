@@ -13,31 +13,31 @@ type FostQuickPerksProps = {
   onLogin?: () => void;
 };
 
-// Compact, centered FOST teaser — distinct from the larger two-column
-// FostMembership.tsx (which has the product photo collage). This is the
-// short version the VN team wants placed directly above it.
+// Compact, full-width FOST teaser that sits directly above FostMembership's
+// photo collage — no separate heading of its own beyond this one, so the
+// two sections read as one continuous block rather than two stacked ones.
 export function FostQuickPerks({ onJoin, onLogin }: FostQuickPerksProps) {
   return (
-    <section className="py-14 bg-white">
-      <div className="max-w-2xl mx-auto px-4 text-center">
+    <section className="pt-14 pb-8 bg-white">
+      <div className="max-w-7xl mx-auto px-4 text-center">
         <div className="inline-flex items-center gap-2 bg-[#F16C10]/10 border border-[#F16C10]/30 px-4 py-2 rounded-full mb-5">
           <Crown className="text-[#F16C10]" size={16} />
           <span className="text-[#F16C10] font-semibold text-xs uppercase tracking-wider">Hội Viên FOST</span>
         </div>
 
-        <h2 className="text-2xl md:text-4xl font-bold text-black mb-8 leading-tight">
+        <h2 className="text-2xl md:text-4xl font-bold text-black mb-10 leading-tight">
           OSTSOME, <span className="text-[#F16C10]">Nhận Nhiều Hơn.</span>
         </h2>
 
-        <div className="flex justify-center gap-6 md:gap-10 mb-8">
+        <div className="flex justify-between md:justify-center md:gap-20 max-w-4xl mx-auto mb-8">
           {perks.map((perk) => {
             const Icon = perk.icon;
             return (
-              <div key={perk.title} className="flex flex-col items-center gap-2 w-16 md:w-20">
-                <Icon className="text-[#F16C10]" size={26} strokeWidth={1.5} />
+              <div key={perk.title} className="flex flex-col items-center gap-3 flex-1 md:flex-none md:w-24">
+                <Icon className="text-[#F16C10]" size={40} strokeWidth={1.5} />
                 <div className="leading-tight">
-                  <p className="text-black font-bold text-xs md:text-sm">{perk.title}</p>
-                  <p className="text-neutral-500 text-[11px] md:text-xs">{perk.subtitle}</p>
+                  <p className="text-black font-bold text-xs md:text-base">{perk.title}</p>
+                  <p className="text-neutral-500 text-[10px] md:text-sm">{perk.subtitle}</p>
                 </div>
               </div>
             );
