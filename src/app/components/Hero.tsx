@@ -61,7 +61,7 @@ export function Hero({ onSelectProduct }: HeroProps) {
 
   return (
     <section className="relative bg-neutral-900 group w-full">
-      <div className="relative w-full aspect-[2/1] sm:aspect-[3/1] overflow-hidden">
+      <div className="relative w-full aspect-[3/1] overflow-hidden">
         {banners.map((banner, index) => (
           <div
             key={index}
@@ -79,7 +79,7 @@ export function Hero({ onSelectProduct }: HeroProps) {
               <ImageWithFallback
                 src={banner}
                 alt={`Hero banner ${index + 1}`}
-                className="w-full h-full object-cover object-left sm:object-center"
+                className="w-full h-full object-cover object-center"
               />
             </button>
           </div>

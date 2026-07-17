@@ -148,24 +148,48 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
           style={{ transform: `translateX(-${currentSceneIndex * 100}%)` }}
         >
           {scenes.map((scene) => (
-            <div key={scene.id} className="w-full flex-shrink-0 relative aspect-[3/1]">
+            <div
+              key={scene.id}
+              className="w-full flex-shrink-0 relative aspect-[3/1]"
+              onClick={() => setActiveProduct(null)}
+            >
               <ImageWithFallback
                 src={scene.image}
                 alt={scene.navigatorText}
-                className="w-full h-full object-cover object-left sm:object-center"
+                className="w-full h-full object-cover object-center"
               />
 
-              {scene.products.map((product) => (
+              {scene.products.map((product) => {
+                // Edge-aware tooltip alignment: a centered, whitespace-nowrap
+                // tooltip clips off-screen on mobile when the hotspot sits
+                // near the left/right edge of a narrow viewport. Hotspots
+                // under 25% or over 75% left anchor the tooltip to that
+                // side instead of centering it on the dot.
+                const leftPct = parseFloat(product.position.left);
+                const tooltipAlign = leftPct < 25 ? 'left' : leftPct > 75 ? 'right' : 'center';
+                const tooltipPositionClass =
+                  tooltipAlign === 'left' ? 'left-0 translate-x-0'
+                  : tooltipAlign === 'right' ? 'right-0 left-auto translate-x-0'
+                  : 'left-1/2 -translate-x-1/2';
+                const arrowPositionClass =
+                  tooltipAlign === 'left' ? 'left-4 -translate-x-0'
+                  : tooltipAlign === 'right' ? 'right-4 left-auto translate-x-0'
+                  : 'left-1/2 -translate-x-1/2';
+
+                return (
                 <div
                   key={product.id}
                   className="absolute"
                   style={{ top: product.position.top, left: product.position.left, transform: 'translate(-50%, -50%)' }}
                   onMouseEnter={() => setActiveProduct(product)}
                   onMouseLeave={() => setActiveProduct(null)}
-                  onClick={() => setActiveProduct(activeProduct?.id === product.id ? null : product)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveProduct(activeProduct?.id === product.id ? null : product);
+                  }}
                 >
                   <button
-                    className="w-8 h-8 md:w-4 md:h-4 flex items-center justify-center -ml-2 -mt-2 md:m-0 cursor-pointer"
+                    className="w-10 h-10 md:w-4 md:h-4 flex items-center justify-center -ml-3 -mt-3 md:m-0 cursor-pointer"
                     aria-label={`View ${product.name}`}
                   >
                     <span className="w-4 h-4 bg-white rounded-full shadow-lg border-2 border-[#F16C10] hover:scale-125 transition-transform inline-block" />
@@ -180,7 +204,7 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
                       // layer — padding is part of the element's own hoverable box,
                       // so the "gap" between the dot and the card below is bridged
                       // and the mouse never leaves the hotspot while crossing it.
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 pb-3 z-10">
+                      <div className={`absolute bottom-full pb-3 z-10 ${tooltipPositionClass}`}>
                         <div
                           className={`relative bg-white px-4 py-3 rounded-lg shadow-xl border border-neutral-200 whitespace-nowrap ${realProduct ? 'cursor-pointer hover:border-[#F16C10] transition-colors' : ''}`}
                           onClick={(e) => {
@@ -195,13 +219,14 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
                           {realProduct && (
                             <div className="text-[11px] font-semibold text-[#F16C10] mt-1">View Product →</div>
                           )}
-                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-white border-r border-b border-neutral-200" />
+                          <div className={`absolute bottom-0 translate-y-1/2 rotate-45 w-2 h-2 bg-white border-r border-b border-neutral-200 ${arrowPositionClass}`} />
                         </div>
                       </div>
                     );
                   })()}
                 </div>
-              ))}
+                );
+              })}
             </div>
           ))}
         </div>
