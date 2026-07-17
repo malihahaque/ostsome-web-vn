@@ -1,17 +1,14 @@
-import { TrendingUp, Star, Sparkles, Zap } from 'lucide-react';
+import { Star, Sparkles, Zap } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import type { Product } from '../data/products';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
-import shureImg from '../../imports/SHURE MV7+.png';
-import kefImg from '../../imports/KEF speaker.png';
 import blink500Img from '../../imports/Blink500 microphone.png';
 import satechiImg from '../../imports/Satechi charging dock.png';
 import soundbladeImg from '../../imports/Soundblade BlueAnt.png';
 
+// Trimmed to 3 best sellers per Mals — Shure MV7+ and KEF LSX II LT removed.
 const featured = [
-  { handle: 'micro-thu-am-shure-mv7-plus', label: 'Staff Pick', labelIcon: Star, labelColor: 'bg-amber-500' },
-  { handle: 'kef-lsx-ii-lt-wireless-speakers', label: 'Trending', labelIcon: TrendingUp, labelColor: 'bg-pink-500' },
   { handle: 'micro-thu-am-blink500-b2', label: 'Just Dropped', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
   { handle: 'satechi-165w-usb-c-4-port-pd-gan-charger', label: 'New Arrival', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
   { handle: 'loa-soundbar-may-tinh-blueant-soundblade-120w', label: 'Staff Pick', labelIcon: Star, labelColor: 'bg-amber-500' },
@@ -24,8 +21,6 @@ const featured = [
 // padding instead of the object-contain+padding treatment used for the
 // Shopify fallback images.
 const PREMIUM_IMAGES: Record<string, string> = {
-  'micro-thu-am-shure-mv7-plus': shureImg,
-  'kef-lsx-ii-lt-wireless-speakers': kefImg,
   'micro-thu-am-blink500-b2': blink500Img,
   'satechi-165w-usb-c-4-port-pd-gan-charger': satechiImg,
   'loa-soundbar-may-tinh-blueant-soundblade-120w': soundbladeImg,
@@ -59,7 +54,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 flex items-end justify-between">
           <div>
-            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Latest of the LATEST</h2>
+            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Best Sellers</h2>
             <p className="text-[14px] md:text-base text-neutral-600">We find it first. You get it first.</p>
           </div>
         </div>
@@ -84,7 +79,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 flex items-end justify-between">
           <div className="text-left md:text-center md:flex-1">
-            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Latest of the LATEST</h2>
+            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Best Sellers</h2>
             <p className="text-[14px] md:text-base text-neutral-600">We find it first. You get it first.</p>
           </div>
           <button
@@ -95,7 +90,6 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
           </button>
         </div>
 
-        {/* Top 3 */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {featuredProducts.slice(0, 3).map((product, i) => {
             const LabelIcon = product.labelIcon;
@@ -133,52 +127,6 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
                       <span className="text-base md:text-xl font-bold text-black">{product.price.toLocaleString('vi-VN')}₫</span>
                     )}
                     <button className="text-[#F16C10] hover:text-black font-medium text-xs md:text-sm transition-colors">View →</button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Bottom 2 */}
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6 mt-3 md:mt-6">
-          {featuredProducts.slice(3).map(product => {
-            const LabelIcon = product.labelIcon;
-            const imgSrc = getHeroImage(product.handle, product.images[0]);
-            const isLifestyle = isLifestylePhoto(product.handle);
-            return (
-              <div
-                key={product.handle}
-                onClick={() => onSelectProduct?.(product)}
-                className="bg-white rounded-xl overflow-hidden border border-neutral-200 hover:shadow-xl transition group cursor-pointer"
-              >
-                <div className="flex flex-col md:flex-row h-full">
-                  <div className="relative w-full md:w-1/2 aspect-square md:aspect-auto bg-neutral-50 overflow-hidden">
-                    <img
-                      src={imgSrc}
-                      alt={product.title}
-                      className={`w-full h-full group-hover:scale-105 transition duration-500 ${isLifestyle ? 'object-cover' : 'object-contain p-4'}`}
-                      onError={e => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80'; }}
-                    />
-                    <div className={`absolute top-2 left-2 md:top-4 md:left-4 ${product.labelColor} text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold flex items-center gap-1 md:gap-1.5`}>
-                      <LabelIcon size={10} />
-                      {product.label}
-                    </div>
-                  </div>
-                  <div className="p-3 md:p-5 flex flex-col justify-center w-full md:w-1/2">
-                    <p className="text-[9px] md:text-[10px] font-semibold text-[#F16C10] uppercase tracking-widest mb-1">{product.vendor}</p>
-                    <h3 className="text-sm md:text-base font-bold text-black mb-2 line-clamp-2">{product.title}</h3>
-                    <div className="flex items-center justify-between">
-                      {isFostMember ? (
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-base md:text-xl font-bold text-[#F16C10]">{getFostPrice(product.price).toLocaleString('vi-VN')}₫</span>
-                          <span className="text-[9px] md:text-[10px] text-neutral-400 line-through">{product.price.toLocaleString('vi-VN')}₫</span>
-                        </div>
-                      ) : (
-                        <span className="text-base md:text-xl font-bold text-black">{product.price.toLocaleString('vi-VN')}₫</span>
-                      )}
-                      <button className="text-[#F16C10] hover:text-black font-medium text-xs md:text-sm transition-colors">View →</button>
-                    </div>
                   </div>
                 </div>
               </div>

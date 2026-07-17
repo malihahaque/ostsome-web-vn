@@ -1,10 +1,12 @@
-import { Briefcase, BookOpen, Headphones, Gift, Camera } from 'lucide-react';
+import { Briefcase, Gift, Camera } from 'lucide-react';
 import workAnywhereImg from '../../imports/Cafe Setup.png';
 import captureLifeImg from '../../imports/Creator Tools.png';
-import studyImg from '../../imports/Study Hard.png';
-import audioImg from '../../imports/Audio Everywhere.png';
 import giftImg from '../../imports/Gift Guide.png';
 
+// Trimmed to 3 lifestyles per Mals — Study Mode and Audio Everywhere removed.
+// With exactly 3 left, using a single even 3-across grid (all cards the same
+// size) instead of the old 2-large-plus-3-small split, which would have left
+// one lonely full-width card on its own row.
 const lifestyles = [
   {
     id: 1,
@@ -23,24 +25,6 @@ const lifestyles = [
     image: captureLifeImg,
     products: '10 products',
     navCategory: 'Mobile Creator',
-  },
-  {
-    id: 3,
-    title: 'Study Mode',
-    description: 'Focus in. Block out the noise.',
-    icon: BookOpen,
-    image: studyImg,
-    products: '9 products',
-    navCategory: 'Mobile Audio',
-  },
-  {
-    id: 4,
-    title: 'Audio Everywhere',
-    description: 'Sound that fills every room.',
-    icon: Headphones,
-    image: audioImg,
-    products: '15 products',
-    navCategory: 'Mobile Audio',
   },
   {
     id: 5,
@@ -67,9 +51,8 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts }: Props
           <p className="text-[14px] md:text-base text-neutral-600">Your setup. Your rules. Your vibe.</p>
         </div>
 
-        {/* Top 2 large cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
-          {lifestyles.slice(0, 2).map((lifestyle) => {
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          {lifestyles.map((lifestyle) => {
             const Icon = lifestyle.icon;
             return (
               <div
@@ -95,44 +78,6 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts }: Props
                   </div>
                   <h3 className="text-white text-xl font-bold mb-2">{lifestyle.title}</h3>
                   <p className="text-white/90 text-sm mb-3">{lifestyle.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/70 text-xs">{lifestyle.products}</span>
-                    <span className="text-white text-sm font-medium group-hover:translate-x-1 transition">Explore →</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Bottom 3 smaller cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {lifestyles.slice(2).map((lifestyle) => {
-            const Icon = lifestyle.icon;
-            return (
-              <div
-                key={lifestyle.id}
-                onClick={() => lifestyle.navCategory ? onNavToCategory?.(lifestyle.navCategory) : onNavToProducts?.()}
-                className="group relative overflow-hidden rounded-xl cursor-pointer"
-              >
-                <div className="relative h-[220px] md:h-[260px] bg-neutral-100 overflow-hidden">
-                  <img
-                    src={lifestyle.image}
-                    alt={lifestyle.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.objectFit = 'contain';
-                      (e.target as HTMLImageElement).style.padding = '2rem';
-                    }}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
-                </div>
-                <div className="absolute inset-0 p-5 flex flex-col justify-end">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-3 group-hover:bg-[#F16C10] transition">
-                    <Icon className="text-white" size={20} />
-                  </div>
-                  <h3 className="text-white text-lg font-bold mb-1">{lifestyle.title}</h3>
-                  <p className="text-white/90 text-xs mb-2">{lifestyle.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-white/70 text-xs">{lifestyle.products}</span>
                     <span className="text-white text-sm font-medium group-hover:translate-x-1 transition">Explore →</span>
