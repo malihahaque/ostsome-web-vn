@@ -28,6 +28,7 @@ import { LaunchExclusivePage } from './components/LaunchExclusivePage';
 import { CategoryGrid } from './components/CategoryGrid';
 import { CategoryProductsPage } from './components/CategoryProductsPage';
 import { FostQuickPerks } from './components/FostQuickPerks';
+import { ContactAndTrust } from './components/ContactAndTrust';
 import type { Tab as AccountTab } from './components/AccountPage';
 import { useProducts } from './hooks/useProducts';
 import type { Product } from './data/products';
@@ -358,6 +359,7 @@ function AppInner() {
           <WhyEnthusiasts />
           <ShoppableSetup onSelectProduct={handleSelectProduct} />
           <OurStory />
+          <ContactAndTrust />
         </>
       )}
 
