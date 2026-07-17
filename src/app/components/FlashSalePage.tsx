@@ -15,8 +15,11 @@ export function FlashSalePage({ onBack, onSelectProduct }: FlashSalePageProps) {
   const { products, loading } = useProducts();
   const { user } = useAuth();
 
+  // .normalize('NFC') guards against Vietnamese diacritics being encoded
+  // two different ways (precomposed vs decomposed) — same visible text,
+  // different underlying bytes, which makes a plain === silently fail.
   const flashProducts = FLASH_SALE_HANDLES
-    .map(({ handle }) => products.find(p => p.handle === handle))
+    .map(({ handle }) => products.find(p => p.handle.normalize('NFC') === handle.normalize('NFC')))
     .filter((p): p is Product => Boolean(p));
 
   return (

@@ -21,7 +21,7 @@ export function getFlashSalePrice(listPrice: number): number {
 export const FLASH_SALE_HANDLES: { handle: string; note: string }[] = [
   { handle: 'tai-nghe-bluetooth-skullcandy-method-360-anc-bảo-hanh-1-nam-chống-ồn-pin-40-giờ-chống-ồn-chủ-động', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
   { handle: 'sung-massage-theragun-sense', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
-  { handle: 'ba-lo-du-lich-matador-refraction-packable-backpack', note: 'CONFIRMED — seen live on ostsome.com.vn' },
+  { handle: 'ba-lo-du-lịch-matador-refraction-packable-backpack', note: 'CONFIRMED — seen live on ostsome.com.vn' },
   { handle: 'recoverytherm-cube', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
   { handle: 'satechi-thunderbolt-4-pro-cable', note: 'CONFIRMED — verified live URL on ostsomevietnam.netlify.app' },
 ];
