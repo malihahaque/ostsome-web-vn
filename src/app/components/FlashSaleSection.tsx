@@ -1,7 +1,7 @@
 import { useAuth } from './AuthContext';
 import { useProducts } from '../hooks/useProducts';
 import { getFostPrice } from '../data/pricing';
-import { FLASH_SALE_HANDLES, getFlashSalePrice, FLASH_SALE_DISCOUNT_PERCENT } from '../data/flashSale';
+import { FLASH_SALE_HANDLES, getFlashSalePrice, FLASH_SALE_DISCOUNT_PERCENT, findFlashSaleProduct } from '../data/flashSale';
 import { FlashSaleHeading } from './FlashSaleCountdown';
 import type { Product } from '../data/products';
 
@@ -18,11 +18,8 @@ export function FlashSaleSection({ onSelectProduct, onViewAll }: FlashSaleSectio
   const { products } = useProducts();
   const { user } = useAuth();
 
-  // .normalize('NFC') guards against Vietnamese diacritics being encoded
-  // two different ways (precomposed vs decomposed) — same visible text,
-  // different underlying bytes, which makes a plain === silently fail.
   const flashProducts = FLASH_SALE_HANDLES
-    .map(({ handle }) => products.find(p => p.handle.normalize('NFC') === handle.normalize('NFC')))
+    .map(entry => findFlashSaleProduct(entry, products))
     .filter((p): p is Product => Boolean(p));
 
   if (flashProducts.length === 0) return null;
