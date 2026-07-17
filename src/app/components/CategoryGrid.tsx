@@ -1,7 +1,11 @@
-import { Smartphone, Tablet as TabletIcon, Laptop, Home as HomeIcon, HeartPulse, Headphones, Watch, Camera as CameraIcon, Monitor, Tv } from 'lucide-react';
+import { Smartphone, Tablet as TabletIcon, Laptop, Home as HomeIcon, HeartPulse, Headphones, Watch, Camera as CameraIcon, Monitor, Tv, Sparkles } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { GENERIC_CATEGORIES, mapGenericCategory, type GenericCategoryKey } from '../data/genericCategories';
+import type { Product } from '../data/products';
 
+// Small icon badge in the corner of each photo tile — just enough to read
+// the category at a glance; the product photo underneath does the real
+// visual work instead of relying on an abstract icon set.
 const ICONS: Record<GenericCategoryKey, React.ComponentType<{ size?: number; className?: string }>> = {
   'dien-thoai': Smartphone,
   'tablet': TabletIcon,
@@ -13,6 +17,7 @@ const ICONS: Record<GenericCategoryKey, React.ComponentType<{ size?: number; cla
   'camera': CameraIcon,
   'pc-man-hinh': Monitor,
   'tivi': Tv,
+  'khac': Sparkles,
 };
 
 type CategoryGridProps = {
@@ -22,24 +27,30 @@ type CategoryGridProps = {
 export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
   const { products } = useProducts();
 
-  // Count real products per bucket, then only render categories that
-  // actually have inventory — per Mals: "if a category has no product,
-  // simply don't include it." This re-evaluates live, so if VN adds phones/
-  // tablets/laptops/TVs to the catalog later, those tiles appear automatically.
-  const counts = products.reduce<Partial<Record<GenericCategoryKey, number>>>((acc, p) => {
+  // Group products per category, and grab the first in-stock product with a
+  // real image to represent that tile — a real photo reads better here than
+  // a generic icon, and costs nothing extra since we already have the data.
+  const byCategory = products.reduce<Partial<Record<GenericCategoryKey, Product[]>>>((acc, p) => {
     const key = mapGenericCategory(p.type);
-    if (key) acc[key] = (acc[key] ?? 0) + 1;
+    (acc[key] ??= []).push(p);
     return acc;
   }, {});
 
-  const activeCategories = GENERIC_CATEGORIES.filter(c => (counts[c.key] ?? 0) > 0);
+  const activeCategories = GENERIC_CATEGORIES
+    .map(cat => {
+      const items = byCategory[cat.key] ?? [];
+      const cover = items.find(p => p.availableForSale && p.images[0]) ?? items.find(p => p.images[0]);
+      return { ...cat, count: items.length, coverImage: cover?.images[0] ?? null };
+    })
+    .filter(cat => cat.count > 0);
 
   if (activeCategories.length === 0) return null;
 
   return (
     <section className="w-full bg-white">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-5 gap-x-2 gap-y-5">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <h2 className="text-lg md:text-xl font-bold text-black mb-5">Danh Mục Sản Phẩm</h2>
+        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-11 gap-3 md:gap-4">
           {activeCategories.map(cat => {
             const Icon = ICONS[cat.key];
             return (
@@ -48,10 +59,24 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
                 onClick={() => onNavToGenericCategory?.(cat.key)}
                 className="flex flex-col items-center gap-2 group"
               >
-                <span className="w-14 h-14 rounded-full bg-neutral-100 flex items-center justify-center text-neutral-700 group-hover:bg-[#F16C10]/10 group-hover:text-[#F16C10] transition-colors">
-                  <Icon size={24} />
+                <span className="relative w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-100 overflow-hidden ring-1 ring-neutral-200 group-hover:ring-2 group-hover:ring-[#F16C10] transition-all shadow-sm group-hover:shadow-md">
+                  {cat.coverImage ? (
+                    <img
+                      src={cat.coverImage}
+                      alt={cat.label}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                  ) : (
+                    <span className="w-full h-full flex items-center justify-center text-neutral-400">
+                      <Icon size={26} />
+                    </span>
+                  )}
+                  <span className="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-white ring-1 ring-neutral-200 flex items-center justify-center text-[#F16C10] shadow-sm">
+                    <Icon size={13} />
+                  </span>
                 </span>
-                <span className="text-xs text-center text-neutral-700 leading-tight group-hover:text-[#F16C10] transition-colors">
+                <span className="text-[11px] md:text-xs text-center text-neutral-700 leading-tight font-medium group-hover:text-[#F16C10] transition-colors">
                   {cat.label}
                 </span>
               </button>

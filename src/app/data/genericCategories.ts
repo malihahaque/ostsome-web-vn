@@ -20,7 +20,8 @@ export type GenericCategoryKey =
   | 'dong-ho'
   | 'camera'
   | 'pc-man-hinh'
-  | 'tivi';
+  | 'tivi'
+  | 'khac';
 
 export const GENERIC_CATEGORIES: { key: GenericCategoryKey; label: string }[] = [
   { key: 'dien-thoai', label: 'Điện thoại' },
@@ -33,6 +34,10 @@ export const GENERIC_CATEGORIES: { key: GenericCategoryKey; label: string }[] = 
   { key: 'camera', label: 'Camera' },
   { key: 'pc-man-hinh', label: 'PC, Màn hình' },
   { key: 'tivi', label: 'Tivi' },
+  // Catch-all so every product lands somewhere (bags, straps, film, misc
+  // accessories that don't belong in any of the 10 device categories above).
+  // Kept last so it never displaces a more specific, meaningful match.
+  { key: 'khac', label: 'Khác' },
 ];
 
 // Order matters: first match wins. Keep more specific checks (e.g. "ốp lưng")
@@ -98,10 +103,10 @@ const RULES: { key: GenericCategoryKey; keywords: string[] }[] = [
   },
 ];
 
-export function mapGenericCategory(productType: string): GenericCategoryKey | null {
+export function mapGenericCategory(productType: string): GenericCategoryKey {
   const t = (productType ?? '').toLowerCase();
   for (const rule of RULES) {
     if (rule.keywords.some(k => t.includes(k))) return rule.key;
   }
-  return null;
+  return 'khac';
 }
