@@ -318,6 +318,7 @@ function AppInner() {
           onNavToHome={handleNavToHome}
           onNavToBrands={handleNavToBrands}
           onNavToCategory={handleNavToNavCategory}
+          onNavToGenericCategory={handleNavToGenericCategory}
           onSelectProduct={handleSelectProduct}
           onSearchNavigate={handleSearchNavigate}
           onNavToLogin={() => {

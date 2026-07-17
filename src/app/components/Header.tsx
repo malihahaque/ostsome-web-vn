@@ -1,17 +1,19 @@
-import { Search, ShoppingCart, User, Menu, ChevronLeft, ChevronRight, X, LogOut, Crown } from 'lucide-react';
-import { useRef, useState, useEffect } from 'react';
+import { Search, ShoppingCart, User, Menu, X, LogOut, Crown } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import logoImg from '../../imports/logo_circle.png';
 import type { Product } from '../data/products';
 import { useCart } from './CartContext';
 import { useProducts } from '../hooks/useProducts';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
+import { GENERIC_CATEGORIES, mapGenericCategory, type GenericCategoryKey } from '../data/genericCategories';
 
 type HeaderProps = {
   onNavToProducts?: () => void;
   onNavToHome?: () => void;
   onNavToBrands?: () => void;
   onNavToCategory?: (category: string) => void;
+  onNavToGenericCategory?: (category: GenericCategoryKey) => void;
   onSelectProduct?: (product: Product) => void;
   onSearchNavigate?: (query: string) => void;
   onNavToLogin?: () => void;
@@ -27,9 +29,9 @@ const announcementMessages = [
   "🔥 Latest of the Latest",
 ];
 
-export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCategory, onSelectProduct, onSearchNavigate, onNavToLogin, onNavToAccount, onLogout, currentPage, currentNavCategory }: HeaderProps) {
-  const navRef = useRef<HTMLDivElement>(null);
+export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCategory, onNavToGenericCategory, onSelectProduct, onSearchNavigate, onNavToLogin, onNavToAccount, onLogout, currentPage, currentNavCategory }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [announcementIndex, setAnnouncementIndex] = useState(0);
   const [announcementVisible, setAnnouncementVisible] = useState(true);
@@ -76,6 +78,22 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
   const { user, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
 
+  // Same active-category logic as the homepage CategoryGrid — only show
+  // categories that actually have products, kept in sync automatically.
+  const menuCategories = (() => {
+    const counts: Partial<Record<GenericCategoryKey, number>> = {};
+    for (const p of products) {
+      const key = mapGenericCategory(p.type);
+      counts[key] = (counts[key] ?? 0) + 1;
+    }
+    return GENERIC_CATEGORIES.filter(c => (counts[c.key] ?? 0) > 0);
+  })();
+
+  function handleMenuNavGenericCategory(key: GenericCategoryKey) {
+    setMenuOpen(false);
+    onNavToGenericCategory?.(key);
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setAnnouncementVisible(false);
@@ -121,16 +139,6 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
       })
       .slice(0, 6);
   })();
-
-  const scrollNav = (direction: 'left' | 'right') => {
-    if (navRef.current) {
-      navRef.current.scrollBy({ left: direction === 'right' ? 150 : -150, behavior: 'smooth' });
-    }
-  };
-
-  const navLinks = [
-    'Mobile Creator', 'Mobile Audio', 'Gaming', 'Smart Life', 'Wellness', 'Travel & Carry', 'Desk Setup',
-  ];
 
   function handleSelectProduct(product: Product) {
     setSearchOpen(false);
@@ -322,7 +330,11 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                 )}
               </div>
 
-              <button className="md:hidden hover:text-[#F16C10] transition-colors">
+              <button
+                onClick={() => setMenuOpen(true)}
+                className="hover:text-[#F16C10] transition-colors"
+                aria-label="Menu"
+              >
                 <Menu size={24} />
               </button>
             </div>
@@ -371,59 +383,6 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="border-b bg-white">
-          <div className="max-w-7xl mx-auto relative flex items-center">
-            <button
-              onClick={() => scrollNav('left')}
-              className="md:hidden shrink-0 px-1 py-4 text-neutral-400 hover:text-[#F16C10] transition-colors z-10"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <div
-              ref={navRef}
-              className="flex items-center gap-6 text-sm text-neutral-700 overflow-x-auto scrollbar-hide px-2 md:px-4 py-4 scroll-smooth"
-            >
-              <button
-                onClick={onNavToHome}
-                className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${currentPage === 'home' ? 'text-[#F16C10] font-semibold' : ''}`}
-              >
-                New & Trending
-              </button>
-              <button
-                onClick={onNavToProducts}
-                className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${currentPage === 'products' ? 'text-[#F16C10] font-semibold' : ''}`}
-              >
-                All Products
-              </button>
-              {navLinks.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => onNavToCategory?.(cat)}
-                  className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${
-                    currentPage === 'nav-category' && currentNavCategory === cat ? 'text-[#F16C10] font-semibold' : ''
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-              <button
-                onClick={onNavToBrands}
-                className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${
-                  currentPage === 'brands' || currentPage === 'brand-detail' ? 'text-[#F16C10] font-semibold' : ''
-                }`}
-              >
-                Brands
-              </button>
-            </div>
-            <button
-              onClick={() => scrollNav('right')}
-              className="md:hidden shrink-0 px-1 py-4 text-neutral-400 hover:text-[#F16C10] transition-colors z-10"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
       </header>
 
       {/* Search Overlay */}
@@ -504,6 +463,62 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
             {searchQuery.trim().length > 1 && searchResults.length === 0 && (
               <div className="max-w-3xl mx-auto px-4 pb-6 border-t border-neutral-100 pt-4 text-center text-sm text-neutral-400">
                 No products found for "{searchQuery}"
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Menu Overlay — replaces the old horizontal nav bar. Reachable from
+          the hamburger icon on every screen size, not just mobile, since
+          removing the nav bar left desktop with no way to reach Brands or
+          All Products otherwise. */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setMenuOpen(false)}
+          />
+          <div className="relative z-10 bg-white w-full max-w-sm h-full shadow-2xl overflow-y-auto">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
+              <span className="font-bold text-black">Menu</span>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="text-neutral-400 hover:text-black transition"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <div className="py-2 border-b border-neutral-100">
+              <button
+                onClick={() => { setMenuOpen(false); onNavToProducts?.(); }}
+                className={`w-full text-left px-5 py-3 text-sm font-medium hover:bg-neutral-50 transition ${currentPage === 'products' ? 'text-[#F16C10] font-semibold' : 'text-black'}`}
+              >
+                All Products
+              </button>
+              <button
+                onClick={() => { setMenuOpen(false); onNavToBrands?.(); }}
+                className={`w-full text-left px-5 py-3 text-sm font-medium hover:bg-neutral-50 transition ${currentPage === 'brands' || currentPage === 'brand-detail' ? 'text-[#F16C10] font-semibold' : 'text-black'}`}
+              >
+                Brands
+              </button>
+            </div>
+
+            {menuCategories.length > 0 && (
+              <div className="py-2">
+                <p className="px-5 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+                  Danh Mục Sản Phẩm
+                </p>
+                {menuCategories.map(cat => (
+                  <button
+                    key={cat.key}
+                    onClick={() => handleMenuNavGenericCategory(cat.key)}
+                    className="w-full text-left px-5 py-3 text-sm font-medium text-black hover:bg-neutral-50 transition"
+                  >
+                    {cat.label}
+                  </button>
+                ))}
               </div>
             )}
           </div>
