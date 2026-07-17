@@ -16,7 +16,9 @@ export function CategoryProductsPage({ category, onBack, onSelectProduct }: Cate
   const { user } = useAuth();
 
   const label = GENERIC_CATEGORIES.find(c => c.key === category)?.label ?? '';
-  const matches = products.filter(p => mapGenericCategory(p.type) === category);
+  // Match ProductListing.tsx and CategoryGrid.tsx: hide sold-out products
+  // everywhere so counts agree across the whole site.
+  const matches = products.filter(p => p.availableForSale && mapGenericCategory(p.type) === category);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

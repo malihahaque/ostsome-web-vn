@@ -26,7 +26,10 @@ type CategoryGridProps = {
 export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
   const { products } = useProducts();
 
-  const byCategory = products.reduce<Partial<Record<GenericCategoryKey, Product[]>>>((acc, p) => {
+  // Match ProductListing.tsx: hide sold-out products from counts and cover
+  // photos, so this grid's numbers agree with "All Products" instead of
+  // counting things that aren't actually purchasable.
+  const byCategory = products.filter(p => p.availableForSale).reduce<Partial<Record<GenericCategoryKey, Product[]>>>((acc, p) => {
     const key = mapGenericCategory(p.type);
     (acc[key] ??= []).push(p);
     return acc;

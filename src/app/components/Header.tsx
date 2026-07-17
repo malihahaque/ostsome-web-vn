@@ -79,10 +79,13 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
   const [profileOpen, setProfileOpen] = useState(false);
 
   // Same active-category logic as the homepage CategoryGrid — only show
-  // categories that actually have products, kept in sync automatically.
+  // categories that actually have in-stock products, kept in sync
+  // automatically, and matching ProductListing.tsx's availableForSale filter
+  // so counts agree across the whole site.
   const menuCategories = (() => {
     const counts: Partial<Record<GenericCategoryKey, number>> = {};
     for (const p of products) {
+      if (!p.availableForSale) continue;
       const key = mapGenericCategory(p.type);
       counts[key] = (counts[key] ?? 0) + 1;
     }
