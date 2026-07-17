@@ -31,14 +31,29 @@ const items = [
     alt: 'Shure MV7+',
     label: 'Đang Thịnh Hành',
     title: 'Shure MV7+',
-    body: <p className="text-neutral-500 text-xs">Lựa chọn hàng đầu cho content creator.</p>,
+    body: (
+      <>
+        <p className="text-neutral-500 text-xs mb-2">Lựa chọn hàng đầu cho content creator.</p>
+        {/* NOTE: price pulled from Header.tsx's notification feed —
+            confirm against Shopify Admin before this goes live, same
+            caveat as the Polaroid price below. */}
+        <p className="text-[#F16C10] text-2xl font-bold">10.100.000₫</p>
+      </>
+    ),
   },
   {
     image: jetbootsFOST,
     alt: 'RecoveryAir JetBoots',
     label: 'SNAG DEAL',
     title: 'RecoveryAir JetBoots',
-    body: <p className="text-neutral-500 text-xs">Ưu đãi 2 tuần 1 lần dành cho hội viên.</p>,
+    body: (
+      <>
+        <p className="text-neutral-500 text-xs mb-2">Ưu đãi 2 tuần 1 lần dành cho hội viên.</p>
+        {/* NOTE: price pulled from a live ostsome.com.vn scrape — same
+            confirm-before-launch caveat as above. */}
+        <p className="text-[#F16C10] text-2xl font-bold">24.890.000₫</p>
+      </>
+    ),
   },
 ];
 
