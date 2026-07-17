@@ -25,11 +25,14 @@ import { FostAuthModal } from './components/FostAuthModal';
 import { AccountPage } from './components/AccountPage';
 import { AdminDashboard } from './components/AdminDashboard';
 import { LaunchExclusivePage } from './components/LaunchExclusivePage';
+import { CategoryGrid } from './components/CategoryGrid';
+import { CategoryProductsPage } from './components/CategoryProductsPage';
 import type { Tab as AccountTab } from './components/AccountPage';
 import { useProducts } from './hooks/useProducts';
 import type { Product } from './data/products';
+import type { GenericCategoryKey } from './data/genericCategories';
 
-type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership';
+type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership';
 
 // Everything needed to fully restore a screen — this is what gets stored in
 // browser history so the back/forward buttons can actually move between
@@ -41,6 +44,7 @@ type NavState = {
   productHandle: string | null;
   brand: string | null;
   navCategory: string | null;
+  genericCategory: GenericCategoryKey | null;
   search: string;
   accountTab: AccountTab;
 };
@@ -57,6 +61,8 @@ function buildUrl(state: NavState): string {
       return state.brand ? `/brands/${encodeURIComponent(state.brand)}` : '/brands';
     case 'nav-category':
       return state.navCategory ? `/category/${encodeURIComponent(state.navCategory)}` : '/';
+    case 'generic-category':
+      return state.genericCategory ? `/c/${state.genericCategory}` : '/';
     case 'account':
       return state.accountTab ? `/account?tab=${state.accountTab}` : '/account';
     case 'admin':
@@ -83,6 +89,7 @@ function AppInner() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedNavCategory, setSelectedNavCategory] = useState<string | null>(null);
+  const [selectedGenericCategory, setSelectedGenericCategory] = useState<GenericCategoryKey | null>(null);
   const [initialSearch, setInitialSearch] = useState<string>('');
   const [accountTab, setAccountTab] = useState<AccountTab>('orders');
 
@@ -95,7 +102,7 @@ function AppInner() {
   // so goTo() always has the latest values even though React state updates
   // are asynchronous (avoids stale-closure bugs when building history state).
   const navRef = useRef<NavState>({
-    page: 'home', productHandle: null, brand: null, navCategory: null, search: '', accountTab: 'orders',
+    page: 'home', productHandle: null, brand: null, navCategory: null, genericCategory: null, search: '', accountTab: 'orders',
   });
 
   // Central navigation function: updates React state AND pushes a real
@@ -107,6 +114,7 @@ function AppInner() {
       product?: Product | null;
       brand?: string | null;
       navCategory?: string | null;
+      genericCategory?: GenericCategoryKey | null;
       search?: string;
       accountTab?: AccountTab;
     },
@@ -118,6 +126,7 @@ function AppInner() {
     if ('product' in next) setSelectedProduct(next.product ?? null);
     if ('brand' in next) setSelectedBrand(next.brand ?? null);
     if ('navCategory' in next) setSelectedNavCategory(next.navCategory ?? null);
+    if ('genericCategory' in next) setSelectedGenericCategory(next.genericCategory ?? null);
     if ('search' in next) setInitialSearch(next.search ?? '');
     if ('accountTab' in next) setAccountTab(next.accountTab ?? 'orders');
 
@@ -126,6 +135,7 @@ function AppInner() {
       productHandle: 'product' in next ? (next.product?.handle ?? null) : navRef.current.productHandle,
       brand: 'brand' in next ? (next.brand ?? null) : navRef.current.brand,
       navCategory: 'navCategory' in next ? (next.navCategory ?? null) : navRef.current.navCategory,
+      genericCategory: 'genericCategory' in next ? (next.genericCategory ?? null) : navRef.current.genericCategory,
       search: next.search ?? '',
       accountTab: next.accountTab ?? navRef.current.accountTab,
     };
@@ -148,11 +158,12 @@ function AppInner() {
       if (!state) {
         // No state means we've gone back past our first pushed entry —
         // treat it as home rather than leaving state stuck on the old page.
-        navRef.current = { page: 'home', productHandle: null, brand: null, navCategory: null, search: '', accountTab: 'orders' };
+        navRef.current = { page: 'home', productHandle: null, brand: null, navCategory: null, genericCategory: null, search: '', accountTab: 'orders' };
         setPage('home');
         setSelectedProduct(null);
         setSelectedBrand(null);
         setSelectedNavCategory(null);
+        setSelectedGenericCategory(null);
         setInitialSearch('');
         window.scrollTo({ top: 0 });
         return;
@@ -162,6 +173,7 @@ function AppInner() {
       setPage(state.page);
       setSelectedBrand(state.brand);
       setSelectedNavCategory(state.navCategory);
+      setSelectedGenericCategory(state.genericCategory);
       setInitialSearch(state.search);
       setAccountTab(state.accountTab);
 
@@ -197,6 +209,7 @@ function AppInner() {
     const productMatch = path.match(/^\/products\/([^?]+)/);
     const brandMatch = path.match(/^\/brands\/([^?]+)/);
     const categoryMatch = path.match(/^\/category\/([^?]+)/);
+    const genericCategoryMatch = path.match(/^\/c\/([^?]+)/);
 
     if (productMatch) {
       // We're on a /products/[handle] URL. liveProducts may still be
@@ -232,6 +245,8 @@ function AppInner() {
       goTo({ page: 'brand-detail', brand: decodeURIComponent(brandMatch[1]) }, { replace: true, scroll: false });
     } else if (categoryMatch) {
       goTo({ page: 'nav-category', navCategory: decodeURIComponent(categoryMatch[1]) }, { replace: true, scroll: false });
+    } else if (genericCategoryMatch) {
+      goTo({ page: 'generic-category', genericCategory: decodeURIComponent(genericCategoryMatch[1]) as GenericCategoryKey }, { replace: true, scroll: false });
     } else if (path === '/launch') {
       goTo({ page: 'launch-exclusive' }, { replace: true, scroll: false });
     } else if (path === '/clearance') {
@@ -258,6 +273,10 @@ function AppInner() {
 
   const handleNavToNavCategory = (category: string) => {
     goTo({ page: 'nav-category', navCategory: category });
+  };
+
+  const handleNavToGenericCategory = (category: GenericCategoryKey) => {
+    goTo({ page: 'generic-category', genericCategory: category });
   };
 
   const handleNavToProducts = () => goTo({ page: 'products', search: '' });
@@ -315,6 +334,7 @@ function AppInner() {
       {page === 'home' && (
         <>
           <Hero onSelectProduct={handleSelectProduct} />
+          <CategoryGrid onNavToGenericCategory={handleNavToGenericCategory} />
           <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
           <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
           <FostMembership
@@ -367,6 +387,14 @@ function AppInner() {
       {page === 'nav-category' && selectedNavCategory && (
         <NavCategoryPage
           category={selectedNavCategory}
+          onBack={() => goTo({ page: 'home' })}
+          onSelectProduct={handleSelectProduct}
+        />
+      )}
+
+      {page === 'generic-category' && selectedGenericCategory && (
+        <CategoryProductsPage
+          category={selectedGenericCategory}
           onBack={() => goTo({ page: 'home' })}
           onSelectProduct={handleSelectProduct}
         />

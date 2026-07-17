@@ -1,3 +1,4 @@
+import { ChevronLeft } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
@@ -6,10 +7,11 @@ import type { Product } from '../data/products';
 
 type CategoryProductsPageProps = {
   category: GenericCategoryKey;
+  onBack?: () => void;
   onSelectProduct?: (product: Product) => void;
 };
 
-export function CategoryProductsPage({ category, onSelectProduct }: CategoryProductsPageProps) {
+export function CategoryProductsPage({ category, onBack, onSelectProduct }: CategoryProductsPageProps) {
   const { products, loading } = useProducts();
   const { user } = useAuth();
 
@@ -18,6 +20,14 @@ export function CategoryProductsPage({ category, onSelectProduct }: CategoryProd
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="flex items-center gap-1 text-sm text-neutral-500 hover:text-[#F16C10] transition-colors mb-4"
+        >
+          <ChevronLeft size={16} /> Quay lại
+        </button>
+      )}
       <h1 className="text-2xl md:text-3xl font-bold text-black mb-1">{label}</h1>
       <p className="text-sm text-neutral-500 mb-6">{matches.length} sản phẩm</p>
 
