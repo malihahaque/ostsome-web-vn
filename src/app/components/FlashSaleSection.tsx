@@ -1,5 +1,6 @@
 import { useAuth } from './AuthContext';
 import { useProducts } from '../hooks/useProducts';
+import { Star } from 'lucide-react';
 import { getFostPrice } from '../data/pricing';
 import { FLASH_SALE_HANDLES, getFlashSalePrice, FLASH_SALE_DISCOUNT_PERCENT, findFlashSaleProduct } from '../data/flashSale';
 import { FlashSaleHeading } from './FlashSaleCountdown';
@@ -61,6 +62,11 @@ export function FlashSaleSection({ onSelectProduct, onViewAll }: FlashSaleSectio
                 <div className="p-3 md:p-4">
                   <p className="text-[10px] font-semibold text-[#F16C10] uppercase tracking-widest mb-1">{product.vendor}</p>
                   <h3 className="text-sm font-bold text-black mb-2 line-clamp-2 min-h-[2.5em]">{product.title}</h3>
+                  <div className="flex items-center gap-0.5 mb-1">
+                    {[1, 2, 3, 4, 5].map(s => (
+                      <Star key={s} size={10} className={s <= 4 ? 'text-amber-400 fill-amber-400' : 'text-neutral-200 fill-neutral-200'} />
+                    ))}
+                  </div>
                   <div className="flex flex-col">
                     <span className="text-xs text-neutral-400 line-through">{product.price.toLocaleString('vi-VN')}₫</span>
                     <span className="text-base md:text-lg font-bold text-[#F16C10]">{displayPrice.toLocaleString('vi-VN')}₫</span>

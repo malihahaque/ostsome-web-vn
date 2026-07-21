@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, Eye } from 'lucide-react';
+import { ShoppingCart, Eye, Star } from 'lucide-react';
 import type { Product } from '../data/products';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
@@ -82,6 +82,11 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         </h3>
         <div className="flex items-center justify-between mt-auto">
           <div className="flex flex-col">
+            <div className="flex items-center gap-0.5 mb-1">
+              {[1, 2, 3, 4, 5].map(s => (
+                <Star key={s} size={10} className={s <= 4 ? 'text-amber-400 fill-amber-400' : 'text-neutral-200 fill-neutral-200'} />
+              ))}
+            </div>
             {isFostMember ? (
               <>
                 <span className="text-xs text-neutral-400 line-through">
@@ -103,7 +108,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
                     {product.comparePrice!.toLocaleString('vi-VN')}₫
                   </span>
                 )}
-                <span className={`text-base font-bold ${hasDiscount ? 'text-[#F16C10]' : 'text-black'}`}>
+                <span className="text-base font-bold text-[#F16C10]">
                   {product.price.toLocaleString('vi-VN')}₫
                 </span>
               </>

@@ -1,4 +1,4 @@
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Star } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import type { Product } from '../data/products';
 import { useAuth } from './AuthContext';
@@ -103,16 +103,18 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
                       className="w-full h-full object-contain p-4 group-hover:scale-105 transition duration-500"
                       onError={e => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80'; }}
                     />
-                    <div className="absolute top-2 left-2 bg-[#F16C10] text-white text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full">
-                      Early Bird
-                    </div>
-                    <div className="absolute top-2 right-2 bg-[#E8291C] text-white text-[10px] font-black rounded-full w-9 h-9 flex items-center justify-center leading-none">
+                    <div className="absolute top-2 right-2 bg-[#F16C10] text-white text-[10px] font-black rounded-full w-9 h-9 flex items-center justify-center leading-none">
                       -{pct}%
                     </div>
                   </div>
                   <div className="p-3 md:p-4">
                     <p className="text-[9px] font-bold text-[#F16C10] uppercase tracking-widest mb-1">{deal.label}</p>
                     <h3 className="text-xs md:text-sm font-bold text-black line-clamp-2 mb-2">{deal.name}</h3>
+                    <div className="flex items-center gap-0.5 mb-1">
+                      {[1, 2, 3, 4, 5].map(s => (
+                        <Star key={s} size={10} className={s <= 4 ? 'text-amber-400 fill-amber-400' : 'text-neutral-200 fill-neutral-200'} />
+                      ))}
+                    </div>
                     {isFostMember ? (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
@@ -124,7 +126,7 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
                     ) : (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-base font-black text-black">{deal.promo.toLocaleString('vi-VN')}₫</span>
+                          <span className="text-base font-black text-[#F16C10]">{deal.promo.toLocaleString('vi-VN')}₫</span>
                           <span className="text-xs text-neutral-400 line-through">{deal.srp.toLocaleString('vi-VN')}₫</span>
                         </div>
                         <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save {saving}₫</p>

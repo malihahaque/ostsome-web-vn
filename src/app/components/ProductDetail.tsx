@@ -596,7 +596,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                     <span className="text-xs font-bold text-[#F16C10]">-{discountPct}%</span>
                   </div>
                 )}
-                <span className={`text-3xl font-bold block mt-0.5 ${hasDiscount ? 'text-[#F16C10]' : 'text-black'}`}>{activePrice.toLocaleString('vi-VN')}₫</span>
+                <span className="text-3xl font-bold block mt-0.5 text-[#F16C10]">{activePrice.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             {!isFostMember && (

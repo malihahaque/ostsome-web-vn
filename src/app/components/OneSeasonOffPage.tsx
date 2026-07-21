@@ -1,4 +1,4 @@
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Star } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { CLEARANCE_DEALS } from './OneSeasonOff';
 import type { Product } from '../data/products';
@@ -31,7 +31,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
           )}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: '#FF1F1F' }}>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: '#F16C10' }}>
                 🔥 Clearance Sale
               </p>
               <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-3">
@@ -44,7 +44,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
             </div>
             <div className="text-left md:text-right shrink-0">
               <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Clearance Off</div>
-              <div className="text-6xl md:text-7xl font-black leading-none" style={{ color: '#FF1F1F' }}>Up to</div>
+              <div className="text-6xl md:text-7xl font-black leading-none" style={{ color: '#F16C10' }}>Up to</div>
               <div className="text-6xl md:text-7xl font-black text-white leading-none">50%</div>
             </div>
           </div>
@@ -52,8 +52,8 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
       </div>
 
       {/* Disclaimer */}
-      <div className="bg-red-50 border-b border-red-100 py-2 px-4 text-center">
-        <p className="text-xs font-medium" style={{ color: '#FF1F1F' }}>
+      <div className="bg-orange-50 border-b border-orange-100 py-2 px-4 text-center">
+        <p className="text-xs font-medium" style={{ color: '#F16C10' }}>
           ⚠️ Clearance prices are final. No further discounts apply. While stocks last. All prices include VAT.
         </p>
       </div>
@@ -88,7 +88,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
                     />
                     <span
                       className="absolute top-2 left-2 text-white text-[9px] font-black px-2 py-1 rounded-full"
-                      style={{ backgroundColor: '#FF1F1F' }}
+                      style={{ backgroundColor: '#F16C10' }}
                     >
                       -{pct}%
                     </span>
@@ -96,6 +96,11 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
                   <div className="p-3 md:p-4">
                     <p className="text-[9px] font-bold uppercase tracking-widest mb-1" style={{ color: '#6F6A63' }}>{deal.label}</p>
                     <h3 className="text-xs md:text-sm font-bold line-clamp-2 mb-2" style={{ color: '#111111' }}>{deal.name}</h3>
+                    <div className="flex items-center gap-0.5 mb-1">
+                      {[1, 2, 3, 4, 5].map(s => (
+                        <Star key={s} size={10} className={s <= 4 ? 'text-amber-400 fill-amber-400' : 'text-neutral-200 fill-neutral-200'} />
+                      ))}
+                    </div>
                     {isFostMember ? (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
@@ -107,7 +112,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
                     ) : (
                       <>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-base font-black" style={{ color: '#111111' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
+                          <span className="text-base font-black" style={{ color: '#F16C10' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
                           <span className="text-xs line-through" style={{ color: '#6F6A63' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         </div>
                         <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save {saving}₫</p>
