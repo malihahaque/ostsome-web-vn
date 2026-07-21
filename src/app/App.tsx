@@ -111,6 +111,20 @@ function AppInner() {
     page: 'home', productHandle: null, brand: null, navCategory: null, genericCategory: null, search: '', accountTab: 'orders',
   });
 
+  // Snapshot of whichever list-type page (home, products, brand-detail,
+  // nav-category, generic-category, flash-sale, etc.) the person was on
+  // right before opening a product — captured in handleSelectProduct.
+  // "Back to Products" restores exactly this, rather than the old approach
+  // of guessing from selectedBrand/selectedNavCategory state, which went
+  // stale as soon as you navigated anywhere that didn't explicitly pass
+  // those fields to goTo(), and had no case at all for the newer generic
+  // category pages (Thể thao, Loa, Tai Nghe, etc.) — meaning Back always
+  // dumped you on the generic "Shop All Products" page instead of back to
+  // where you actually were.
+  const previousListNavRef = useRef<NavState>({
+    page: 'products', productHandle: null, brand: null, navCategory: null, genericCategory: null, search: '', accountTab: 'orders',
+  });
+
   // Central navigation function: updates React state AND pushes a real
   // browser history entry, so the back/forward buttons have something to
   // actually navigate between.
@@ -272,6 +286,14 @@ function AppInner() {
   }, [liveProducts]);
 
   const handleSelectProduct = (product: Product) => {
+    // Only update the "came from" anchor if we're not already on a
+    // product-detail page — otherwise clicking a related product on one
+    // product page would silently move the Back target to "the previous
+    // product" instead of keeping the original list page you started
+    // from, several products deep.
+    if (navRef.current.page !== 'product-detail') {
+      previousListNavRef.current = { ...navRef.current };
+    }
     goTo({ page: 'product-detail', product });
   };
 
@@ -296,9 +318,14 @@ function AppInner() {
   };
 
   const handleBackFromProduct = () => {
-    if (selectedBrand) goTo({ page: 'brand-detail', brand: selectedBrand });
-    else if (selectedNavCategory) goTo({ page: 'nav-category', navCategory: selectedNavCategory });
-    else goTo({ page: 'products' });
+    const prev = previousListNavRef.current;
+    goTo({
+      page: prev.page,
+      brand: prev.brand,
+      navCategory: prev.navCategory,
+      genericCategory: prev.genericCategory,
+      search: prev.search,
+    });
   };
 
   const handleGoToCheckout = () => { openCart(); };
