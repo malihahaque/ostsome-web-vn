@@ -108,11 +108,11 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
           onClick={() => active.navCategory ? onNavToCategory?.(active.navCategory) : onNavToProducts?.()}
           className="group relative overflow-hidden rounded-xl cursor-pointer mb-6"
         >
-          <div className="relative bg-neutral-100 overflow-hidden">
+          <div className="relative bg-neutral-100 overflow-hidden md:h-[280px]">
             <img
               src={active.image}
               alt={active.title}
-              className="w-full h-auto block group-hover:scale-110 transition duration-700"
+              className="w-full h-auto md:h-full block object-contain md:object-cover group-hover:scale-110 transition duration-700"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.objectFit = 'contain';
                 (e.target as HTMLImageElement).style.padding = '2rem';
