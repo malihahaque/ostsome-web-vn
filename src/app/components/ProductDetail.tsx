@@ -805,17 +805,24 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
               ))}
             </div>
             </div>
-
-            <div className="border-t border-neutral-100 mb-6" />
-
-            <div>
-              <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-4">About this product</h2>
-              <div
-                className="text-sm text-neutral-600 leading-relaxed product-description"
-                dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
-              />
-            </div>
           </div>
+        </div>
+
+        {/* About this product — deliberately full-width and OUTSIDE the
+            2-column grid above, as its own row. Keeping it inside the
+            right-hand column (as a sibling below the sticky buy box)
+            caused the sticky box to visually float on top of this
+            description while scrolling, since they shared the same
+            column. Moving it here means the sticky box only sticks
+            relative to the image/buy-box row's own height, and this
+            section scrolls normally underneath with no overlap. */}
+        <div className="mt-10 lg:mt-14 max-w-3xl">
+          <div className="border-t border-neutral-100 mb-6" />
+          <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-4">About this product</h2>
+          <div
+            className="text-sm text-neutral-600 leading-relaxed product-description"
+            dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
+          />
         </div>
 
         {/* Related Products */}
