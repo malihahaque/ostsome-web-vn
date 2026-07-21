@@ -61,7 +61,7 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
                 onClick={() => onNavToGenericCategory?.(cat.key)}
                 className="flex flex-col items-center gap-3 group w-24 md:w-32"
               >
-                <span className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-100 overflow-hidden ring-1 ring-neutral-200 group-hover:ring-2 group-hover:ring-[#F16C10] transition-all shadow-sm group-hover:shadow-md">
+                <span className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white overflow-hidden ring-1 ring-neutral-200 group-hover:ring-2 group-hover:ring-[#F16C10] transition-all shadow-sm group-hover:shadow-md">
                   {cat.coverImage ? (
                     <img
                       src={cat.coverImage}

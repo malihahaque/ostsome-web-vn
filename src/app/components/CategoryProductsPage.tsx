@@ -48,7 +48,7 @@ export function CategoryProductsPage({ category, onBack, onSelectProduct }: Cate
             onClick={() => onSelectProduct?.(product)}
             className="text-left group"
           >
-            <div className="aspect-square rounded-xl bg-neutral-100 overflow-hidden mb-3">
+            <div className="aspect-square rounded-xl bg-white overflow-hidden mb-3">
               <img
                 src={product.images[0]}
                 alt={product.title}

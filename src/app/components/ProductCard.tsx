@@ -28,7 +28,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
       onClick={() => onClick(product)}
     >
       <div
-        className="relative overflow-hidden bg-neutral-50"
+        className="relative overflow-hidden bg-white"
         style={{ aspectRatio: '1 / 1' }}
         onMouseEnter={() => product.images.length > 1 && setImgIdx(1)}
         onMouseLeave={() => setImgIdx(0)}
