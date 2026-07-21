@@ -65,7 +65,7 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
+        <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-5 md:overflow-visible md:mx-0 md:px-0">
           {FEATURED_DEALS.map(deal => {
             const product = products.find(p => p.handle === deal.handle);
             if (!product) return null;
@@ -74,7 +74,7 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
               <div
                 key={deal.handle}
                 onClick={() => onSelectProduct?.(product)}
-                className="bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                className="shrink-0 w-[46%] sm:w-52 md:w-auto snap-start bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
               >
                 <div className="relative aspect-square bg-neutral-50 overflow-hidden">
                   <img

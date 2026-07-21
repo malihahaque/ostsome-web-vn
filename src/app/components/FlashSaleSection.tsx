@@ -38,7 +38,7 @@ export function FlashSaleSection({ onSelectProduct, onViewAll }: FlashSaleSectio
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+        <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:mx-0 md:px-0">
           {flashProducts.slice(0, 3).map(product => {
             const flashPrice = getFlashSalePrice(product.price);
             const displayPrice = user ? getFostPrice(flashPrice) : flashPrice;
@@ -46,7 +46,7 @@ export function FlashSaleSection({ onSelectProduct, onViewAll }: FlashSaleSectio
               <div
                 key={product.handle}
                 onClick={() => onSelectProduct?.(product)}
-                className="bg-white rounded-xl overflow-hidden border border-neutral-200 hover:shadow-xl transition group cursor-pointer"
+                className="shrink-0 w-[46%] sm:w-52 md:w-auto snap-start bg-white rounded-xl overflow-hidden border border-neutral-200 hover:shadow-xl transition group cursor-pointer"
               >
                 <div className="relative aspect-square bg-neutral-50 overflow-hidden">
                   <img
