@@ -1,78 +1,52 @@
-import { getFostPrice } from '../data/pricing';
-import polaroidFOST from '../../imports/polaroidFOST.png';
-import shureFOST from '../../imports/shureFOST.png';
-import jetbootsFOST from '../../imports/jetbootsFOST.png';
+import fostSectionImg from '../../imports/FOST_section.jpg';
 
-// Photo collage that follows FostQuickPerks — heading/copy/perks/CTAs live
-// there now. All three cards use the same "Giá Hội Viên" pattern: list
-// price struck through, FOST price via getFostPrice() (not hardcoded —
-// stays correct if the FOST discount logic ever changes), savings badge.
+type Props = {
+  onJoin?: () => void;
+  onLearnMore?: () => void;
+  onLogin?: () => void;
+};
+
+// Replaced the old version (hardcoded product cards + hardcoded list
+// prices that its own comments flagged as needing manual verification
+// against Shopify — a real staleness risk) with a single static banner
+// image and two clickable hotspots layered on top. Coordinates below were
+// measured directly from the actual banner image's pixels (1536x1024),
+// not eyeballed, so they line up precisely with the button/link baked
+// into the image. Positioned as percentages (not fixed px) so they stay
+// aligned at any render width. Same hotspot-over-image pattern already
+// used in ShoppableSetup.tsx.
 //
-// NOTE: listPrice values below are pulled from elsewhere in the codebase
-// (Shure MV7+ from Header.tsx's notification feed, RecoveryAir JetBoots
-// from a live ostsome.com.vn scrape, Polaroid from the original design) —
-// confirm against Shopify Admin before this goes live, since a hardcoded
-// price here won't update automatically if the real product price changes.
-const items = [
-  {
-    image: polaroidFOST,
-    alt: 'Polaroid I-2',
-    label: 'Giá Hội Viên',
-    title: 'Polaroid I-2 Instant Camera',
-    listPrice: 15500000,
-  },
-  {
-    image: shureFOST,
-    alt: 'Shure MV7+',
-    label: 'Đang Thịnh Hành',
-    title: 'Shure MV7+',
-    listPrice: 10100000,
-  },
-  {
-    image: jetbootsFOST,
-    alt: 'RecoveryAir JetBoots',
-    label: 'SNAG DEAL',
-    title: 'RecoveryAir JetBoots',
-    listPrice: 24890000,
-  },
-];
-
-export function FostMembership(_props: { onJoin?: () => void; onLearnMore?: () => void; onLogin?: () => void }) {
+// If this banner image is ever replaced with a different design, these
+// hotspot coordinates will need to be re-measured against the new image.
+export function FostMembership({ onJoin, onLogin }: Props) {
   return (
-    <section className="pb-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {items.map(item => {
-            const fostPrice = getFostPrice(item.listPrice);
-            const savings = item.listPrice - fostPrice;
-            return (
-              <div key={item.title} className="flex flex-col">
-                <div className="rounded-2xl overflow-hidden shadow-lg mb-4">
-                  <img
-                    src={item.image}
-                    alt={item.alt}
-                    className="w-full h-64 md:h-72 object-cover"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                  />
-                </div>
-                <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-4 flex-1">
-                  <p className="text-[#F16C10] text-[10px] font-bold uppercase tracking-wider mb-2">{item.label}</p>
-                  <p className="text-black text-sm font-bold mb-3 leading-snug">{item.title}</p>
+    <section className="bg-white">
+      <div className="relative max-w-7xl mx-auto">
+        <img
+          src={fostSectionImg}
+          alt="OSTSOME FOST Membership — Nhận Nhiều Hơn"
+          className="w-full h-auto block"
+        />
 
-                  <p className="text-neutral-400 text-[10px] mb-0.5">Giá Niêm Yết</p>
-                  <p className="text-neutral-400 text-sm line-through mb-2">{item.listPrice.toLocaleString('vi-VN')}₫</p>
+        {/* "Tham Gia Hoàn Toàn Miễn Phí" button — measured button bbox is
+            30.1%–69.9% x / 88.8%–94.9% y; padded slightly for a
+            comfortable tap target. */}
+        <button
+          onClick={onJoin}
+          aria-label="Tham Gia Hoàn Toàn Miễn Phí"
+          className="absolute cursor-pointer"
+          style={{ left: '28%', top: '87.8%', width: '44%', height: '7.7%' }}
+        />
 
-                  <p className="text-[#F16C10] text-[9px] font-bold uppercase tracking-wider mb-0.5">Giá FOST</p>
-                  <p className="text-[#F16C10] text-2xl font-bold mb-2">{fostPrice.toLocaleString('vi-VN')}₫</p>
-
-                  <div className="bg-[#F16C10]/10 text-[#F16C10] text-[10px] font-bold px-2 py-1 rounded-full inline-block">
-                    Tiết kiệm {savings.toLocaleString('vi-VN')}₫
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* "Đăng nhập" text link — measured text bbox is 51.2%–57.7% x /
+            97.1%–97.9% y, which is only ~9px tall in the source image, so
+            padded generously here since that's too small a target as-is. */}
+        <button
+          onClick={onLogin}
+          aria-label="Đăng nhập"
+          className="absolute cursor-pointer"
+          style={{ left: '47%', top: '96%', width: '16%', height: '3%' }}
+        />
       </div>
     </section>
   );
