@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { Briefcase, Gift, Camera } from 'lucide-react';
 import workAnywhereImg from '../../imports/Cafe Setup.png';
 import captureLifeImg from '../../imports/Creator Tools.png';
 import giftImg from '../../imports/Gift Guide.png';
+import { useProducts } from '../hooks/useProducts';
+import { ProductCard } from './ProductCard';
+import type { Product } from '../data/products';
 
-// Trimmed to 3 lifestyles per Mals — Study Mode and Audio Everywhere removed.
-// With exactly 3 left, using a single even 3-across grid (all cards the same
-// size) instead of the old 2-large-plus-3-small split, which would have left
-// one lonely full-width card on its own row.
+// Rebuilt as a tabbed section (banner + swipeable product row per tab)
+// instead of 3 full stacked grids — the old version made customers scroll
+// through a long wall of content. Trimmed to 3 lifestyles per Mals — Study
+// Mode and Audio Everywhere removed.
 const lifestyles = [
   {
     id: 1,
@@ -14,7 +18,6 @@ const lifestyles = [
     description: 'Your office. Your rules.',
     icon: Briefcase,
     image: workAnywhereImg,
-    products: '18 products',
     navCategory: 'Desk Setup',
   },
   {
@@ -23,7 +26,6 @@ const lifestyles = [
     description: 'Every moment. Every memory. Print it, keep it.',
     icon: Camera,
     image: captureLifeImg,
-    products: '10 products',
     navCategory: 'Mobile Creator',
   },
   {
@@ -32,17 +34,39 @@ const lifestyles = [
     description: 'Thoughtful tech gifts for the ones you love.',
     icon: Gift,
     image: giftImg,
-    products: '22 products',
-    navCategory: null, // spans multiple categories — routes to All Products instead
+    // Deliberately null — this lifestyle spans multiple categories, so it
+    // can't filter by navCategory like the other two. See product-picking
+    // fallback below.
+    navCategory: null as string | null,
   },
 ];
+
+const MAX_PRODUCTS = 10;
 
 type Props = {
   onNavToCategory?: (category: string) => void;
   onNavToProducts?: () => void;
+  onSelectProduct?: (product: Product) => void;
 };
 
-export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts }: Props) {
+export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelectProduct }: Props) {
+  const { products } = useProducts();
+  const [activeTab, setActiveTab] = useState(0);
+  const active = lifestyles[activeTab];
+  const Icon = active.icon;
+
+  // Tết Gift Guide has no single navCategory to filter on (it intentionally
+  // spans many), so — per Mals — it falls back to the first available
+  // products site-wide for now. The other two tabs filter by the real
+  // navCategory already computed in useProducts.ts. Long-term, Gift Guide
+  // should probably move to a curated handle list, same pattern as Flash
+  // Sale / One Season Off / Launch Exclusive, once specific products are
+  // picked for it.
+  const tabProducts = (active.navCategory
+    ? products.filter(p => p.availableForSale && p.navCategory === active.navCategory)
+    : products.filter(p => p.availableForSale)
+  ).slice(0, MAX_PRODUCTS);
+
   return (
     <section className="py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -51,42 +75,60 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts }: Props
           <p className="text-[14px] md:text-base text-neutral-600">Your setup. Your rules. Your vibe.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {lifestyles.map((lifestyle) => {
-            const Icon = lifestyle.icon;
-            return (
-              <div
-                key={lifestyle.id}
-                onClick={() => lifestyle.navCategory ? onNavToCategory?.(lifestyle.navCategory) : onNavToProducts?.()}
-                className="group relative overflow-hidden rounded-xl cursor-pointer"
-              >
-                <div className="relative h-[300px] md:h-[420px] bg-neutral-100 overflow-hidden">
-                  <img
-                    src={lifestyle.image}
-                    alt={lifestyle.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.objectFit = 'contain';
-                      (e.target as HTMLImageElement).style.padding = '2rem';
-                    }}
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
-                </div>
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-4 group-hover:bg-[#F16C10] transition">
-                    <Icon className="text-white" size={24} />
-                  </div>
-                  <h3 className="text-white text-xl font-bold mb-2">{lifestyle.title}</h3>
-                  <p className="text-white/90 text-sm mb-3">{lifestyle.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-white/70 text-xs">{lifestyle.products}</span>
-                    <span className="text-white text-sm font-medium group-hover:translate-x-1 transition">Explore →</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        {/* Tab selector */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
+          {lifestyles.map((lifestyle, i) => (
+            <button
+              key={lifestyle.id}
+              onClick={() => setActiveTab(i)}
+              className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
+                activeTab === i
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-neutral-600 border-neutral-200 hover:border-neutral-400'
+              }`}
+            >
+              {lifestyle.title}
+            </button>
+          ))}
         </div>
+
+        {/* Banner for the active tab */}
+        <div
+          onClick={() => active.navCategory ? onNavToCategory?.(active.navCategory) : onNavToProducts?.()}
+          className="group relative overflow-hidden rounded-xl cursor-pointer mb-6"
+        >
+          <div className="relative h-[220px] md:h-[280px] bg-neutral-100 overflow-hidden">
+            <img
+              src={active.image}
+              alt={active.title}
+              className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.objectFit = 'contain';
+                (e.target as HTMLImageElement).style.padding = '2rem';
+              }}
+            />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
+          </div>
+          <div className="absolute inset-0 p-6 flex flex-col justify-end">
+            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-3 group-hover:bg-[#F16C10] transition">
+              <Icon className="text-white" size={22} />
+            </div>
+            <h3 className="text-white text-xl font-bold mb-1">{active.title}</h3>
+            <p className="text-white/90 text-sm mb-1">{active.description}</p>
+            <span className="text-white text-sm font-medium group-hover:translate-x-1 transition">Explore all →</span>
+          </div>
+        </div>
+
+        {/* Swipeable product row for the active tab */}
+        {tabProducts.length > 0 && (
+          <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-5 md:gap-5 md:overflow-visible md:mx-0 md:px-0">
+            {tabProducts.map(product => (
+              <div key={product.handle} className="shrink-0 w-[46%] sm:w-52 md:w-auto snap-start">
+                <ProductCard product={product} onClick={p => onSelectProduct?.(p)} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

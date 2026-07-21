@@ -365,7 +365,7 @@ function AppInner() {
             onLearnMore={() => goTo({ page: 'fost-membership' })}
           />
           <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
-          <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
+          <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} onSelectProduct={handleSelectProduct} />
           <ShoppableSetup onSelectProduct={handleSelectProduct} />
           <OurStory />
           <ContactAndTrust />
