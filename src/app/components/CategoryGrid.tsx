@@ -29,7 +29,7 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
   // photos, so this grid's numbers agree with "All Products" instead of
   // counting things that aren't actually purchasable.
   const byCategory = products.filter(p => p.availableForSale).reduce<Partial<Record<GenericCategoryKey, Product[]>>>((acc, p) => {
-    const key = mapGenericCategory(p.type, p.title);
+    const key = mapGenericCategory(p.type, p.title, p.vendor);
     (acc[key] ??= []).push(p);
     return acc;
   }, {});

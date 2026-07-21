@@ -112,6 +112,17 @@ const RULES: { key: GenericCategoryKey; keywords: string[] }[] = [
   },
 ];
 
+// Vendors whose entire catalog is a single category — used as a manual
+// override below, ahead of keyword matching. This is a direct workaround
+// for KEF specifically: several KEF products have an empty "Type" field
+// in Shopify with nothing in the title to match either, so no keyword
+// list can catch them. Every KEF product is a speaker, so vendor alone is
+// a reliable signal here. Add more brands to this list if the same
+// problem shows up elsewhere (e.g. a mic-only or gaming-only vendor).
+const VENDOR_OVERRIDES: Record<string, GenericCategoryKey> = {
+  'kef': 'loa',
+};
+
 // Falls back to matching against the product title when the Shopify "Type"
 // field is empty (confirmed this happens — e.g. KEF LS50 Meta has Type set
 // to "None" in Shopify Admin, so there's literally no productType text to
@@ -120,7 +131,10 @@ const RULES: { key: GenericCategoryKey; keywords: string[] }[] = [
 // blank-Type product — if the category keyword isn't in the title either,
 // there's genuinely nothing here to match on, and the real fix for those
 // is filling in the Type field in Shopify Admin, not another keyword.
-export function mapGenericCategory(productType: string, title?: string): GenericCategoryKey {
+export function mapGenericCategory(productType: string, title?: string, vendor?: string): GenericCategoryKey {
+  const vendorOverride = VENDOR_OVERRIDES[(vendor ?? '').toLowerCase()];
+  if (vendorOverride) return vendorOverride;
+
   const t = `${productType ?? ''} ${title ?? ''}`.toLowerCase();
   for (const rule of RULES) {
     if (rule.keywords.some(k => t.includes(k))) return rule.key;
