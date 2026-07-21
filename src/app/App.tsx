@@ -8,7 +8,6 @@ import { OneSeasonOffPage } from './components/OneSeasonOffPage';
 import { WhatsNewThisWeek } from './components/WhatsNewThisWeek';
 import { ShoppableSetup } from './components/ShoppableSetup';
 import { DiscoveryByLifestyle } from './components/DiscoveryByLifestyle';
-import { WhyEnthusiasts } from './components/WhyEnthusiasts';
 import { OurStory } from './components/OurStory';
 import { FostMembership } from './components/FostMembership';
 import { FostMembershipPage } from './components/FostMembershipPage';
@@ -367,7 +366,6 @@ function AppInner() {
           />
           <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
           <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} />
-          <WhyEnthusiasts />
           <ShoppableSetup onSelectProduct={handleSelectProduct} />
           <OurStory />
           <ContactAndTrust />

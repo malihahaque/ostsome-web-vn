@@ -43,7 +43,7 @@ export function ContactAndTrust() {
         {/* Contact card */}
         <div className="bg-gradient-to-br from-[#FDF3EA] to-white rounded-3xl p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
-            <h3 className="text-xl md:text-2xl font-bold text-black mb-2">Công ty TNHH Streacast Asia Việt Nam</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-black mb-2">Công ty TNHH Streamcast Asia Việt Nam</h3>
             <div className="w-12 h-1 bg-[#F16C10] rounded-full mb-6" />
             <div className="flex flex-col divide-y divide-neutral-200">
               {contactRows.map((row, i) => {
