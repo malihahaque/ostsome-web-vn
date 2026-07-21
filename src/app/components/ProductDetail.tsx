@@ -871,25 +871,32 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                   </div>
                 )}
 
-                {/* Feature highlights — Content 1-5 / Image 1-5 pairs,
-                    alternating image side on desktop, stacked on mobile. */}
-                {product.metafields.features.map((feature, i) => (
-                  <div key={i} className={`flex flex-col gap-5 items-start ${i % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
-                    {feature.image && (
-                      <img
-                        src={feature.image}
-                        alt=""
-                        className="w-full md:w-1/3 rounded-xl object-cover"
-                      />
-                    )}
-                    {feature.content && (
-                      <div
-                        className="flex-1 text-sm text-neutral-600 leading-relaxed product-description"
-                        dangerouslySetInnerHTML={{ __html: feature.content }}
-                      />
-                    )}
+                {/* Feature highlights — Content 1-5 / Image 1-5 pairs, as
+                    a horizontal snap-scroll carousel (one full slide at a
+                    time, image + text together), matching how these show
+                    on the Shopify theme side rather than stacking them as
+                    separate full-width sections. */}
+                {product.metafields.features.length > 0 && (
+                  <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 -mx-4 px-4 md:mx-0 md:px-0 pb-2">
+                    {product.metafields.features.map((feature, i) => (
+                      <div key={i} className="snap-center shrink-0 w-full flex flex-col md:flex-row items-center gap-5">
+                        {feature.content && (
+                          <div
+                            className="flex-1 text-sm text-neutral-600 leading-relaxed product-description"
+                            dangerouslySetInnerHTML={{ __html: feature.content }}
+                          />
+                        )}
+                        {feature.image && (
+                          <img
+                            src={feature.image}
+                            alt=""
+                            className="w-full md:w-1/2 rounded-xl object-cover shrink-0"
+                          />
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
 
                 {/* Labeled text sections — Compatibility, Specifications,
                     What's in the Box, Reference Docs. */}

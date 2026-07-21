@@ -39,6 +39,69 @@ function mapNavCategory(vendor: string, productType: string): string {
 
 // ─── METAFIELDS ────────────────────────────────────────────────────────────────
 
+// "Rich text" type metafields (Content 1-5, Compatibility, Thông số kỹ
+// thuật, Trọn bộ sản phẩm, Tài liệu tham khảo, Content Mô tả) come back
+// from Shopify as a JSON document tree, NOT as HTML — e.g.
+// {"type":"root","children":[{"type":"paragraph","children":[{"type":"text","value":"..."}]}]}.
+// Rendering that JSON string directly as HTML (as an earlier version of
+// this code did) just prints the raw JSON as visible text. This parses
+// the tree into actual HTML. "Single line text" fields (Meta Info Box
+// 1/2, Heading Mô tả) are plain strings already and must NOT be run
+// through this — there's nothing to parse there.
+type RichTextNode = {
+  type: string;
+  children?: RichTextNode[];
+  value?: string;
+  bold?: boolean;
+  italic?: boolean;
+  level?: number;
+  listType?: 'unordered' | 'ordered';
+  url?: string;
+};
+
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function richTextNodeToHtml(node: RichTextNode): string {
+  const inner = () => (node.children ?? []).map(richTextNodeToHtml).join('');
+  switch (node.type) {
+    case 'root':
+      return inner();
+    case 'paragraph':
+      return `<p>${inner()}</p>`;
+    case 'heading':
+      return `<h${node.level ?? 3}>${inner()}</h${node.level ?? 3}>`;
+    case 'list':
+      return node.listType === 'ordered' ? `<ol>${inner()}</ol>` : `<ul>${inner()}</ul>`;
+    case 'list-item':
+      return `<li>${inner()}</li>`;
+    case 'link':
+      return `<a href="${node.url ?? '#'}" target="_blank" rel="noopener noreferrer">${inner()}</a>`;
+    case 'text': {
+      let text = escapeHtml(node.value ?? '').replace(/\n/g, '<br/>');
+      if (node.bold) text = `<strong>${text}</strong>`;
+      if (node.italic) text = `<em>${text}</em>`;
+      return text;
+    }
+    default:
+      return inner();
+  }
+}
+
+// Converts a rich-text metafield's raw value into renderable HTML. Falls
+// back to returning the raw string if it's not valid JSON (defensive —
+// shouldn't normally happen for a real rich-text field, but avoids a hard
+// crash if a field's type ever changes in Shopify Admin).
+function richTextToHtml(raw: string | null): string | null {
+  if (!raw) return null;
+  try {
+    return richTextNodeToHtml(JSON.parse(raw));
+  } catch {
+    return raw;
+  }
+}
+
 // Shopify returns metafields as a flat array (one entry per identifier
 // requested, null if that product doesn't have a value set for it) rather
 // than a keyed object — this reshapes it into something components can
@@ -51,21 +114,22 @@ function mapMetafields(raw: ShopifyProduct['metafields']): ProductMetafields {
     byKey.set(m.key, { value: m.value, imageUrl: m.reference?.image?.url ?? null });
   }
   const text = (key: string) => byKey.get(key)?.value ?? null;
+  const richText = (key: string) => richTextToHtml(byKey.get(key)?.value ?? null);
   const image = (key: string) => byKey.get(key)?.imageUrl ?? null;
 
   const features = [1, 2, 3, 4, 5]
-    .map(n => ({ content: text(`content_${n}`), image: image(`image_${n}`) }))
+    .map(n => ({ content: richText(`content_${n}`), image: image(`image_${n}`) }))
     .filter(f => f.content || f.image);
 
   return {
-    compatibility: text('compatibility'),
+    compatibility: richText('compatibility'),
     descriptionHeading: text('heading_m_t_'),
-    descriptionContent: text('content_m_t_'),
+    descriptionContent: richText('content_m_t_'),
     descriptionImage: image('image_m_t_'),
     features,
-    specifications: text('th_ng_s_k_thu_t'),
-    whatsInTheBox: text('tr_n_b_s_n_ph_m'),
-    referenceDocs: text('t_i_li_u_tham_kh_o'),
+    specifications: richText('th_ng_s_k_thu_t'),
+    whatsInTheBox: richText('tr_n_b_s_n_ph_m'),
+    referenceDocs: richText('t_i_li_u_tham_kh_o'),
     metaInfoBox1: text('meta_info_box_1'),
     metaInfoBox2: text('meta_info_box_2'),
   };
