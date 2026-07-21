@@ -884,30 +884,41 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
 
             {/* Description heading/content/image — an additional
                 highlight block distinct from the main product
-                description above. */}
+                description above. When there's no heading/content text
+                (image-only, as with Looki's branded promo graphic), the
+                image gets its own centered, smaller treatment instead of
+                the half-width/side-by-side layout meant for when there's
+                text next to it. */}
             {(product.metafields.descriptionHeading || product.metafields.descriptionContent || product.metafields.descriptionImage) && (
-              <div className="flex flex-col md:flex-row gap-8 items-center">
-                {product.metafields.descriptionImage && (
-                  <img
-                    src={product.metafields.descriptionImage}
-                    alt=""
-                    className="w-full md:w-1/2 rounded-xl object-cover"
-                  />
-                )}
-                <div className="flex-1">
-                  {product.metafields.descriptionHeading && (
-                    <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">
-                      {product.metafields.descriptionHeading}
-                    </h3>
-                  )}
-                  {product.metafields.descriptionContent && (
-                    <div
-                      className="text-sm text-neutral-600 leading-relaxed product-description"
-                      dangerouslySetInnerHTML={{ __html: product.metafields.descriptionContent }}
-                    />
-                  )}
-                </div>
-              </div>
+              (() => {
+                const hasText = Boolean(product.metafields!.descriptionHeading || product.metafields!.descriptionContent);
+                return (
+                  <div className={hasText ? 'flex flex-col md:flex-row gap-8 items-center' : 'flex justify-center'}>
+                    {product.metafields!.descriptionImage && (
+                      <img
+                        src={product.metafields!.descriptionImage}
+                        alt=""
+                        className={hasText ? 'w-full md:w-1/2 rounded-xl object-cover' : 'w-full max-w-sm rounded-xl object-cover'}
+                      />
+                    )}
+                    {hasText && (
+                      <div className="flex-1">
+                        {product.metafields!.descriptionHeading && (
+                          <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">
+                            {product.metafields!.descriptionHeading}
+                          </h3>
+                        )}
+                        {product.metafields!.descriptionContent && (
+                          <div
+                            className="text-sm text-neutral-600 leading-relaxed product-description"
+                            dangerouslySetInnerHTML={{ __html: product.metafields!.descriptionContent }}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()
             )}
 
             {/* Feature highlights — Content 1-5 / Image 1-5 pairs, back to
