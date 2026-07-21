@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, ShoppingCart, Star, Shield, Truck, RefreshCw, Check, X } from 'lucide-react';
 import type { Product } from '../data/products';
 import { useCart } from './CartContext';
@@ -350,6 +350,40 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
     'arzopa-d10-10-1-digital-photo-frame': { videoId: '_Hbar0aUjis', title: 'Arzopa D10 video' },
   };
   const productVideo = PRODUCT_VIDEOS[product.handle];
+
+  // Scroll-spy for the vertical feature-progress dots (Content/Image 1-5),
+  // similar to the dot indicator on the Shopify theme reference. Tracks
+  // which feature block is currently most in view and highlights the
+  // matching dot; clicking a dot scrolls that block into view.
+  const featureRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeFeature, setActiveFeature] = useState(0);
+  const featureCount = product.metafields?.features.length ?? 0;
+
+  useEffect(() => {
+    if (featureCount === 0) return;
+    const observer = new IntersectionObserver(
+      entries => {
+        // Pick the entry closest to the center of the viewport among
+        // those currently intersecting, rather than just "first match" —
+        // keeps the active dot accurate when multiple blocks are
+        // partially visible at once.
+        const visible = entries.filter(e => e.isIntersecting);
+        if (visible.length === 0) return;
+        const closest = visible.reduce((best, e) =>
+          Math.abs(e.boundingClientRect.top) < Math.abs(best.boundingClientRect.top) ? e : best
+        );
+        const idx = Number(closest.target.getAttribute('data-feature-index'));
+        if (!Number.isNaN(idx)) setActiveFeature(idx);
+      },
+      { threshold: 0.4 }
+    );
+    featureRefs.current.forEach(el => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, [featureCount]);
+
+  function scrollToFeature(i: number) {
+    featureRefs.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 
   // Related products: prioritize same-brand items, then top up with
   // same-category items if the brand alone doesn't have enough in stock.
@@ -824,100 +858,123 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
               />
             </div>
+          </div>
+        </div>
 
-            {/* Product metafields from Shopify — Compatibility, feature
-                highlights (Content/Image 1-5), specs, what's in the box,
-                reference docs, and the two Meta Info badges. Everything
-                here is conditionally rendered — a product with none of
-                these fields set just won't show this section at all. */}
-            {product.metafields && (
-              <div className="mt-8 flex flex-col gap-8">
-                {/* Meta Info badges */}
-                {(product.metafields.metaInfoBox1 || product.metafields.metaInfoBox2) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {[product.metafields.metaInfoBox1, product.metafields.metaInfoBox2].filter(Boolean).map((text, i) => (
-                      <div key={i} className="bg-[#FFF8F1] border border-[#F16C10]/20 rounded-xl px-4 py-3 text-sm text-neutral-700">
-                        {text}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Description heading/content/image — an additional
-                    highlight block distinct from the main product
-                    description above. */}
-                {(product.metafields.descriptionHeading || product.metafields.descriptionContent || product.metafields.descriptionImage) && (
-                  <div className="flex flex-col md:flex-row gap-5 items-start">
-                    {product.metafields.descriptionImage && (
-                      <img
-                        src={product.metafields.descriptionImage}
-                        alt=""
-                        className="w-full md:w-1/3 rounded-xl object-cover"
-                      />
-                    )}
-                    <div className="flex-1">
-                      {product.metafields.descriptionHeading && (
-                        <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">
-                          {product.metafields.descriptionHeading}
-                        </h3>
-                      )}
-                      {product.metafields.descriptionContent && (
-                        <div
-                          className="text-sm text-neutral-600 leading-relaxed product-description"
-                          dangerouslySetInnerHTML={{ __html: product.metafields.descriptionContent }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Feature highlights — Content 1-5 / Image 1-5 pairs, as
-                    a horizontal snap-scroll carousel (one full slide at a
-                    time, image + text together), matching how these show
-                    on the Shopify theme side rather than stacking them as
-                    separate full-width sections. */}
-                {product.metafields.features.length > 0 && (
-                  <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 -mx-4 px-4 md:mx-0 md:px-0 pb-2">
-                    {product.metafields.features.map((feature, i) => (
-                      <div key={i} className="snap-center shrink-0 w-full flex flex-col md:flex-row items-center gap-5">
-                        {feature.content && (
-                          <div
-                            className="flex-1 text-sm text-neutral-600 leading-relaxed product-description"
-                            dangerouslySetInnerHTML={{ __html: feature.content }}
-                          />
-                        )}
-                        {feature.image && (
-                          <img
-                            src={feature.image}
-                            alt=""
-                            className="w-full md:w-1/2 rounded-xl object-cover shrink-0"
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Labeled text sections — Compatibility, Specifications,
-                    What's in the Box, Reference Docs. */}
-                {[
-                  { label: 'Compatibility', content: product.metafields.compatibility },
-                  { label: 'Thông số kỹ thuật', content: product.metafields.specifications },
-                  { label: 'Trọn bộ sản phẩm', content: product.metafields.whatsInTheBox },
-                  { label: 'Tài liệu tham khảo', content: product.metafields.referenceDocs },
-                ].filter(section => section.content).map(section => (
-                  <div key={section.label}>
-                    <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">{section.label}</h3>
-                    <div
-                      className="text-sm text-neutral-600 leading-relaxed product-description"
-                      dangerouslySetInnerHTML={{ __html: section.content! }}
-                    />
+        {/* Product metafields from Shopify — Compatibility, feature
+            highlights (Content/Image 1-5), specs, what's in the box,
+            reference docs, and the two Meta Info badges. Full-width (a
+            sibling of the 2-column grid above, not nested inside the
+            narrow right column) so it actually spans the page instead of
+            being squeezed into ~half the width. Everything here is
+            conditionally rendered — a product with none of these fields
+            set just won't show this section at all. */}
+        {product.metafields && (
+          <div className="mt-16 md:mt-20 relative flex flex-col gap-12">
+            {/* Meta Info badges */}
+            {(product.metafields.metaInfoBox1 || product.metafields.metaInfoBox2) && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[product.metafields.metaInfoBox1, product.metafields.metaInfoBox2].filter(Boolean).map((text, i) => (
+                  <div key={i} className="bg-[#FFF8F1] border border-[#F16C10]/20 rounded-xl px-4 py-3 text-sm text-neutral-700">
+                    {text}
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Description heading/content/image — an additional
+                highlight block distinct from the main product
+                description above. */}
+            {(product.metafields.descriptionHeading || product.metafields.descriptionContent || product.metafields.descriptionImage) && (
+              <div className="flex flex-col md:flex-row gap-8 items-center">
+                {product.metafields.descriptionImage && (
+                  <img
+                    src={product.metafields.descriptionImage}
+                    alt=""
+                    className="w-full md:w-1/2 rounded-xl object-cover"
+                  />
+                )}
+                <div className="flex-1">
+                  {product.metafields.descriptionHeading && (
+                    <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">
+                      {product.metafields.descriptionHeading}
+                    </h3>
+                  )}
+                  {product.metafields.descriptionContent && (
+                    <div
+                      className="text-sm text-neutral-600 leading-relaxed product-description"
+                      dangerouslySetInnerHTML={{ __html: product.metafields.descriptionContent }}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Feature highlights — Content 1-5 / Image 1-5 pairs, back to
+                a vertical stack (alternating image side), now full-width
+                so both the text and the image actually have room. The
+                dots on the right (lg+ only) are a scroll-spy — see
+                featureRefs/activeFeature above — matching the vertical
+                progress-dot indicator on the Shopify theme reference. */}
+            {product.metafields.features.length > 0 && (
+              <div className="flex flex-col gap-16 relative">
+                {product.metafields.features.map((feature, i) => (
+                  <div
+                    key={i}
+                    ref={el => { featureRefs.current[i] = el; }}
+                    data-feature-index={i}
+                    className={`flex flex-col gap-8 items-center ${i % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'}`}
+                  >
+                    {feature.image && (
+                      <img
+                        src={feature.image}
+                        alt=""
+                        className="w-full md:w-1/2 rounded-xl object-cover"
+                      />
+                    )}
+                    {feature.content && (
+                      <div
+                        className="flex-1 text-sm text-neutral-600 leading-relaxed product-description"
+                        dangerouslySetInnerHTML={{ __html: feature.content }}
+                      />
+                    )}
+                  </div>
+                ))}
+
+                {/* Vertical scroll-progress dots */}
+                <div className="hidden lg:flex flex-col gap-3 fixed right-6 top-1/2 -translate-y-1/2 z-30">
+                  {product.metafields.features.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => scrollToFeature(i)}
+                      aria-label={`Feature ${i + 1}`}
+                      className={`w-2.5 h-2.5 rounded-full transition-all ${
+                        activeFeature === i ? 'bg-[#F16C10] scale-125' : 'bg-neutral-300 hover:bg-neutral-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Labeled text sections — Compatibility, Specifications,
+                What's in the Box, Reference Docs. */}
+            {[
+              { label: 'Compatibility', content: product.metafields.compatibility },
+              { label: 'Thông số kỹ thuật', content: product.metafields.specifications },
+              { label: 'Trọn bộ sản phẩm', content: product.metafields.whatsInTheBox },
+              { label: 'Tài liệu tham khảo', content: product.metafields.referenceDocs },
+            ].filter(section => section.content).map(section => (
+              <div key={section.label}>
+                <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">{section.label}</h3>
+                <div
+                  className="text-sm text-neutral-600 leading-relaxed product-description"
+                  dangerouslySetInnerHTML={{ __html: section.content! }}
+                />
+              </div>
+            ))}
           </div>
-        </div>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
