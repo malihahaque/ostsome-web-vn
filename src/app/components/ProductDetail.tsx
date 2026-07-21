@@ -499,7 +499,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
       )}
 
       <div className="max-w-7xl mx-auto px-4 pb-24 lg:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
 
           {/* Image Gallery */}
           <div className="flex flex-col gap-4">
@@ -554,10 +554,6 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
 
           {/* Product Info */}
           <div className="flex flex-col">
-            {/* Sticky on desktop so it stays in view while scrolling past
-                the description below — unsticks naturally once this
-                column's content ends, same as Shopee's PDP layout. */}
-            <div className="lg:sticky lg:top-24">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-xs font-bold text-[#F16C10] uppercase tracking-widest">{product.vendor}</span>
               <span className="text-xs text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-full">{product.category}</span>
@@ -804,25 +800,17 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 </div>
               ))}
             </div>
+
+            <div className="border-t border-neutral-100 mb-6" />
+
+            <div>
+              <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-4">About this product</h2>
+              <div
+                className="text-sm text-neutral-600 leading-relaxed product-description"
+                dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
+              />
             </div>
           </div>
-        </div>
-
-        {/* About this product — deliberately full-width and OUTSIDE the
-            2-column grid above, as its own row. Keeping it inside the
-            right-hand column (as a sibling below the sticky buy box)
-            caused the sticky box to visually float on top of this
-            description while scrolling, since they shared the same
-            column. Moving it here means the sticky box only sticks
-            relative to the image/buy-box row's own height, and this
-            section scrolls normally underneath with no overlap. */}
-        <div className="mt-10 lg:mt-14 max-w-3xl">
-          <div className="border-t border-neutral-100 mb-6" />
-          <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-4">About this product</h2>
-          <div
-            className="text-sm text-neutral-600 leading-relaxed product-description"
-            dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
-          />
         </div>
 
         {/* Related Products */}
