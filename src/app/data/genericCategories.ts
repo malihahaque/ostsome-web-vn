@@ -112,8 +112,16 @@ const RULES: { key: GenericCategoryKey; keywords: string[] }[] = [
   },
 ];
 
-export function mapGenericCategory(productType: string): GenericCategoryKey {
-  const t = (productType ?? '').toLowerCase();
+// Falls back to matching against the product title when the Shopify "Type"
+// field is empty (confirmed this happens — e.g. KEF LS50 Meta has Type set
+// to "None" in Shopify Admin, so there's literally no productType text to
+// match against). Titles like "Loa Bookshelf KEF Q150" still carry the
+// category keyword even when Type doesn't. This won't rescue every
+// blank-Type product — if the category keyword isn't in the title either,
+// there's genuinely nothing here to match on, and the real fix for those
+// is filling in the Type field in Shopify Admin, not another keyword.
+export function mapGenericCategory(productType: string, title?: string): GenericCategoryKey {
+  const t = `${productType ?? ''} ${title ?? ''}`.toLowerCase();
   for (const rule of RULES) {
     if (rule.keywords.some(k => t.includes(k))) return rule.key;
   }

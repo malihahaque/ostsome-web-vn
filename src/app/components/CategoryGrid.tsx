@@ -29,20 +29,20 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
   // photos, so this grid's numbers agree with "All Products" instead of
   // counting things that aren't actually purchasable.
   const byCategory = products.filter(p => p.availableForSale).reduce<Partial<Record<GenericCategoryKey, Product[]>>>((acc, p) => {
-    const key = mapGenericCategory(p.type);
+    const key = mapGenericCategory(p.type, p.title);
     (acc[key] ??= []).push(p);
     return acc;
   }, {});
 
-  const activeCategories = GENERIC_CATEGORIES
-    .map(cat => {
-      const items = byCategory[cat.key] ?? [];
-      const cover = items.find(p => p.availableForSale && p.images[0]) ?? items.find(p => p.images[0]);
-      return { ...cat, count: items.length, coverImage: cover?.images[0] ?? null };
-    })
-    .filter(cat => cat.count > 0);
-
-  if (activeCategories.length === 0) return null;
+  // Always show all 10 categories as a fixed nav strip, even ones with no
+  // matching products yet (falls back to the icon instead of a cover
+  // photo) — this is a fixed taxonomy the VN team wants visible in full,
+  // not a "only show what's currently in stock" grid.
+  const activeCategories = GENERIC_CATEGORIES.map(cat => {
+    const items = byCategory[cat.key] ?? [];
+    const cover = items.find(p => p.availableForSale && p.images[0]) ?? items.find(p => p.images[0]);
+    return { ...cat, count: items.length, coverImage: cover?.images[0] ?? null };
+  });
 
   return (
     <section className="w-full bg-white">
