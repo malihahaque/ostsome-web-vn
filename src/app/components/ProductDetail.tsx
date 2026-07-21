@@ -498,8 +498,8 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+      <div className="max-w-7xl mx-auto px-4 pb-24 lg:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-start">
 
           {/* Image Gallery */}
           <div className="flex flex-col gap-4">
@@ -554,6 +554,10 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
 
           {/* Product Info */}
           <div className="flex flex-col">
+            {/* Sticky on desktop so it stays in view while scrolling past
+                the description below — unsticks naturally once this
+                column's content ends, same as Shopee's PDP layout. */}
+            <div className="lg:sticky lg:top-24">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-xs font-bold text-[#F16C10] uppercase tracking-widest">{product.vendor}</span>
               <span className="text-xs text-neutral-400 bg-neutral-100 px-2 py-0.5 rounded-full">{product.category}</span>
@@ -756,7 +760,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
               </div>
             )}
 
-            <div className="flex flex-col gap-3 mb-8">
+            <div className="hidden lg:flex flex-col gap-3 mb-8">
               {(!product.availableForSale || (selectedOption1 !== null && !selectedVariantAvailable)) ? (
                 <div className="w-full bg-neutral-100 text-neutral-400 font-bold py-4 rounded-xl flex items-center justify-center text-sm uppercase tracking-wide">
                   Hết Hàng
@@ -800,6 +804,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 </div>
               ))}
             </div>
+            </div>
 
             <div className="border-t border-neutral-100 mb-6" />
 
@@ -834,6 +839,40 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
 
       <OurStory />
       <ContactAndTrust />
+
+      {/* Mobile fixed buy bar — desktop keeps the buttons inline in the
+          sticky product-info column instead, see the "hidden lg:flex"
+          button block above. */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-neutral-200 px-4 py-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        {(!product.availableForSale || (selectedOption1 !== null && !selectedVariantAvailable)) ? (
+          <div className="w-full bg-neutral-100 text-neutral-400 font-bold py-3.5 rounded-xl flex items-center justify-center text-sm uppercase tracking-wide">
+            Hết Hàng
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={handleAddToCart}
+              className={`flex-1 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all text-xs uppercase tracking-wide ${
+                addedToCart
+                  ? 'bg-green-500 text-white'
+                  : 'bg-[#F16C10] hover:bg-[#d9610e] text-white'
+              }`}
+            >
+              {addedToCart ? (
+                <><Check size={16} /> Đã Thêm</>
+              ) : (
+                <><ShoppingCart size={16} /> Thêm Vào Giỏ</>
+              )}
+            </button>
+            <button
+              onClick={handleBuyNow}
+              className="flex-1 bg-black hover:bg-neutral-800 text-white font-bold py-3.5 rounded-xl transition-colors text-xs uppercase tracking-wide"
+            >
+              Mua Ngay
+            </button>
+          </>
+        )}
+      </div>
 
       <style>{`
         .product-description ul { list-style: disc; padding-left: 1.25rem; margin: 0.75rem 0; }
