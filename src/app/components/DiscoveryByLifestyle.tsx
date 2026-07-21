@@ -108,7 +108,7 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
           onClick={() => active.navCategory ? onNavToCategory?.(active.navCategory) : onNavToProducts?.()}
           className="group relative overflow-hidden rounded-xl cursor-pointer mb-6"
         >
-          <div className="relative bg-neutral-100 overflow-hidden md:h-[280px]">
+          <div className="relative bg-neutral-100 overflow-hidden md:aspect-[3/1]">
             <img
               src={active.image}
               alt={active.title}
