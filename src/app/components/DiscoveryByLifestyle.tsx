@@ -7,11 +7,21 @@ import { useProducts } from '../hooks/useProducts';
 import { ProductCard } from './ProductCard';
 import type { Product } from '../data/products';
 
+type Lifestyle = {
+  id: number;
+  title: string;
+  description: string;
+  icon: typeof Briefcase;
+  image: string;
+  navCategory: string | null;
+  maxProducts?: number;
+};
+
 // Rebuilt as a tabbed section (banner + swipeable product row per tab)
 // instead of 3 full stacked grids — the old version made customers scroll
 // through a long wall of content. Trimmed to 3 lifestyles per Mals — Study
 // Mode and Audio Everywhere removed.
-const lifestyles = [
+const lifestyles: Lifestyle[] = [
   {
     id: 1,
     title: 'Work Anywhere',
@@ -37,11 +47,12 @@ const lifestyles = [
     // Deliberately null — this lifestyle spans multiple categories, so it
     // can't filter by navCategory like the other two. See product-picking
     // fallback below.
-    navCategory: null as string | null,
+    navCategory: null,
+    maxProducts: 5,
   },
 ];
 
-const MAX_PRODUCTS = 10;
+const DEFAULT_MAX_PRODUCTS = 10;
 
 type Props = {
   onNavToCategory?: (category: string) => void;
@@ -65,7 +76,7 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
   const tabProducts = (active.navCategory
     ? products.filter(p => p.availableForSale && p.navCategory === active.navCategory)
     : products.filter(p => p.availableForSale)
-  ).slice(0, MAX_PRODUCTS);
+  ).slice(0, active.maxProducts ?? DEFAULT_MAX_PRODUCTS);
 
   return (
     <section className="py-12 md:py-16 bg-white">
@@ -97,7 +108,7 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
           onClick={() => active.navCategory ? onNavToCategory?.(active.navCategory) : onNavToProducts?.()}
           className="group relative overflow-hidden rounded-xl cursor-pointer mb-6"
         >
-          <div className="relative h-[220px] md:h-[280px] bg-neutral-100 overflow-hidden">
+          <div className="relative aspect-[3/1] bg-neutral-100 overflow-hidden">
             <img
               src={active.image}
               alt={active.title}
@@ -119,11 +130,15 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
           </div>
         </div>
 
-        {/* Swipeable product row for the active tab */}
+        {/* Swipeable product row for the active tab — stays a horizontal
+            scroll strip on desktop too (not a wrapping grid), since a tab
+            can have anywhere from a handful up to 10 products and a grid
+            would spill into multiple rows, undoing the compact one-row
+            layout this whole rebuild was for. */}
         {tabProducts.length > 0 && (
-          <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-5 md:gap-5 md:overflow-visible md:mx-0 md:px-0">
+          <div className="flex gap-4 md:gap-5 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
             {tabProducts.map(product => (
-              <div key={product.handle} className="shrink-0 w-[46%] sm:w-52 md:w-auto snap-start">
+              <div key={product.handle} className="shrink-0 w-[46%] sm:w-52 md:w-[31%] snap-start">
                 <ProductCard product={product} onClick={p => onSelectProduct?.(p)} />
               </div>
             ))}
