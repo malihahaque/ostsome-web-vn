@@ -100,21 +100,23 @@ export function ContactAndTrust() {
         </div>
 
         {/* Footer link columns */}
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-x-12 gap-y-8 mt-10 pt-10 border-t border-neutral-100">
-          {footerLinkColumns.map(col => (
-            <div key={col.heading}>
-              <h4 className="text-sm font-bold text-black mb-3">{col.heading}</h4>
-              <ul className="flex flex-col gap-2">
-                {col.links.map(label => (
-                  <li key={label}>
-                    <a href="#" className="text-sm text-neutral-500 hover:text-[#F16C10] transition-colors">
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="mt-10 bg-neutral-50 border border-neutral-100 rounded-2xl p-6 md:p-8">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-x-12 gap-y-8">
+            {footerLinkColumns.map(col => (
+              <div key={col.heading}>
+                <h4 className="text-sm font-bold text-black mb-3">{col.heading}</h4>
+                <ul className="flex flex-col gap-2">
+                  {col.links.map(label => (
+                    <li key={label}>
+                      <a href="#" className="text-sm text-neutral-500 hover:text-[#F16C10] transition-colors">
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

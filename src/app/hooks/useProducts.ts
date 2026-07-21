@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchAllProducts } from '../data/shopify';
 import type { ShopifyProduct } from '../data/shopify';
-import type { Product } from '../data/products';
+import type { Product, ProductMetafields } from '../data/products';
 
 // ─── MODULE-LEVEL CACHE ───────────────────────────────────────────────────────
 // Products are fetched once and cached for the lifetime of the app session
@@ -37,6 +37,40 @@ function mapNavCategory(vendor: string, productType: string): string {
   return 'Smart Life';
 }
 
+// ─── METAFIELDS ────────────────────────────────────────────────────────────────
+
+// Shopify returns metafields as a flat array (one entry per identifier
+// requested, null if that product doesn't have a value set for it) rather
+// than a keyed object — this reshapes it into something components can
+// just destructure. File-type fields (Image N) come through as a
+// MediaImage reference, not a plain value, hence checking `.reference`.
+function mapMetafields(raw: ShopifyProduct['metafields']): ProductMetafields {
+  const byKey = new Map<string, { value: string | null; imageUrl: string | null }>();
+  for (const m of raw) {
+    if (!m) continue;
+    byKey.set(m.key, { value: m.value, imageUrl: m.reference?.image?.url ?? null });
+  }
+  const text = (key: string) => byKey.get(key)?.value ?? null;
+  const image = (key: string) => byKey.get(key)?.imageUrl ?? null;
+
+  const features = [1, 2, 3, 4, 5]
+    .map(n => ({ content: text(`content_${n}`), image: image(`image_${n}`) }))
+    .filter(f => f.content || f.image);
+
+  return {
+    compatibility: text('compatibility'),
+    descriptionHeading: text('heading_m_t_'),
+    descriptionContent: text('content_m_t_'),
+    descriptionImage: image('image_m_t_'),
+    features,
+    specifications: text('th_ng_s_k_thu_t'),
+    whatsInTheBox: text('tr_n_b_s_n_ph_m'),
+    referenceDocs: text('t_i_li_u_tham_kh_o'),
+    metaInfoBox1: text('meta_info_box_1'),
+    metaInfoBox2: text('meta_info_box_2'),
+  };
+}
+
 // ─── MAPPER ───────────────────────────────────────────────────────────────────
 
 export function mapShopifyProduct(p: ShopifyProduct): Product {
@@ -61,6 +95,7 @@ export function mapShopifyProduct(p: ShopifyProduct): Product {
     images: p.images.edges.map(e => e.node.url),
     bodyHtml: p.descriptionHtml,
     availableForSale,
+    metafields: mapMetafields(p.metafields),
   };
 }
 

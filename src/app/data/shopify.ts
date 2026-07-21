@@ -7,6 +7,41 @@ const SHOPIFY_API_VERSION = '2024-04';
 
 const STOREFRONT_API_URL = `https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 
+// Shared across both product queries below. File-type metafields (the
+// Image N fields) need the `reference` expansion to get an actual URL —
+// `value` alone on a File field is just an internal reference ID, not a URL.
+const PRODUCT_METAFIELDS_QUERY = `
+  metafields(identifiers: [
+    { namespace: "custom", key: "compatibility" }
+    { namespace: "custom", key: "heading_m_t_" }
+    { namespace: "custom", key: "content_m_t_" }
+    { namespace: "custom", key: "image_m_t_" }
+    { namespace: "custom", key: "content_1" }
+    { namespace: "custom", key: "image_1" }
+    { namespace: "custom", key: "content_2" }
+    { namespace: "custom", key: "image_2" }
+    { namespace: "custom", key: "content_3" }
+    { namespace: "custom", key: "image_3" }
+    { namespace: "custom", key: "content_4" }
+    { namespace: "custom", key: "image_4" }
+    { namespace: "custom", key: "content_5" }
+    { namespace: "custom", key: "image_5" }
+    { namespace: "custom", key: "th_ng_s_k_thu_t" }
+    { namespace: "custom", key: "tr_n_b_s_n_ph_m" }
+    { namespace: "custom", key: "t_i_li_u_tham_kh_o" }
+    { namespace: "custom", key: "meta_info_box_1" }
+    { namespace: "custom", key: "meta_info_box_2" }
+  ]) {
+    key
+    value
+    reference {
+      ... on MediaImage {
+        image { url }
+      }
+    }
+  }
+`;
+
 async function storefrontFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
   const response = await fetch(STOREFRONT_API_URL, {
     method: 'POST',
@@ -32,6 +67,21 @@ async function storefrontFetch<T>(query: string, variables?: Record<string, unkn
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 
+// Product metafields shown on the product detail page, below "About this
+// product". Namespace/key values were pulled directly from the VN store's
+// real metafield definitions (via Admin API) — the Vietnamese-named ones
+// in particular have auto-generated keys that don't match their display
+// names at all (diacritics get mangled, e.g. "Thông số kỹ thuật" became
+// "th_ng_s_k_thu_t"), so these are NOT guessable and must stay exactly as
+// captured. Image-type metafields return a MediaImage reference, not a
+// direct URL — hence the `reference { ... on MediaImage { image { url } } }`
+// expansion in the query below.
+export type ProductMetafield = {
+  key: string;
+  value: string | null;
+  reference: { image: { url: string } } | null;
+};
+
 export type ShopifyProduct = {
   id: string;
   handle: string;
@@ -40,6 +90,7 @@ export type ShopifyProduct = {
   productType: string;
   descriptionHtml: string;
   images: { edges: { node: { url: string; altText: string | null } }[] };
+  metafields: (ProductMetafield | null)[];
   variants: {
     edges: {
       node: {
@@ -96,6 +147,7 @@ export async function fetchAllProducts(): Promise<ShopifyProduct[]> {
             node {
               id handle title vendor productType descriptionHtml
               images(first: 10) { edges { node { url altText } } }
+              ${PRODUCT_METAFIELDS_QUERY}
               variants(first: 20) {
                 edges {
                   node {
@@ -135,6 +187,7 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
       product(handle: $handle) {
         id handle title vendor productType descriptionHtml
         images(first: 10) { edges { node { url altText } } }
+        ${PRODUCT_METAFIELDS_QUERY}
         variants(first: 20) {
           edges {
             node {

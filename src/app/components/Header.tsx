@@ -160,8 +160,11 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
   return (
     <>
       <header className="w-full">
-        {/* Logo + Icons Row */}
-        <div className="bg-white text-black border-b border-neutral-100">
+        {/* Logo + Icons Row — sticky on all screen sizes; this is the
+            compact essential nav (search/cart/menu), unlike the
+            announcement bar below which only sticks on desktop (see its
+            own comment for why). */}
+        <div className="sticky top-0 z-50 bg-white text-black border-b border-neutral-100">
           <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-24 md:h-28">
 
             {/* Logo + Tagline */}
@@ -344,8 +347,15 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
           </div>
         </div>
 
-        {/* Orange Announcement Bar — rotating messages */}
-        <div className="bg-[#F16C10] text-white">
+        {/* Orange Announcement Bar — rotating messages. Only sticky from
+            lg up (desktop): on mobile, pinning this AND the notification
+            strip below it on top of the logo row would permanently eat
+            ~176px, roughly a quarter of a typical phone screen, every
+            time someone scrolls. Desktop has more vertical room and no
+            notification strip, so the cost of keeping it pinned there is
+            much lower. lg:top-28 = 112px matches the logo row's height
+            at md+ (h-28), so this sits directly below it with no gap. */}
+        <div className="lg:sticky lg:top-28 lg:z-40 bg-[#F16C10] text-white">
           <div className="max-w-7xl mx-auto px-4 py-2.5 text-center text-sm font-semibold tracking-wide uppercase">
             <span
               style={{

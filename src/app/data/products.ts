@@ -1,3 +1,16 @@
+export type ProductMetafields = {
+  compatibility: string | null;
+  descriptionHeading: string | null;
+  descriptionContent: string | null;
+  descriptionImage: string | null;
+  features: { content: string | null; image: string | null }[];
+  specifications: string | null;
+  whatsInTheBox: string | null;
+  referenceDocs: string | null;
+  metaInfoBox1: string | null;
+  metaInfoBox2: string | null;
+};
+
 export type Product = {
   handle: string;
   title: string;
@@ -10,6 +23,12 @@ export type Product = {
   images: string[];
   bodyHtml: string;
   availableForSale: boolean;
+  // Optional: the large static `products` array below predates this field
+  // and isn't updated to include it — this file is a legacy/fallback data
+  // set, not what the live site actually renders (that comes from Shopify
+  // via useProducts.ts). Made optional rather than touching all ~9700
+  // lines of static entries below just to satisfy the type.
+  metafields?: ProductMetafields;
 };
 
 export const CATEGORIES = [

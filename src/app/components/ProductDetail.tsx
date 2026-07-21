@@ -604,7 +604,11 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 FOST Member giảm thêm 5% — Tham gia miễn phí để nhận giá này.
               </p>
             )}
-            {isFostMember && <div className="mb-5" />}
+            {isFostMember && (
+              <p className="text-xs text-[#F16C10] font-semibold mb-5">
+                FOST Member giảm thêm {(activePrice - getFostPrice(activePrice)).toLocaleString('vi-VN')}đ.
+              </p>
+            )}
 
             <p className="text-xs text-neutral-500 mb-6 bg-neutral-50 border border-neutral-100 rounded-lg px-3 py-2">
               Or 3 payments of <strong className="text-black">{Math.round((isFostMember ? getFostPrice(activePrice) : activePrice) / 3).toLocaleString('vi-VN')}₫</strong> with Atome. Taxes included.
@@ -820,6 +824,91 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
               />
             </div>
+
+            {/* Product metafields from Shopify — Compatibility, feature
+                highlights (Content/Image 1-5), specs, what's in the box,
+                reference docs, and the two Meta Info badges. Everything
+                here is conditionally rendered — a product with none of
+                these fields set just won't show this section at all. */}
+            {product.metafields && (
+              <div className="mt-8 flex flex-col gap-8">
+                {/* Meta Info badges */}
+                {(product.metafields.metaInfoBox1 || product.metafields.metaInfoBox2) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[product.metafields.metaInfoBox1, product.metafields.metaInfoBox2].filter(Boolean).map((text, i) => (
+                      <div key={i} className="bg-[#FFF8F1] border border-[#F16C10]/20 rounded-xl px-4 py-3 text-sm text-neutral-700">
+                        {text}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Description heading/content/image — an additional
+                    highlight block distinct from the main product
+                    description above. */}
+                {(product.metafields.descriptionHeading || product.metafields.descriptionContent || product.metafields.descriptionImage) && (
+                  <div className="flex flex-col md:flex-row gap-5 items-start">
+                    {product.metafields.descriptionImage && (
+                      <img
+                        src={product.metafields.descriptionImage}
+                        alt=""
+                        className="w-full md:w-1/3 rounded-xl object-cover"
+                      />
+                    )}
+                    <div className="flex-1">
+                      {product.metafields.descriptionHeading && (
+                        <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">
+                          {product.metafields.descriptionHeading}
+                        </h3>
+                      )}
+                      {product.metafields.descriptionContent && (
+                        <div
+                          className="text-sm text-neutral-600 leading-relaxed product-description"
+                          dangerouslySetInnerHTML={{ __html: product.metafields.descriptionContent }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Feature highlights — Content 1-5 / Image 1-5 pairs,
+                    alternating image side on desktop, stacked on mobile. */}
+                {product.metafields.features.map((feature, i) => (
+                  <div key={i} className={`flex flex-col gap-5 items-start ${i % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
+                    {feature.image && (
+                      <img
+                        src={feature.image}
+                        alt=""
+                        className="w-full md:w-1/3 rounded-xl object-cover"
+                      />
+                    )}
+                    {feature.content && (
+                      <div
+                        className="flex-1 text-sm text-neutral-600 leading-relaxed product-description"
+                        dangerouslySetInnerHTML={{ __html: feature.content }}
+                      />
+                    )}
+                  </div>
+                ))}
+
+                {/* Labeled text sections — Compatibility, Specifications,
+                    What's in the Box, Reference Docs. */}
+                {[
+                  { label: 'Compatibility', content: product.metafields.compatibility },
+                  { label: 'Thông số kỹ thuật', content: product.metafields.specifications },
+                  { label: 'Trọn bộ sản phẩm', content: product.metafields.whatsInTheBox },
+                  { label: 'Tài liệu tham khảo', content: product.metafields.referenceDocs },
+                ].filter(section => section.content).map(section => (
+                  <div key={section.label}>
+                    <h3 className="text-sm font-bold text-black uppercase tracking-wide mb-2">{section.label}</h3>
+                    <div
+                      className="text-sm text-neutral-600 leading-relaxed product-description"
+                      dangerouslySetInnerHTML={{ __html: section.content! }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
