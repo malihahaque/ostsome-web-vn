@@ -9,9 +9,10 @@ const PAGE_SIZE = 24;
 type ProductListingProps = {
   onSelectProduct: (product: Product) => void;
   initialSearch?: string;
+  onBack?: () => void;
 };
 
-export function ProductListing({ onSelectProduct, initialSearch = '' }: ProductListingProps) {
+export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: ProductListingProps) {
   const { products, loading, error } = useProducts();
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default');
@@ -73,6 +74,14 @@ export function ProductListing({ onSelectProduct, initialSearch = '' }: ProductL
   return (
     <section className="py-10 md:py-14 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1 text-sm text-neutral-500 hover:text-[#F16C10] transition-colors mb-4"
+          >
+            <ChevronLeft size={16} /> Quay lại
+          </button>
+        )}
         <div className="mb-8 md:mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
             <h2 className="text-[26px] md:text-4xl font-bold text-black uppercase">Shop All Products</h2>

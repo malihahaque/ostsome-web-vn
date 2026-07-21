@@ -1,3 +1,4 @@
+import { ChevronLeft } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { normalize, brandMeta, getBrandImage, hasVectorLogo, BRAND_PRODUCT_IMAGES } from '../data/brandData';
 
@@ -16,9 +17,10 @@ const ALLOWED_BRANDS = [
 
 type BrandsPageProps = {
   onSelectBrand: (brand: string) => void;
+  onBack?: () => void;
 };
 
-export function BrandsPage({ onSelectBrand }: BrandsPageProps) {
+export function BrandsPage({ onSelectBrand, onBack }: BrandsPageProps) {
   const { products, loading } = useProducts();
 
   const allowedSet = new Set(ALLOWED_BRANDS.map(normalize));
@@ -48,6 +50,14 @@ export function BrandsPage({ onSelectBrand }: BrandsPageProps) {
   return (
     <section className="py-10 md:py-14 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1 text-sm text-neutral-500 hover:text-[#F16C10] transition-colors mb-4"
+          >
+            <ChevronLeft size={16} /> Quay lại
+          </button>
+        )}
         <div className="mb-8">
           <h2 className="text-[26px] md:text-4xl font-bold text-black uppercase">Our Brands</h2>
           <p className="text-sm text-neutral-500 mt-1">

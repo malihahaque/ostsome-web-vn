@@ -22,6 +22,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutPage } from './components/CheckoutPage';
 import { FostAuthModal } from './components/FostAuthModal';
 import { AccountPage } from './components/AccountPage';
+import { SupportFAB } from './components/SupportFAB';
 import { AdminDashboard } from './components/AdminDashboard';
 import { LaunchExclusivePage } from './components/LaunchExclusivePage';
 import { CategoryGrid } from './components/CategoryGrid';
@@ -377,6 +378,7 @@ function AppInner() {
           key={initialSearch}
           onSelectProduct={handleSelectProduct}
           initialSearch={initialSearch}
+          onBack={handleNavToHome}
         />
       )}
 
@@ -389,7 +391,7 @@ function AppInner() {
       )}
 
       {page === 'brands' && (
-        <BrandsPage onSelectBrand={handleSelectBrand} />
+        <BrandsPage onSelectBrand={handleSelectBrand} onBack={handleNavToHome} />
       )}
 
       {page === 'brand-detail' && selectedBrand && (
@@ -463,6 +465,8 @@ function AppInner() {
           initialTab={accountTab}
         />
       )}
+
+      <SupportFAB />
     </div>
   );
 }
