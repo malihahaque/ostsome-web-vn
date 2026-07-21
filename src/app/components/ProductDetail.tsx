@@ -351,13 +351,8 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
   };
   const productVideo = PRODUCT_VIDEOS[product.handle];
 
-  // Related products: category is the primary signal here, not vendor —
-  // some VN products have their vendor field mistagged as the generic
-  // "OSTSOME" instead of the real brand (e.g. Skullcandy Method 360 ANC),
-  // so matching on vendor first was pulling in other mistagged-vendor
-  // products (like Looki L1) that have nothing to do with the current
-  // product. Category grouping is reliable, so it goes first; a real
-  // (non-"OSTSOME") vendor match is used only to top up the list after.
+  // Related products: prioritize same-brand items, then top up with
+  // same-category items if the brand alone doesn't have enough in stock.
   // Reuses the same product list ProductListing already fetches, so this
   // doesn't add a second network round-trip pattern to maintain.
   const { products: allProducts } = useProducts();
@@ -365,13 +360,12 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
     const inStock = allProducts.filter(
       p => p.handle !== product.handle && p.availableForSale
     );
-    const sameCategory = inStock.filter(p => p.category === product.category);
-    const sameCategoryHandles = new Set(sameCategory.map(p => p.handle));
-    const vendorIsTrustworthy = Boolean(product.vendor) && product.vendor.toLowerCase() !== 'ostsome';
-    const sameVendor = vendorIsTrustworthy
-      ? inStock.filter(p => p.vendor === product.vendor && !sameCategoryHandles.has(p.handle))
-      : [];
-    return [...sameCategory, ...sameVendor].slice(0, 8);
+    const sameVendor = inStock.filter(p => p.vendor === product.vendor);
+    const sameVendorHandles = new Set(sameVendor.map(p => p.handle));
+    const sameCategory = inStock.filter(
+      p => p.category === product.category && !sameVendorHandles.has(p.handle)
+    );
+    return [...sameVendor, ...sameCategory].slice(0, 8);
   }, [allProducts, product.handle, product.vendor, product.category]);
 
   function handleSelectRelated(p: Product) {
