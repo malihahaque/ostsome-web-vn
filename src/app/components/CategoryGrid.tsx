@@ -34,15 +34,23 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
     return acc;
   }, {});
 
+  // TEMPORARY: Loa is hidden until KEF is restocked — every KEF product
+  // (the only vendor in this category via the vendor override below) is
+  // currently sold out, so the category is otherwise always empty. Remove
+  // this filter to bring it back once there's stock.
+  const HIDDEN_CATEGORIES: GenericCategoryKey[] = ['loa'];
+
   // Always show all 10 categories as a fixed nav strip, even ones with no
   // matching products yet (falls back to the icon instead of a cover
   // photo) — this is a fixed taxonomy the VN team wants visible in full,
   // not a "only show what's currently in stock" grid.
-  const activeCategories = GENERIC_CATEGORIES.map(cat => {
-    const items = byCategory[cat.key] ?? [];
-    const cover = items.find(p => p.availableForSale && p.images[0]) ?? items.find(p => p.images[0]);
-    return { ...cat, count: items.length, coverImage: cover?.images[0] ?? null };
-  });
+  const activeCategories = GENERIC_CATEGORIES
+    .filter(cat => !HIDDEN_CATEGORIES.includes(cat.key))
+    .map(cat => {
+      const items = byCategory[cat.key] ?? [];
+      const cover = items.find(p => p.availableForSale && p.images[0]) ?? items.find(p => p.images[0]);
+      return { ...cat, count: items.length, coverImage: cover?.images[0] ?? null };
+    });
 
   return (
     <section className="w-full bg-white">
