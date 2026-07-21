@@ -84,6 +84,9 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           <div className="flex flex-col">
             {isFostMember ? (
               <>
+                <span className="text-xs text-neutral-400 line-through">
+                  {product.price.toLocaleString('vi-VN')}₫
+                </span>
                 <div className="flex items-center gap-1.5">
                   <span className="text-base font-bold text-[#F16C10]">
                     {fostPrice.toLocaleString('vi-VN')}₫
@@ -92,20 +95,17 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
                     FOST
                   </span>
                 </div>
-                <span className="text-xs text-neutral-400 line-through">
-                  {product.price.toLocaleString('vi-VN')}₫
-                </span>
               </>
             ) : (
               <>
-                <span className="text-base font-bold text-black">
-                  {product.price.toLocaleString('vi-VN')}₫
-                </span>
                 {hasDiscount && (
                   <span className="text-xs text-neutral-400 line-through">
                     {product.comparePrice!.toLocaleString('vi-VN')}₫
                   </span>
                 )}
+                <span className={`text-base font-bold ${hasDiscount ? 'text-[#F16C10]' : 'text-black'}`}>
+                  {product.price.toLocaleString('vi-VN')}₫
+                </span>
               </>
             )}
           </div>

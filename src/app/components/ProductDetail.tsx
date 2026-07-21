@@ -572,9 +572,16 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
 
             {isFostMember ? (
               <div className="mb-1">
-                <div className="flex items-baseline gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-neutral-400 line-through">
+                    {(hasDiscount ? product.comparePrice! : activePrice).toLocaleString('vi-VN')}₫
+                  </span>
+                  {hasDiscount && (
+                    <span className="text-xs font-bold text-[#F16C10]">-{discountPct}%</span>
+                  )}
+                </div>
+                <div className="flex items-baseline gap-3 mt-0.5">
                   <span className="text-3xl font-bold text-[#F16C10]">{getFostPrice(activePrice).toLocaleString('vi-VN')}₫</span>
-                  <span className="text-lg text-neutral-400 line-through">{activePrice.toLocaleString('vi-VN')}₫</span>
                   <span className="text-[10px] font-bold text-white bg-[#F16C10] px-2 py-0.5 rounded-full uppercase tracking-wide">Giá FOST</span>
                 </div>
                 {hasDiscount && (
@@ -582,11 +589,14 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 )}
               </div>
             ) : (
-              <div className="flex items-baseline gap-3 mb-1">
-                <span className="text-3xl font-bold text-black">{activePrice.toLocaleString('vi-VN')}₫</span>
+              <div className="mb-1">
                 {hasDiscount && (
-                  <span className="text-lg text-neutral-400 line-through">{product.comparePrice!.toLocaleString('vi-VN')}₫</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-neutral-400 line-through">{product.comparePrice!.toLocaleString('vi-VN')}₫</span>
+                    <span className="text-xs font-bold text-[#F16C10]">-{discountPct}%</span>
+                  </div>
                 )}
+                <span className={`text-3xl font-bold block mt-0.5 ${hasDiscount ? 'text-[#F16C10]' : 'text-black'}`}>{activePrice.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             {!isFostMember && (
