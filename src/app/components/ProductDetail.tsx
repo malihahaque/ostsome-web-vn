@@ -6,17 +6,26 @@ import { useAuth } from './AuthContext';
 import { fetchProductByHandle } from '../data/shopify';
 import type { ShopifyProduct } from '../data/shopify';
 import { getFostPrice } from '../data/pricing';
+import { useProducts } from '../hooks/useProducts';
+import { ProductCard } from './ProductCard';
+import { OurStory } from './OurStory';
+import { ContactAndTrust } from './ContactAndTrust';
 import luckyDrawImg from '../../imports/rubyoung-lucky-draw.jpg';
 
 type ProductDetailProps = {
   product: Product;
   onBack: () => void;
   onCheckout?: () => void;
+  // Lets the related-products row navigate to another product's detail
+  // page. Optional so this component doesn't break if a parent hasn't
+  // wired it up yet — in that case related product cards just won't
+  // do anything when clicked.
+  onSelectProduct?: (product: Product) => void;
 };
 
 const RUBYOUNG_SPIN_HANDLES = ['rubyoung-spin'];
 
-export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProps) {
+export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: ProductDetailProps) {
   const { user } = useAuth();
   const isFostMember = Boolean(user);
   const [activeImg, setActiveImg] = useState(0);
@@ -342,6 +351,28 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
   };
   const productVideo = PRODUCT_VIDEOS[product.handle];
 
+  // Related products: prioritize same-brand items, then top up with
+  // same-category items if the brand alone doesn't have enough in stock.
+  // Reuses the same product list ProductListing already fetches, so this
+  // doesn't add a second network round-trip pattern to maintain.
+  const { products: allProducts } = useProducts();
+  const relatedProducts = useMemo(() => {
+    const inStock = allProducts.filter(
+      p => p.handle !== product.handle && p.availableForSale
+    );
+    const sameVendor = inStock.filter(p => p.vendor === product.vendor);
+    const sameVendorHandles = new Set(sameVendor.map(p => p.handle));
+    const sameCategory = inStock.filter(
+      p => p.category === product.category && !sameVendorHandles.has(p.handle)
+    );
+    return [...sameVendor, ...sameCategory].slice(0, 8);
+  }, [allProducts, product.handle, product.vendor, product.category]);
+
+  function handleSelectRelated(p: Product) {
+    onSelectProduct?.(p);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -544,10 +575,10 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-bold text-[#F16C10]">{getFostPrice(activePrice).toLocaleString('vi-VN')}₫</span>
                   <span className="text-lg text-neutral-400 line-through">{activePrice.toLocaleString('vi-VN')}₫</span>
-                  <span className="text-[10px] font-bold text-white bg-[#F16C10] px-2 py-0.5 rounded-full uppercase tracking-wide">FOST Price</span>
+                  <span className="text-[10px] font-bold text-white bg-[#F16C10] px-2 py-0.5 rounded-full uppercase tracking-wide">Giá FOST</span>
                 </div>
                 {hasDiscount && (
-                  <p className="text-xs text-neutral-400 mt-1">Original price {product.comparePrice!.toLocaleString('vi-VN')}₫ — now with an extra 5% FOST member discount</p>
+                  <p className="text-xs text-neutral-400 mt-1">Giá gốc {product.comparePrice!.toLocaleString('vi-VN')}₫ — đã áp dụng thêm ưu đãi 5% dành cho thành viên FOST</p>
                 )}
               </div>
             ) : (
@@ -560,7 +591,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
             )}
             {!isFostMember && (
               <p className="text-xs text-[#F16C10] font-semibold mb-5">
-                FOST members save an extra 5% — join free to unlock this price.
+                FOST Member giảm thêm 5% — Tham gia miễn phí để nhận giá này.
               </p>
             )}
             {isFostMember && <div className="mb-5" />}
@@ -578,7 +609,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                     <span className="text-black normal-case tracking-normal font-normal ml-1">: {selectedOption1}</span>
                   )}
                   {validationError && !selectedOption1 && (
-                    <span className="text-red-500 normal-case tracking-normal font-normal ml-1">— required</span>
+                    <span className="text-red-500 normal-case tracking-normal font-normal ml-1">— bắt buộc</span>
                   )}
                 </label>
                 {isColourOption(option1Name) ? (
@@ -590,7 +621,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                         <button
                           key={val}
                           onClick={() => handleOption1Select(val)}
-                          title={available ? val : `${val} — Sold out`}
+                          title={available ? val : `${val} — Hết hàng`}
                           className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 transition-all ${
                             selectedOption1 === val
                               ? 'border-[#F16C10] scale-110'
@@ -621,7 +652,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                         <button
                           key={val}
                           onClick={() => handleOption1Select(val)}
-                          title={available ? undefined : `${val} — Sold out`}
+                          title={available ? undefined : `${val} — Hết hàng`}
                           className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
                             selectedOption1 === val
                               ? 'bg-black text-white border-black'
@@ -646,7 +677,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                     <span className="text-black normal-case tracking-normal font-normal ml-1">: {selectedOption2}</span>
                   )}
                   {validationError && !selectedOption2 && (
-                    <span className="text-red-500 normal-case tracking-normal font-normal ml-1">— required</span>
+                    <span className="text-red-500 normal-case tracking-normal font-normal ml-1">— bắt buộc</span>
                   )}
                 </label>
                 {isColourOption(option2Name) ? (
@@ -661,7 +692,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                         <button
                           key={val}
                           onClick={() => handleOption2Select(val)}
-                          title={available ? val : `${val} — Sold out`}
+                          title={available ? val : `${val} — Hết hàng`}
                           className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 transition-all ${
                             selectedOption2 === val
                               ? 'border-[#F16C10] scale-110'
@@ -692,7 +723,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                         <button
                           key={val}
                           onClick={() => setSelectedOption2(val)}
-                          title={available ? undefined : `${val} — Sold out`}
+                          title={available ? undefined : `${val} — Hết hàng`}
                           className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
                             selectedOption2 === val
                               ? 'bg-black text-white border-black'
@@ -710,7 +741,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
 
             {/* Quantity */}
             <div className="mb-5">
-              <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide block mb-2">Quantity</label>
+              <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide block mb-2">Số lượng</label>
               <div className="flex items-center border border-neutral-200 rounded-lg w-fit">
                 <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-10 flex items-center justify-center text-neutral-600 hover:text-black transition text-xl font-light">−</button>
                 <span className="w-10 text-center text-sm font-semibold">{qty}</span>
@@ -728,7 +759,7 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
             <div className="flex flex-col gap-3 mb-8">
               {(!product.availableForSale || (selectedOption1 !== null && !selectedVariantAvailable)) ? (
                 <div className="w-full bg-neutral-100 text-neutral-400 font-bold py-4 rounded-xl flex items-center justify-center text-sm uppercase tracking-wide">
-                  Sold Out
+                  Hết Hàng
                 </div>
               ) : (
                 <>
@@ -741,16 +772,16 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
                     }`}
                   >
                     {addedToCart ? (
-                      <><Check size={18} /> Added to Cart</>
+                      <><Check size={18} /> Đã Thêm Vào Giỏ</>
                     ) : (
-                      <><ShoppingCart size={18} /> Add to Cart</>
+                      <><ShoppingCart size={18} /> Thêm Vào Giỏ</>
                     )}
                   </button>
                   <button
                     onClick={handleBuyNow}
                     className="w-full bg-black hover:bg-neutral-800 text-white font-bold py-4 rounded-xl transition-colors text-sm uppercase tracking-wide"
                   >
-                    Buy Now
+                    Mua Ngay
                   </button>
                 </>
               )}
@@ -758,9 +789,9 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
 
             <div className="grid grid-cols-3 gap-3 mb-8">
               {[
-                { icon: Truck, label: 'Free shipping', sub: 'Orders over 2.000.000₫' },
-                { icon: Shield, label: 'Warranty', sub: '1-year coverage' },
-                { icon: RefreshCw, label: 'Easy returns', sub: '30-day policy' },
+                { icon: Truck, label: 'Miễn phí giao hàng', sub: 'Đơn từ 2.000.000₫' },
+                { icon: Shield, label: 'Bảo hành chính hãng', sub: '1 NĂM' },
+                { icon: RefreshCw, label: 'Trả hàng miễn phí', sub: '10 ngày' },
               ].map(({ icon: Icon, label, sub }) => (
                 <div key={label} className="flex flex-col items-center text-center p-3 bg-neutral-50 rounded-xl">
                   <Icon size={18} className="text-[#F16C10] mb-1.5" />
@@ -781,7 +812,28 @@ export function ProductDetail({ product, onBack, onCheckout }: ProductDetailProp
             </div>
           </div>
         </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-16 md:mt-20">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex-1 border-t border-dashed border-neutral-300" />
+              <span className="italic text-sm text-neutral-500 whitespace-nowrap">Có thể bạn cũng thích</span>
+              <div className="flex-1 border-t border-dashed border-neutral-300" />
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:mx-0 md:px-0">
+              {relatedProducts.slice(0, 4).map(p => (
+                <div key={p.handle} className="shrink-0 w-[46%] sm:w-52 md:w-auto snap-start">
+                  <ProductCard product={p} onClick={handleSelectRelated} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      <OurStory />
+      <ContactAndTrust />
 
       <style>{`
         .product-description ul { list-style: disc; padding-left: 1.25rem; margin: 0.75rem 0; }
