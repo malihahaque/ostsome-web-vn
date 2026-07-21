@@ -3,103 +3,112 @@
 // match English keywords and largely miss Vietnamese Shopify productType
 // strings. This mapping is keyed off Vietnamese terms actually seen in the
 // VN store's "Loại sản phẩm" (product type) field, with a few English
-// loanwords Shopify VN also uses verbatim (Camera, Gaming, Charger…).
+// loanwords Shopify VN also uses verbatim (Gaming, Micro, Adapter…).
 //
-// Returns null for product types outside these 10 buckets (bags, straps,
-// misc accessories, etc.) — those products simply won't appear in any tile,
-// which is intentional; this grid is for browsing by device type, not a
-// catch-all.
+// NOTE: this replaces the previous 11 device-type buckets (Điện thoại,
+// Tablet, Laptop, Camera, Đồng hồ, Tivi, etc.) with a new 10-category set
+// requested by the VN team, organized more around accessory type than
+// device type. A few product types that had a dedicated home before
+// (cameras/gimbals, smartwatches, tablets, laptops, TVs as devices) don't
+// have an obvious bucket in the new list and fall into "Khác" — flag any
+// of these that show up miscategorized once this is live, since the exact
+// wording of "Loại sản phẩm" for those products wasn't available to verify
+// keyword matches against.
+//
+// Returns 'khac' for anything that doesn't match a more specific rule, so
+// every product still lands somewhere.
 
 export type GenericCategoryKey =
-  | 'dien-thoai'
-  | 'tablet'
-  | 'laptop'
-  | 'gia-dung'
+  | 'the-thao'
   | 'suc-khoe-lam-dep'
-  | 'am-thanh'
-  | 'dong-ho'
-  | 'camera'
-  | 'pc-man-hinh'
-  | 'tivi'
+  | 'loa'
+  | 'tai-nghe'
+  | 'phu-kien-di-dong'
+  | 'phu-kien-laptop'
+  | 'micro'
+  | 'gaming'
+  | 'phu-kien-du-lich'
   | 'khac';
 
 export const GENERIC_CATEGORIES: { key: GenericCategoryKey; label: string }[] = [
-  { key: 'dien-thoai', label: 'Điện thoại' },
-  { key: 'tablet', label: 'Tablet' },
-  { key: 'laptop', label: 'Laptop' },
-  { key: 'gia-dung', label: 'Gia dụng' },
-  { key: 'suc-khoe-lam-dep', label: 'Sức khỏe làm đẹp' },
-  { key: 'am-thanh', label: 'Âm thanh' },
-  { key: 'dong-ho', label: 'Đồng hồ' },
-  { key: 'camera', label: 'Camera' },
-  { key: 'pc-man-hinh', label: 'PC, Màn hình' },
-  { key: 'tivi', label: 'Tivi' },
-  // Catch-all so every product lands somewhere (bags, straps, film, misc
-  // accessories that don't belong in any of the 10 device categories above).
-  // Kept last so it never displaces a more specific, meaningful match.
+  { key: 'the-thao', label: 'Thể thao' },
+  { key: 'suc-khoe-lam-dep', label: 'Sức Khỏe Làm Đẹp' },
+  { key: 'loa', label: 'Loa' },
+  { key: 'tai-nghe', label: 'Tai Nghe' },
+  { key: 'phu-kien-di-dong', label: 'Phụ Kiện Di Động' },
+  { key: 'phu-kien-laptop', label: 'Phụ Kiện Laptop' },
+  { key: 'micro', label: 'Micro' },
+  { key: 'gaming', label: 'Gaming' },
+  { key: 'phu-kien-du-lich', label: 'Phụ Kiện Du Lịch' },
+  // Catch-all so every product lands somewhere. Kept last so it never
+  // displaces a more specific, meaningful match.
   { key: 'khac', label: 'Khác' },
 ];
 
-// Order matters: first match wins. Keep more specific checks (e.g. "ốp lưng")
-// ahead of broader ones so a phone *case* doesn't accidentally get pulled
-// into Audio just because "smartphone" appears elsewhere.
+// Order matters: first match wins. Keep more specific checks ahead of
+// broader ones — e.g. "tai nghe gaming" should land in Gaming or Tai Nghe
+// consistently rather than flip-flopping depending on rule order, so
+// Gaming is checked first since it's the more specific signal when both
+// words appear together.
 const RULES: { key: GenericCategoryKey; keywords: string[] }[] = [
+  {
+    key: 'gaming',
+    keywords: [
+      'gaming', 'tay cầm chơi game', 'tay cầm', 'controller', 'joystick',
+      'game pass', 'backbone',
+    ],
+  },
+  {
+    key: 'micro',
+    keywords: ['micro', 'microphone', 'lavalier', 'thu âm', 'máy ghi âm'],
+  },
+  {
+    key: 'tai-nghe',
+    keywords: [
+      'tai nghe', 'headphone', 'headset', 'earbud', 'earphone',
+      'true wireless', 'open ear',
+    ],
+  },
+  {
+    key: 'loa',
+    keywords: ['loa', 'speaker'],
+  },
+  {
+    key: 'the-thao',
+    keywords: [
+      'thể thao', 'chạy bộ', 'đai đo nhịp tim', 'nhịp tim', 'heart rate',
+      'dây đeo cảm biến', 'polar', 'đồng hồ thông minh', 'smartwatch',
+      'fitness',
+    ],
+  },
   {
     key: 'suc-khoe-lam-dep',
     keywords: [
       'massage', 'giác hơi', 'thư giãn', 'làm đẹp', 'theraface',
-      'recoveryair', 'recovery air',
+      'recoveryair', 'recovery air', 'chăm sóc da',
     ],
   },
   {
-    key: 'dong-ho',
-    keywords: ['đồng hồ', 'dây đeo cảm biến', 'smartwatch'],
-  },
-  {
-    key: 'camera',
+    key: 'phu-kien-du-lich',
     keywords: [
-      'camera', 'máy ảnh', 'gimbal', 'ống kính', 'lens', 'film ảnh',
-      'máy in ảnh', 'flycam', 'drone', 'balo máy ảnh',
+      'balo', 'túi', 'vali', 'du lịch', 'duffle', 'túi đeo chéo',
+      'bình nước', 'larq', 'organizer',
     ],
   },
   {
-    key: 'am-thanh',
+    key: 'phu-kien-laptop',
     keywords: [
-      'tai nghe', 'headphone', 'earbud', 'earphone', 'loa', 'speaker',
-      'micro', 'true wireless', 'open ear', 'âm thanh', 'audio',
-      'máy ghi âm', 'intercom', 'headset',
+      'bàn phím', 'chuột', 'keyboard', 'mouse', 'hub', 'dock',
+      'màn hình', 'monitor', 'laptop', 'macbook', 'đế tản nhiệt',
     ],
   },
   {
-    key: 'dien-thoai',
-    keywords: ['ốp lưng', 'ốp điện thoại', 'điện thoại', 'smartphone'],
-  },
-  {
-    key: 'pc-man-hinh',
+    key: 'phu-kien-di-dong',
     keywords: [
-      'bàn phím', 'chuột', 'keyboard', 'mouse', 'hub', 'adapter',
-      'màn hình', 'monitor', 'cáp', 'dock', 'conventor',
+      'ốp lưng', 'ốp điện thoại', 'điện thoại', 'smartphone',
+      'sạc dự phòng', 'sạc không dây', 'cáp sạc', 'cáp', 'adapter',
+      'giá đỡ điện thoại', 'gimbal',
     ],
-  },
-  {
-    key: 'gia-dung',
-    keywords: [
-      'nhà thông minh', 'khóa thông minh', 'công tắc thông minh',
-      'hút chân không', 'đèn', 'robot', 'trạm điện', 'quang năng',
-      'tuabin', 'sạc dự phòng', 'sạc không dây', 'thiết bị thông minh',
-    ],
-  },
-  {
-    key: 'tablet',
-    keywords: ['tablet', 'ipad'],
-  },
-  {
-    key: 'laptop',
-    keywords: ['laptop', 'macbook'],
-  },
-  {
-    key: 'tivi',
-    keywords: ['tivi', 'smart tv'],
   },
 ];
 

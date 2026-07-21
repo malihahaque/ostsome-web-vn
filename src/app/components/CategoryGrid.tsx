@@ -1,4 +1,4 @@
-import { Smartphone, Tablet as TabletIcon, Laptop, Home as HomeIcon, HeartPulse, Headphones, Watch, Camera as CameraIcon, Monitor, Tv, Sparkles } from 'lucide-react';
+import { Dumbbell, HeartPulse, Volume2, Headphones, Smartphone, Laptop, Mic, Gamepad2, Briefcase, Sparkles } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { GENERIC_CATEGORIES, mapGenericCategory, type GenericCategoryKey } from '../data/genericCategories';
 import type { Product } from '../data/products';
@@ -6,16 +6,15 @@ import type { Product } from '../data/products';
 // Only used as a placeholder for the rare case a category has no product
 // image at all — the photo itself is the primary visual now, no badge.
 const ICONS: Record<GenericCategoryKey, React.ComponentType<{ size?: number; className?: string }>> = {
-  'dien-thoai': Smartphone,
-  'tablet': TabletIcon,
-  'laptop': Laptop,
-  'gia-dung': HomeIcon,
+  'the-thao': Dumbbell,
   'suc-khoe-lam-dep': HeartPulse,
-  'am-thanh': Headphones,
-  'dong-ho': Watch,
-  'camera': CameraIcon,
-  'pc-man-hinh': Monitor,
-  'tivi': Tv,
+  'loa': Volume2,
+  'tai-nghe': Headphones,
+  'phu-kien-di-dong': Smartphone,
+  'phu-kien-laptop': Laptop,
+  'micro': Mic,
+  'gaming': Gamepad2,
+  'phu-kien-du-lich': Briefcase,
   'khac': Sparkles,
 };
 
@@ -49,19 +48,19 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
     <section className="w-full bg-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-lg md:text-xl font-bold text-black mb-6">Danh Mục Sản Phẩm</h2>
-        {/* flex-wrap (not a fixed grid-cols count) so this naturally settles
-            into ~2 rows regardless of how many categories end up active —
-            robust if VN adds Tablet/Laptop/Tivi inventory later. */}
-        <div className="flex flex-wrap gap-x-6 gap-y-8 md:gap-x-8">
+        {/* Fixed grid-cols-5 on mobile so all 10 categories settle into
+            exactly 2 rows of 5, matching the VN team's reference layout;
+            widens to a single row of 10 from md up where there's room. */}
+        <div className="grid grid-cols-5 md:grid-cols-10 gap-x-2 gap-y-5 md:gap-x-4">
           {activeCategories.map(cat => {
             const Icon = ICONS[cat.key];
             return (
               <button
                 key={cat.key}
                 onClick={() => onNavToGenericCategory?.(cat.key)}
-                className="flex flex-col items-center gap-3 group w-24 md:w-32"
+                className="flex flex-col items-center gap-2 group"
               >
-                <span className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white overflow-hidden ring-1 ring-neutral-200 group-hover:ring-2 group-hover:ring-[#F16C10] transition-all shadow-sm group-hover:shadow-md">
+                <span className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white overflow-hidden ring-1 ring-neutral-200 group-hover:ring-2 group-hover:ring-[#F16C10] transition-all shadow-sm group-hover:shadow-md">
                   {cat.coverImage ? (
                     <img
                       src={cat.coverImage}
@@ -71,11 +70,11 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
                     />
                   ) : (
                     <span className="w-full h-full flex items-center justify-center text-neutral-400">
-                      <Icon size={36} />
+                      <Icon size={20} />
                     </span>
                   )}
                 </span>
-                <span className="text-xs md:text-sm text-center text-neutral-700 leading-tight font-medium group-hover:text-[#F16C10] transition-colors">
+                <span className="text-[10px] sm:text-xs text-center text-neutral-700 leading-tight font-medium group-hover:text-[#F16C10] transition-colors">
                   {cat.label}
                 </span>
               </button>
