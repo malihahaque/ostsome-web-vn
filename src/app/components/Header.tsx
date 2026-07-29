@@ -1,12 +1,13 @@
-import { Search, ShoppingCart, User, Menu, X, LogOut, Crown } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Search, ShoppingCart, User, Menu, X, LogOut, Crown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import logoImg from '../../imports/logo_circle.png';
 import type { Product } from '../data/products';
 import { useCart } from './CartContext';
 import { useProducts } from '../hooks/useProducts';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
-import { GENERIC_CATEGORIES, mapGenericCategory, type GenericCategoryKey } from '../data/genericCategories';
+import type { GenericCategoryKey } from '../data/genericCategories';
+import { NAV_CATEGORIES } from '../data/navCategories';
 
 type HeaderProps = {
   onNavToProducts?: () => void;
@@ -77,24 +78,17 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
   const { products } = useProducts();
   const { user, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
-  // Same active-category logic as the homepage CategoryGrid — only show
-  // categories that actually have in-stock products, kept in sync
-  // automatically, and matching ProductListing.tsx's availableForSale filter
-  // so counts agree across the whole site.
-  const menuCategories = (() => {
-    const counts: Partial<Record<GenericCategoryKey, number>> = {};
-    for (const p of products) {
-      if (!p.availableForSale) continue;
-      const key = mapGenericCategory(p.type);
-      counts[key] = (counts[key] ?? 0) + 1;
+  const scrollNav = (direction: 'left' | 'right') => {
+    if (navRef.current) {
+      navRef.current.scrollBy({ left: direction === 'right' ? 150 : -150, behavior: 'smooth' });
     }
-    return GENERIC_CATEGORIES.filter(c => (counts[c.key] ?? 0) > 0);
-  })();
+  };
 
-  function handleMenuNavGenericCategory(key: GenericCategoryKey) {
+  function handleMenuNavCategory(key: string) {
     setMenuOpen(false);
-    onNavToGenericCategory?.(key);
+    onNavToCategory?.(key);
   }
 
   useEffect(() => {
@@ -347,6 +341,63 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
           </div>
         </div>
 
+        {/* Navigation — mirrors SG's nav bar 1:1, just in Vietnamese.
+            Replaces the old hamburger-only nav (see menu overlay below,
+            which still exists for search/account access on mobile but no
+            longer owns category browsing). */}
+        <div className="border-b bg-white">
+          <div className="max-w-7xl mx-auto relative flex items-center">
+            <button
+              onClick={() => scrollNav('left')}
+              className="md:hidden shrink-0 px-1 py-4 text-neutral-400 hover:text-[#F16C10] transition-colors z-10"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <div
+              ref={navRef}
+              className="flex items-center gap-6 text-sm text-neutral-700 overflow-x-auto scrollbar-hide px-2 md:px-4 py-4 scroll-smooth"
+            >
+              <button
+                onClick={onNavToHome}
+                className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${currentPage === 'home' ? 'text-[#F16C10] font-semibold' : ''}`}
+              >
+                Mới & Nổi Bật
+              </button>
+              <button
+                onClick={onNavToProducts}
+                className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${currentPage === 'products' ? 'text-[#F16C10] font-semibold' : ''}`}
+              >
+                Tất Cả Sản Phẩm
+              </button>
+              {NAV_CATEGORIES.map(cat => (
+                <button
+                  key={cat.key}
+                  onClick={() => onNavToCategory?.(cat.key)}
+                  className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${
+                    currentPage === 'nav-category' && currentNavCategory === cat.key ? 'text-[#F16C10] font-semibold' : ''
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+              <button
+                onClick={onNavToBrands}
+                className={`whitespace-nowrap hover:text-[#F16C10] transition-colors ${
+                  currentPage === 'brands' || currentPage === 'brand-detail' ? 'text-[#F16C10] font-semibold' : ''
+                }`}
+              >
+                Thương Hiệu
+              </button>
+            </div>
+            <button
+              onClick={() => scrollNav('right')}
+              className="md:hidden shrink-0 px-1 py-4 text-neutral-400 hover:text-[#F16C10] transition-colors z-10"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+
         {/* Orange Announcement Bar — rotating messages. Only sticky from
             lg up (desktop): on mobile, pinning this AND the notification
             strip below it on top of the logo row would permanently eat
@@ -505,35 +556,41 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
 
             <div className="py-2 border-b border-neutral-100">
               <button
+                onClick={() => { setMenuOpen(false); onNavToHome?.(); }}
+                className={`w-full text-left px-5 py-3 text-sm font-medium hover:bg-neutral-50 transition ${currentPage === 'home' ? 'text-[#F16C10] font-semibold' : 'text-black'}`}
+              >
+                Mới & Nổi Bật
+              </button>
+              <button
                 onClick={() => { setMenuOpen(false); onNavToProducts?.(); }}
                 className={`w-full text-left px-5 py-3 text-sm font-medium hover:bg-neutral-50 transition ${currentPage === 'products' ? 'text-[#F16C10] font-semibold' : 'text-black'}`}
               >
-                All Products
+                Tất Cả Sản Phẩm
               </button>
               <button
                 onClick={() => { setMenuOpen(false); onNavToBrands?.(); }}
                 className={`w-full text-left px-5 py-3 text-sm font-medium hover:bg-neutral-50 transition ${currentPage === 'brands' || currentPage === 'brand-detail' ? 'text-[#F16C10] font-semibold' : 'text-black'}`}
               >
-                Brands
+                Thương Hiệu
               </button>
             </div>
 
-            {menuCategories.length > 0 && (
-              <div className="py-2">
-                <p className="px-5 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-                  Danh Mục Sản Phẩm
-                </p>
-                {menuCategories.map(cat => (
-                  <button
-                    key={cat.key}
-                    onClick={() => handleMenuNavGenericCategory(cat.key)}
-                    className="w-full text-left px-5 py-3 text-sm font-medium text-black hover:bg-neutral-50 transition"
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="py-2">
+              <p className="px-5 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+                Danh Mục Sản Phẩm
+              </p>
+              {NAV_CATEGORIES.map(cat => (
+                <button
+                  key={cat.key}
+                  onClick={() => handleMenuNavCategory(cat.key)}
+                  className={`w-full text-left px-5 py-3 text-sm font-medium hover:bg-neutral-50 transition ${
+                    currentPage === 'nav-category' && currentNavCategory === cat.key ? 'text-[#F16C10] font-semibold' : 'text-black'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}

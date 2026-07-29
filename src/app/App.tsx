@@ -25,7 +25,6 @@ import { AccountPage } from './components/AccountPage';
 import { SupportFAB } from './components/SupportFAB';
 import { AdminDashboard } from './components/AdminDashboard';
 import { LaunchExclusivePage } from './components/LaunchExclusivePage';
-import { CategoryGrid } from './components/CategoryGrid';
 import { CategoryProductsPage } from './components/CategoryProductsPage';
 import { FostQuickPerks } from './components/FostQuickPerks';
 import { ContactAndTrust } from './components/ContactAndTrust';
@@ -370,7 +369,6 @@ function AppInner() {
       {page === 'home' && (
         <>
           <Hero onSelectProduct={handleSelectProduct} />
-          <CategoryGrid onNavToGenericCategory={handleNavToGenericCategory} />
           <FlashSaleSection
             onSelectProduct={handleSelectProduct}
             onViewAll={() => goTo({ page: 'flash-sale' })}
