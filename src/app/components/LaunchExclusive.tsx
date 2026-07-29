@@ -96,14 +96,14 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
                     ))}
                   </div>
                   {isFostMember ? (
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-xs text-neutral-400 line-through">{deal.srp.toLocaleString('vi-VN')}₫</span>
                       <span className="text-base md:text-lg font-black text-[#F16C10]">{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
-                      <span className="text-xs text-neutral-400 line-through">{deal.promo.toLocaleString('vi-VN')}₫</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-base md:text-lg font-black text-[#F16C10]">{deal.promo.toLocaleString('vi-VN')}₫</span>
+                    <div className="flex flex-col gap-0.5">
                       <span className="text-xs text-neutral-400 line-through">{deal.srp.toLocaleString('vi-VN')}₫</span>
+                      <span className="text-base md:text-lg font-black text-[#F16C10]">{deal.promo.toLocaleString('vi-VN')}₫</span>
                     </div>
                   )}
                 </div>

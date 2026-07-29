@@ -6,6 +6,7 @@ import { useAuth } from './AuthContext';
 import { fetchProductByHandle } from '../data/shopify';
 import type { ShopifyProduct } from '../data/shopify';
 import { getFostPrice } from '../data/pricing';
+import { SOLD_COUNT_BASELINE } from '../data/soldCounts';
 import { useProducts } from '../hooks/useProducts';
 import { ProductCard } from './ProductCard';
 import { OurStory } from './OurStory';
@@ -189,6 +190,22 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
     const key = [selectedOption1, selectedOption2].filter(Boolean).join('/');
     return shopifyQuantity[key] ?? shopifyQuantity['default'] ?? null;
   }, [selectedOption1, selectedOption2, shopifyQuantity]);
+
+  // "Đã bán X" social-proof badge. Storefront API only gives us current
+  // remaining stock (quantityAvailable, fetched above) — not units sold —
+  // so this is baseline − remaining, where baseline is a manually-set
+  // starting stock number in soldCounts.ts. Sums across ALL variants
+  // (not just the selected one) since the badge is about the product as
+  // a whole, not one color/size. Only renders once we have both a
+  // baseline AND live quantity data — never shows a guessed number.
+  const soldCount = useMemo(() => {
+    const baseline = SOLD_COUNT_BASELINE[product.handle];
+    if (baseline === undefined || !variantsLoaded) return null;
+    const quantities = Object.values(shopifyQuantity);
+    if (quantities.length === 0 || quantities.some(q => q === null)) return null;
+    const totalRemaining = (quantities as number[]).reduce((sum, q) => sum + q, 0);
+    return Math.max(baseline - totalRemaining, 0);
+  }, [product.handle, shopifyQuantity, variantsLoaded]);
 
   // How many of this exact product + variant combo are already sitting in
   // the cart from a previous add. Without this, two separate adds of 1
@@ -602,6 +619,9 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 ))}
               </div>
               <span className="text-xs text-neutral-400">(24 reviews)</span>
+              {soldCount !== null && soldCount > 0 && (
+                <span className="text-xs font-bold text-[#F16C10]">· Đã bán {soldCount.toLocaleString('vi-VN')}</span>
+              )}
             </div>
 
             {isFostMember ? (

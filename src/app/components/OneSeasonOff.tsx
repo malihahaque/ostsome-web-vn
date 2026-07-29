@@ -124,13 +124,13 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
                         </div>
                         {isFostMember ? (
                           <>
+                            <span className="line-through block" style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                             <span className="font-black block" style={{ fontSize: '1rem', color: '#F16C10' }}>{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
-                            <span className="line-through" style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
                           </>
                         ) : (
                           <>
+                            <span className="line-through block" style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                             <span className="font-black block" style={{ fontSize: '1rem', color: '#F16C10' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
-                            <span className="line-through" style={{ fontSize: '0.68rem', color: '#9CA3AF' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                           </>
                         )}
                       </div>
@@ -200,13 +200,13 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
                     </div>
                     {isFostMember ? (
                       <>
+                        <span className="line-through block" style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         <span className="font-black block" style={{ fontSize: '0.9rem', color: '#F16C10' }}>{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
-                        <span className="line-through" style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
                       </>
                     ) : (
                       <>
+                        <span className="line-through block" style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         <span className="font-black block" style={{ fontSize: '0.9rem', color: '#F16C10' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
-                        <span className="line-through" style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                       </>
                     )}
                   </div>
