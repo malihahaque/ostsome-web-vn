@@ -30,10 +30,10 @@ type PaymentInfo = {
 };
 
 const STEPS: { key: Step; label: string; icon: typeof ShoppingBag }[] = [
-  { key: 'review', label: 'Cart', icon: ShoppingBag },
-  { key: 'shipping', label: 'Shipping', icon: MapPin },
-  { key: 'payment', label: 'Payment', icon: CreditCard },
-  { key: 'confirmation', label: 'Confirm', icon: Package },
+  { key: 'review', label: 'Giỏ hàng', icon: ShoppingBag },
+  { key: 'shipping', label: 'Vận chuyển', icon: MapPin },
+  { key: 'payment', label: 'Thanh toán', icon: CreditCard },
+  { key: 'confirmation', label: 'Xác nhận', icon: Package },
 ];
 
 const STEP_ORDER: Step[] = ['review', 'shipping', 'payment', 'confirmation'];
@@ -83,7 +83,7 @@ function OrderSummary({ compact = false }: { compact?: boolean }) {
         className={`w-full flex items-center justify-between px-5 py-4 ${compact ? '' : 'cursor-default'}`}
         onClick={() => compact && setOpen(o => !o)}
       >
-        <span className="text-sm font-bold text-black">Order Summary ({items.length} item{items.length !== 1 ? 's' : ''})</span>
+        <span className="text-sm font-bold text-black">Tóm Tắt Đơn Hàng ({items.length} sản phẩm)</span>
         {compact && <ChevronRight size={16} className={`text-neutral-400 transition-transform ${open ? 'rotate-90' : ''}`} />}
       </button>
 
@@ -125,22 +125,22 @@ function OrderSummary({ compact = false }: { compact?: boolean }) {
 
           <div className="border-t border-neutral-200 pt-3 flex flex-col gap-2">
             <div className="flex justify-between text-sm text-neutral-500">
-              <span>Subtotal</span>
+              <span>Tạm tính</span>
               <span className={`font-medium ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>{subtotal.toLocaleString('vi-VN')}₫</span>
             </div>
             {isFostMember && (
               <div className="flex justify-between text-sm text-[#F16C10] font-semibold">
-                <span>FOST member savings (5%)</span><span>– {fostSavings.toLocaleString('vi-VN')}₫</span>
+                <span>Ưu đãi thành viên FOST (5%)</span><span>– {fostSavings.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             <div className="flex justify-between text-sm text-neutral-500">
-              <span>Shipping</span>
+              <span>Phí vận chuyển</span>
               <span className={freeShipping ? 'text-green-600 font-medium' : 'text-black font-medium'}>
-                {freeShipping ? 'Free' : `${shipping.toLocaleString('vi-VN')}₫`}
+                {freeShipping ? 'Miễn phí' : `${shipping.toLocaleString('vi-VN')}₫`}
               </span>
             </div>
             <div className="flex justify-between text-base font-bold text-black border-t border-neutral-200 pt-2 mt-1">
-              <span>Total</span><span>{total.toLocaleString('vi-VN')}₫</span>
+              <span>Tổng cộng</span><span>{total.toLocaleString('vi-VN')}₫</span>
             </div>
           </div>
         </div>
@@ -160,7 +160,7 @@ function ReviewStep({ onNext }: { onNext: () => void }) {
     return (
       <div className="text-center py-16">
         <ShoppingBag size={48} className="mx-auto text-neutral-200 mb-4" />
-        <p className="text-lg font-semibold text-neutral-400">Your cart is empty</p>
+        <p className="text-lg font-semibold text-neutral-400">Giỏ hàng của bạn đang trống</p>
       </div>
     );
   }
@@ -221,14 +221,14 @@ function ReviewStep({ onNext }: { onNext: () => void }) {
             <Tag size={14} className="text-neutral-400" />
             <input
               type="text"
-              placeholder="Discount code"
+              placeholder="Mã giảm giá"
               value={coupon}
               onChange={e => setCoupon(e.target.value)}
               className="flex-1 py-3 text-sm outline-none bg-transparent text-black placeholder-neutral-400"
             />
           </div>
           <button className="px-5 py-3 rounded-xl border border-neutral-200 text-sm font-semibold text-black hover:bg-neutral-50 transition">
-            Apply
+            Áp dụng
           </button>
         </div>
       </div>
@@ -236,25 +236,25 @@ function ReviewStep({ onNext }: { onNext: () => void }) {
       {/* Right: summary + CTA */}
       <div className="flex flex-col gap-4">
         <div className="bg-neutral-50 rounded-2xl border border-neutral-100 p-5">
-          <h3 className="text-sm font-bold text-black mb-4">Order Summary</h3>
+          <h3 className="text-sm font-bold text-black mb-4">Tóm Tắt Đơn Hàng</h3>
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex justify-between text-neutral-500">
-              <span>Subtotal</span>
+              <span>Tạm tính</span>
               <span className={`font-medium ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>{subtotal.toLocaleString('vi-VN')}₫</span>
             </div>
             {isFostMember && (
               <div className="flex justify-between text-[#F16C10] font-semibold">
-                <span>FOST member savings (5%)</span><span>– {fostSavings.toLocaleString('vi-VN')}₫</span>
+                <span>Ưu đãi thành viên FOST (5%)</span><span>– {fostSavings.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             <div className="flex justify-between text-neutral-500">
-              <span>Shipping</span>
+              <span>Phí vận chuyển</span>
               <span className={freeShipping ? 'text-green-600 font-medium' : 'text-black font-medium'}>
-                {freeShipping ? 'Free' : `${shipping.toLocaleString('vi-VN')}₫`}
+                {freeShipping ? 'Miễn phí' : `${shipping.toLocaleString('vi-VN')}₫`}
               </span>
             </div>
             <div className="flex justify-between text-base font-bold text-black border-t border-neutral-200 pt-3 mt-1">
-              <span>Total</span><span>{total.toLocaleString('vi-VN')}₫</span>
+              <span>Tổng cộng</span><span>{total.toLocaleString('vi-VN')}₫</span>
             </div>
           </div>
         </div>
@@ -262,10 +262,10 @@ function ReviewStep({ onNext }: { onNext: () => void }) {
           onClick={onNext}
           className="w-full bg-[#F16C10] hover:bg-[#d65f0e] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition text-base"
         >
-          Proceed to Shipping <ChevronRight size={18} />
+          Tiếp Tục Đến Vận Chuyển <ChevronRight size={18} />
         </button>
         <div className="flex items-center justify-center gap-2 text-xs text-neutral-400">
-          <Lock size={12} /> Secure checkout
+          <Lock size={12} /> Thanh toán an toàn
         </div>
       </div>
     </div>
@@ -296,41 +296,36 @@ function ShippingStep({ onNext, onBack, info, setInfo }: {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
       <div>
-        <h3 className="text-base font-bold text-black mb-5">Shipping Information</h3>
+        <h3 className="text-base font-bold text-black mb-5">Thông Tin Giao Hàng</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {field('First Name', 'firstName', 'text', 'Jane')}
-          {field('Last Name', 'lastName', 'text', 'Tan')}
-          <div className="sm:col-span-2">{field('Email Address', 'email', 'email', 'jane@example.com')}</div>
-          {field('Phone', 'phone', 'tel', '+65 9123 4567')}
-          <div className="sm:col-span-2">{field('Address', 'address', 'text', 'Block 123, Tampines Street 11')}</div>
-          {field('Unit / Floor', 'unit', 'text', '#04-21')}
-          {field('City', 'city', 'text', 'Singapore')}
-          {field('Postal Code', 'postal', 'text', '520123')}
+          {field('Tên', 'firstName', 'text', 'Lan')}
+          {field('Họ', 'lastName', 'text', 'Nguyễn')}
+          <div className="sm:col-span-2">{field('Địa chỉ Email', 'email', 'email', 'lan@example.com')}</div>
+          {field('Số điện thoại', 'phone', 'tel', '+84 91 234 5678')}
+          <div className="sm:col-span-2">{field('Địa chỉ', 'address', 'text', '123 Đường Nguyễn Huệ')}</div>
+          {field('Số nhà / Tầng', 'unit', 'text', 'Tầng 4, Căn 21')}
+          {field('Thành phố', 'city', 'text', 'Hồ Chí Minh')}
+          {field('Mã bưu điện', 'postal', 'text', '700000')}
           <div className="sm:col-span-2">
-            <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide block mb-1.5">Country</label>
+            <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide block mb-1.5">Quốc gia</label>
             <select
               value={info.country}
               onChange={e => setInfo({ ...info, country: e.target.value })}
               className="w-full border border-neutral-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black bg-white"
             >
-              <option value="Singapore">Singapore</option>
-              <option value="Malaysia">Malaysia</option>
-              <option value="Indonesia">Indonesia</option>
-              <option value="Thailand">Thailand</option>
-              <option value="Philippines">Philippines</option>
-              <option value="Vietnam">Vietnam</option>
+              <option value="Vietnam">Việt Nam</option>
             </select>
           </div>
         </div>
 
         {/* Shipping method */}
         <div className="mt-6">
-          <h3 className="text-base font-bold text-black mb-3">Delivery Method</h3>
+          <h3 className="text-base font-bold text-black mb-3">Phương Thức Giao Hàng</h3>
           <div className="flex flex-col gap-3">
             {[
-              { label: 'Standard Delivery', sub: '3–5 business days', price: '30.000₫' },
-              { label: 'Express Delivery', sub: '1–2 business days', price: '60.000₫' },
-              { label: 'Self Collection', sub: 'Collect at Ostsome HQ', price: 'Free' },
+              { label: 'Giao hàng tiêu chuẩn', sub: '3–5 ngày làm việc', price: '30.000₫' },
+              { label: 'Giao hàng nhanh', sub: '1–2 ngày làm việc', price: '60.000₫' },
+              { label: 'Tự đến lấy hàng', sub: 'Nhận tại văn phòng Ostsome', price: 'Miễn phí' },
             ].map((opt, i) => (
               <label key={i} className="flex items-center gap-4 p-4 border border-neutral-200 rounded-xl cursor-pointer hover:border-[#F16C10] transition group has-[:checked]:border-[#F16C10] has-[:checked]:bg-[#F16C10]/5">
                 <input type="radio" name="delivery" defaultChecked={i === 0} className="accent-[#F16C10]" />
@@ -353,14 +348,14 @@ function ShippingStep({ onNext, onBack, info, setInfo }: {
             disabled={!isValid}
             className="w-full bg-[#F16C10] hover:bg-[#d65f0e] disabled:bg-neutral-200 disabled:text-neutral-400 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition text-base"
           >
-            Continue to Payment <ChevronRight size={18} />
+            Tiếp Tục Đến Thanh Toán <ChevronRight size={18} />
           </button>
           <button onClick={onBack} className="w-full flex items-center justify-center gap-1 text-sm text-neutral-400 hover:text-black transition">
-            <ChevronLeft size={14} /> Back to Cart
+            <ChevronLeft size={14} /> Quay Lại Giỏ Hàng
           </button>
         </div>
         <div className="flex items-center justify-center gap-2 text-xs text-neutral-400">
-          <Lock size={12} /> Secure checkout
+          <Lock size={12} /> Thanh toán an toàn
         </div>
       </div>
     </div>
@@ -386,12 +381,12 @@ function PaymentStep({ onNext, onBack, info, setInfo }: {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
       <div>
-        <h3 className="text-base font-bold text-black mb-5">Payment Method</h3>
+        <h3 className="text-base font-bold text-black mb-5">Phương Thức Thanh Toán</h3>
 
         {/* Method tabs */}
         <div className="flex gap-3 mb-6">
           {[
-            { key: 'card' as const, label: '💳 Credit / Debit Card' },
+            { key: 'card' as const, label: '💳 Thẻ Tín Dụng / Ghi Nợ' },
             { key: 'paynow' as const, label: '🏦 PayNow' },
           ].map(m => (
             <button
@@ -409,17 +404,17 @@ function PaymentStep({ onNext, onBack, info, setInfo }: {
         {method === 'card' ? (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">Name on Card</label>
+              <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">Tên trên thẻ</label>
               <input
                 type="text"
                 value={info.cardName}
                 onChange={e => setInfo({ ...info, cardName: e.target.value })}
-                placeholder="Jane Tan"
+                placeholder="Nguyễn Văn A"
                 className="border border-neutral-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">Card Number</label>
+              <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">Số thẻ</label>
               <div className="relative">
                 <input
                   type="text"
@@ -435,7 +430,7 @@ function PaymentStep({ onNext, onBack, info, setInfo }: {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">Expiry</label>
+                <label className="text-xs font-semibold text-neutral-600 uppercase tracking-wide">Ngày hết hạn</label>
                 <input
                   type="text"
                   value={info.expiry}
@@ -473,9 +468,8 @@ function PaymentStep({ onNext, onBack, info, setInfo }: {
               </svg>
             </div>
             <div className="text-center">
-              <p className="text-sm font-bold text-black mb-1">Scan with your bank app</p>
-              <p className="text-xs text-neutral-400">UEN: 202312345K • Ostsome Pte Ltd</p>
-              <p className="text-xs text-neutral-400 mt-1">Screenshot this QR and pay via your preferred banking app</p>
+              <p className="text-sm font-bold text-black mb-1">Quét bằng ứng dụng ngân hàng của bạn</p>
+              <p className="text-xs text-neutral-400">Chụp màn hình mã QR này và thanh toán qua ứng dụng ngân hàng bạn muốn dùng</p>
             </div>
           </div>
         )}
@@ -489,14 +483,14 @@ function PaymentStep({ onNext, onBack, info, setInfo }: {
             disabled={!isValid}
             className="w-full bg-[#F16C10] hover:bg-[#d65f0e] disabled:bg-neutral-200 disabled:text-neutral-400 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition text-base"
           >
-            <Lock size={16} /> Place Order
+            <Lock size={16} /> Đặt Hàng
           </button>
           <button onClick={onBack} className="w-full flex items-center justify-center gap-1 text-sm text-neutral-400 hover:text-black transition">
-            <ChevronLeft size={14} /> Back to Shipping
+            <ChevronLeft size={14} /> Quay Lại Vận Chuyển
           </button>
         </div>
         <p className="text-xs text-neutral-400 text-center leading-relaxed">
-          By placing your order you agree to Ostsome's Terms of Service and Privacy Policy.
+          Khi đặt hàng, bạn đồng ý với Điều khoản Dịch vụ và Chính sách Bảo mật của Ostsome.
         </p>
       </div>
     </div>
@@ -510,20 +504,20 @@ function ConfirmationStep({ orderNum, onContinue }: { orderNum: string; onContin
         <Check size={36} className="text-green-500" strokeWidth={2.5} />
       </div>
       <div>
-        <h2 className="text-2xl font-bold text-black mb-2">Order Confirmed!</h2>
+        <h2 className="text-2xl font-bold text-black mb-2">Đặt Hàng Thành Công!</h2>
         <p className="text-neutral-500 text-sm leading-relaxed">
-          Thank you for your order. We've received it and will start processing right away.
+          Cảm ơn bạn đã đặt hàng. Chúng tôi đã nhận được đơn và sẽ bắt đầu xử lý ngay.
         </p>
       </div>
       <div className="bg-neutral-50 rounded-2xl border border-neutral-100 px-8 py-5 w-full">
-        <p className="text-xs text-neutral-400 uppercase tracking-wider mb-1">Order Number</p>
+        <p className="text-xs text-neutral-400 uppercase tracking-wider mb-1">Mã Đơn Hàng</p>
         <p className="text-lg font-bold text-black font-mono">{orderNum}</p>
       </div>
       <div className="grid grid-cols-3 gap-4 w-full text-sm">
         {[
-          { icon: '📦', label: 'Processing', sub: 'Right now' },
-          { icon: '🚚', label: 'Dispatched', sub: '1–2 days' },
-          { icon: '🏠', label: 'Delivered', sub: '3–5 days' },
+          { icon: '📦', label: 'Đang xử lý', sub: 'Ngay bây giờ' },
+          { icon: '🚚', label: 'Đã gửi hàng', sub: '1–2 ngày' },
+          { icon: '🏠', label: 'Đã giao hàng', sub: '3–5 ngày' },
         ].map(s => (
           <div key={s.label} className="flex flex-col items-center gap-1 p-3 bg-white rounded-xl border border-neutral-100">
             <span className="text-xl">{s.icon}</span>
@@ -533,13 +527,13 @@ function ConfirmationStep({ orderNum, onContinue }: { orderNum: string; onContin
         ))}
       </div>
       <p className="text-sm text-neutral-400">
-        A confirmation email has been sent to your inbox.
+        Email xác nhận đã được gửi đến hộp thư của bạn.
       </p>
       <button
         onClick={onContinue}
         className="w-full bg-black hover:bg-neutral-800 text-white font-bold py-4 rounded-xl transition text-base"
       >
-        Continue Shopping
+        Tiếp Tục Mua Sắm
       </button>
     </div>
   );
@@ -552,7 +546,7 @@ export function CheckoutPage({ onBack, onOrderComplete }: CheckoutProps) {
 
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     firstName: '', lastName: '', email: '', phone: '',
-    address: '', unit: '', city: 'Singapore', postal: '', country: 'Singapore',
+    address: '', unit: '', city: '', postal: '', country: 'Vietnam',
   });
 
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
@@ -576,7 +570,7 @@ export function CheckoutPage({ onBack, onOrderComplete }: CheckoutProps) {
             onClick={onBack}
             className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-black transition mb-6"
           >
-            <ChevronLeft size={16} /> Back to Shop
+            <ChevronLeft size={16} /> Quay Lại Cửa Hàng
           </button>
         )}
 

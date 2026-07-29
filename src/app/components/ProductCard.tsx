@@ -45,7 +45,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
           {isSoldOut ? (
             <span className="bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
-              Sold Out
+              Hết Hàng
             </span>
           ) : hasDiscount && (
             <span className="bg-[#F16C10] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
@@ -56,7 +56,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100">
           <button className="flex items-center gap-2 bg-white border border-neutral-200 text-black text-xs font-semibold px-4 py-2 rounded-full shadow-md hover:bg-[#F16C10] hover:text-white hover:border-[#F16C10] transition-all">
             <Eye size={13} />
-            Quick View
+            Xem Nhanh
           </button>
         </div>
         {product.images.length > 1 && (
@@ -122,7 +122,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
             }`}
             onClick={(e) => { e.stopPropagation(); }}
             disabled={isSoldOut}
-            aria-label={isSoldOut ? 'Sold out' : 'Add to cart'}
+            aria-label={isSoldOut ? 'Hết hàng' : 'Thêm vào giỏ hàng'}
           >
             <ShoppingCart size={15} />
           </button>

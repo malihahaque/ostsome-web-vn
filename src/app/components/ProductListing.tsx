@@ -57,7 +57,7 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
     <section className="py-10 md:py-14 bg-white min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="w-10 h-10 border-4 border-[#F16C10] border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-neutral-400 font-medium">Loading products…</p>
+        <p className="text-sm text-neutral-400 font-medium">Đang tải sản phẩm…</p>
       </div>
     </section>
   );
@@ -65,7 +65,7 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
   if (error) return (
     <section className="py-10 md:py-14 bg-white min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <p className="text-lg font-semibold text-black mb-2">Failed to load products</p>
+        <p className="text-lg font-semibold text-black mb-2">Không thể tải sản phẩm</p>
         <p className="text-sm text-neutral-400">{error}</p>
       </div>
     </section>
@@ -84,10 +84,10 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
         )}
         <div className="mb-8 md:mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h2 className="text-[26px] md:text-4xl font-bold text-black uppercase">Shop All Products</h2>
+            <h2 className="text-[26px] md:text-4xl font-bold text-black uppercase">Tất Cả Sản Phẩm</h2>
             <p className="text-sm text-neutral-500 mt-1">
-              {filtered.length} product{filtered.length !== 1 ? 's' : ''} found
-              {totalPages > 1 && ` · Page ${page} of ${totalPages}`}
+              Tìm thấy {filtered.length} sản phẩm
+              {totalPages > 1 && ` · Trang ${page}/${totalPages}`}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -95,7 +95,7 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
               <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
               <input
                 type="text"
-                placeholder="Search products…"
+                placeholder="Tìm kiếm sản phẩm…"
                 value={searchQuery}
                 onChange={e => handleSearch(e.target.value)}
                 className="w-full pl-9 pr-4 py-2.5 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:border-[#F16C10] transition-colors"
@@ -111,9 +111,9 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
               onChange={e => { setSortBy(e.target.value as typeof sortBy); setPage(1); }}
               className="py-2.5 px-3 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:border-[#F16C10] text-neutral-700 bg-white"
             >
-              <option value="default">Featured</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
+              <option value="default">Nổi Bật</option>
+              <option value="price-asc">Giá: Thấp đến Cao</option>
+              <option value="price-desc">Giá: Cao đến Thấp</option>
             </select>
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -126,7 +126,7 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
 
         {showFilters && (
           <div className="mb-8 p-5 bg-neutral-50 rounded-xl border border-neutral-100">
-            <p className="text-xs font-bold text-black uppercase tracking-wide mb-3">Filter by Brand</p>
+            <p className="text-xs font-bold text-black uppercase tracking-wide mb-3">Lọc Theo Thương Hiệu</p>
             <div className="flex flex-wrap gap-2">
               {topVendors.map(vendor => (
                 <button
@@ -155,7 +155,7 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
                   disabled={page === 1}
                   className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold border border-neutral-200 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed hover:border-neutral-400 transition"
                 >
-                  <ChevronLeft size={16} /> Prev
+                  <ChevronLeft size={16} /> Trước
                 </button>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -184,7 +184,7 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
                   disabled={page === totalPages}
                   className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold border border-neutral-200 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed hover:border-neutral-400 transition"
                 >
-                  Next <ChevronRight size={16} />
+                  Sau <ChevronRight size={16} />
                 </button>
               </div>
             )}
@@ -192,13 +192,13 @@ export function ProductListing({ onSelectProduct, initialSearch = '', onBack }: 
         ) : (
           <div className="text-center py-24">
             <p className="text-4xl mb-4">🔍</p>
-            <p className="text-lg font-semibold text-black mb-2">No products found</p>
-            <p className="text-sm text-neutral-500 mb-6">Try a different search or category.</p>
+            <p className="text-lg font-semibold text-black mb-2">Không tìm thấy sản phẩm</p>
+            <p className="text-sm text-neutral-500 mb-6">Hãy thử tìm kiếm hoặc danh mục khác.</p>
             <button
               onClick={() => handleSearch('')}
               className="px-6 py-2.5 bg-[#F16C10] text-white rounded-lg text-sm font-semibold hover:bg-[#d9610e] transition-colors"
             >
-              Clear filters
+              Xóa bộ lọc
             </button>
           </div>
         )}

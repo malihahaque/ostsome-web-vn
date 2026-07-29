@@ -61,7 +61,7 @@ function StrengthBar({ password }: { password: string }) {
     /[^A-Za-z0-9]/.test(password),
   ];
   const strength = checks.filter(Boolean).length;
-  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+  const labels = ['', 'Yếu', 'Tạm được', 'Khá', 'Mạnh'];
   const colors = ['', 'bg-red-400', 'bg-amber-400', 'bg-yellow-400', 'bg-green-500'];
   if (!password) return null;
   return (
@@ -100,16 +100,16 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
   const [loading, setLoading] = useState(false);
 
   function validateEmail() {
-    if (!email) { setErrors(p => ({ ...p, email: 'Email is required' })); return false; }
-    if (!isValidEmail(email)) { setErrors(p => ({ ...p, email: 'Enter a valid email address' })); return false; }
+    if (!email) { setErrors(p => ({ ...p, email: 'Vui lòng nhập email' })); return false; }
+    if (!isValidEmail(email)) { setErrors(p => ({ ...p, email: 'Nhập một địa chỉ email hợp lệ' })); return false; }
     return true;
   }
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!email) e.email = 'Email is required';
-    else if (!isValidEmail(email)) e.email = 'Enter a valid email address';
-    if (!password) e.password = 'Password is required';
+    if (!email) e.email = 'Vui lòng nhập email';
+    else if (!isValidEmail(email)) e.email = 'Nhập một địa chỉ email hợp lệ';
+    if (!password) e.password = 'Vui lòng nhập mật khẩu';
     return e;
   }
 
@@ -120,7 +120,7 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
     try {
       const result = await customerLogin(email, password);
       if (!result) {
-        setErrors({ password: 'Incorrect email or password' });
+        setErrors({ password: 'Email hoặc mật khẩu không đúng' });
         setLoading(false);
         return;
       }
@@ -134,7 +134,7 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
       });
       onSuccess();
     } catch (err) {
-      setErrors({ password: 'Login failed. Please try again.' });
+      setErrors({ password: 'Đăng nhập thất bại. Vui lòng thử lại.' });
     }
     setLoading(false);
   }
@@ -142,8 +142,8 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
   return (
     <div className="flex flex-col gap-5">
       <div className="text-center mb-2">
-        <h2 className="text-xl font-bold text-black mb-1">Welcome back</h2>
-        <p className="text-sm text-neutral-500">Log in to access your FOST perks</p>
+        <h2 className="text-xl font-bold text-black mb-1">Chào mừng trở lại</h2>
+        <p className="text-sm text-neutral-500">Đăng nhập để nhận ưu đãi thành viên FOST</p>
       </div>
 
       <FieldRow label="Email" error={errors.email}>
@@ -154,13 +154,13 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
             value={email}
             onChange={e => { setEmail(e.target.value); setErrors(p => ({ ...p, email: '' })); }}
             onBlur={validateEmail}
-            placeholder="jane@example.com"
+            placeholder="lan@example.com"
             className={`w-full border rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400 ${errors.email ? 'border-red-300 bg-red-50' : 'border-neutral-200'}`}
           />
         </div>
       </FieldRow>
 
-      <FieldRow label="Password" error={errors.password}>
+      <FieldRow label="Mật khẩu" error={errors.password}>
         <PasswordInput
           value={password}
           onChange={v => { setPassword(v); setErrors(p => ({ ...p, password: '' })); }}
@@ -169,7 +169,7 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
           onClick={onForgot}
           className="text-xs text-[#F16C10] font-semibold hover:underline text-right mt-0.5 self-end"
         >
-          Forgot password?
+          Quên mật khẩu?
         </button>
       </FieldRow>
 
@@ -179,20 +179,20 @@ function LoginView({ onSignup, onForgot, onSuccess }: {
         className="w-full bg-[#F16C10] hover:bg-[#d65f0e] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2"
       >
         {loading
-          ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Logging in…</>
-          : 'Log In'}
+          ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Đang đăng nhập…</>
+          : 'Đăng Nhập'}
       </button>
 
       <div className="flex items-center gap-3">
         <div className="flex-1 h-px bg-neutral-100" />
-        <span className="text-xs text-neutral-400">or</span>
+        <span className="text-xs text-neutral-400">hoặc</span>
         <div className="flex-1 h-px bg-neutral-100" />
       </div>
 
       <p className="text-center text-sm text-neutral-500">
-        Not a member yet?{' '}
+        Chưa là thành viên?{' '}
         <button onClick={onSignup} className="text-[#F16C10] font-bold hover:underline">
-          Join FOST — it's free
+          Tham gia FOST — miễn phí
         </button>
       </p>
     </div>
@@ -222,21 +222,21 @@ function SignupView({ onLogin, onSuccess }: {
 
   function validateEmailField() {
     if (form.email && !isValidEmail(form.email)) {
-      setErrors(p => ({ ...p, email: 'Enter a valid email address' }));
+      setErrors(p => ({ ...p, email: 'Nhập một địa chỉ email hợp lệ' }));
     }
   }
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!form.firstName.trim()) e.firstName = 'Required';
-    if (!form.lastName.trim()) e.lastName = 'Required';
-    if (!form.email) e.email = 'Required';
-    else if (!isValidEmail(form.email)) e.email = 'Enter a valid email address';
-    if (form.phone && !/^[\d\s\+\-\(\)]{7,15}$/.test(form.phone)) e.phone = 'Enter a valid phone number';
-    if (!form.password) e.password = 'Required';
-    else if (form.password.length < 8) e.password = 'Minimum 8 characters';
-    if (form.password !== form.confirm) e.confirm = 'Passwords do not match';
-    if (!agree) e.agree = 'Please agree to the terms';
+    if (!form.firstName.trim()) e.firstName = 'Bắt buộc';
+    if (!form.lastName.trim()) e.lastName = 'Bắt buộc';
+    if (!form.email) e.email = 'Bắt buộc';
+    else if (!isValidEmail(form.email)) e.email = 'Nhập một địa chỉ email hợp lệ';
+    if (form.phone && !/^[\d\s\+\-\(\)]{7,15}$/.test(form.phone)) e.phone = 'Nhập một số điện thoại hợp lệ';
+    if (!form.password) e.password = 'Bắt buộc';
+    else if (form.password.length < 8) e.password = 'Tối thiểu 8 ký tự';
+    if (form.password !== form.confirm) e.confirm = 'Mật khẩu không khớp';
+    if (!agree) e.agree = 'Vui lòng đồng ý với điều khoản';
     return e;
   }
 
@@ -253,7 +253,7 @@ function SignupView({ onLogin, onSuccess }: {
         phone: form.phone || undefined,
       });
       if (!result.success) {
-        setErrors({ email: result.errors[0] ?? 'Registration failed' });
+        setErrors({ email: result.errors[0] ?? 'Đăng ký thất bại' });
         setLoading(false);
         return;
       }
@@ -267,7 +267,7 @@ function SignupView({ onLogin, onSuccess }: {
         onSuccess(form.firstName, form.lastName, form.email, null);
       }
     } catch (err) {
-      setErrors({ email: 'Registration failed. Please try again.' });
+      setErrors({ email: 'Đăng ký thất bại. Vui lòng thử lại.' });
     }
     setLoading(false);
   }
@@ -275,22 +275,22 @@ function SignupView({ onLogin, onSuccess }: {
   return (
     <div className="flex flex-col gap-4">
       <div className="text-center mb-1">
-        <h2 className="text-xl font-bold text-black mb-1">Join FOST</h2>
-        <p className="text-sm text-neutral-500">Free membership. Better prices. Early access.</p>
+        <h2 className="text-xl font-bold text-black mb-1">Tham Gia FOST</h2>
+        <p className="text-sm text-neutral-500">Miễn phí thành viên. Giá tốt hơn. Ưu tiên trải nghiệm sớm.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <FieldRow label="First Name" error={errors.firstName}>
+        <FieldRow label="Tên" error={errors.firstName}>
           <div className="relative">
             <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
             <input type="text" value={form.firstName} onChange={e => set('firstName')(e.target.value)}
-              placeholder="Jane"
+              placeholder="Lan"
               className={`w-full border rounded-xl pl-9 pr-3 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400 ${errors.firstName ? 'border-red-300 bg-red-50' : 'border-neutral-200'}`} />
           </div>
         </FieldRow>
-        <FieldRow label="Last Name" error={errors.lastName}>
+        <FieldRow label="Họ" error={errors.lastName}>
           <input type="text" value={form.lastName} onChange={e => set('lastName')(e.target.value)}
-            placeholder="Tan"
+            placeholder="Nguyễn"
             className={`w-full border rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400 ${errors.lastName ? 'border-red-300 bg-red-50' : 'border-neutral-200'}`} />
         </FieldRow>
       </div>
@@ -303,14 +303,14 @@ function SignupView({ onLogin, onSuccess }: {
             value={form.email}
             onChange={e => set('email')(e.target.value)}
             onBlur={validateEmailField}
-            placeholder="jane@example.com"
+            placeholder="lan@example.com"
             className={`w-full border rounded-xl pl-9 pr-4 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400 ${errors.email ? 'border-red-300 bg-red-50' : 'border-neutral-200'}`}
           />
         </div>
       </FieldRow>
 
       <div className="grid grid-cols-2 gap-3">
-        <FieldRow label="Phone (optional)" error={errors.phone}>
+        <FieldRow label="Số điện thoại (không bắt buộc)" error={errors.phone}>
           <div className="relative">
             <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
             <input
@@ -318,17 +318,17 @@ function SignupView({ onLogin, onSuccess }: {
               inputMode="numeric"
               value={form.phone}
               onChange={e => handlePhoneChange(e.target.value)}
-              placeholder="+65 9123 4567"
+              placeholder="+84 91 234 5678"
               className={`w-full border rounded-xl pl-9 pr-3 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400 ${errors.phone ? 'border-red-300 bg-red-50' : 'border-neutral-200'}`}
             />
           </div>
         </FieldRow>
-        <FieldRow label="Year of Birth (optional)">
+        <FieldRow label="Năm sinh (không bắt buộc)">
           <div className="relative">
             <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" />
             <select value={form.birthYear} onChange={e => set('birthYear')(e.target.value)}
               className={`w-full border border-neutral-200 rounded-xl pl-9 pr-3 py-3 text-sm outline-none focus:border-[#F16C10] transition appearance-none ${form.birthYear ? 'text-black' : 'text-neutral-400'}`}>
-              <option value="" disabled>Select year</option>
+              <option value="" disabled>Chọn năm</option>
               {birthYears.map(year => (
                 <option key={year} value={year} className="text-black">{year}</option>
               ))}
@@ -337,13 +337,13 @@ function SignupView({ onLogin, onSuccess }: {
         </FieldRow>
       </div>
 
-      <FieldRow label="Password" error={errors.password}>
-        <PasswordInput value={form.password} onChange={set('password')} placeholder="Min. 8 characters" />
+      <FieldRow label="Mật khẩu" error={errors.password}>
+        <PasswordInput value={form.password} onChange={set('password')} placeholder="Tối thiểu 8 ký tự" />
         <StrengthBar password={form.password} />
       </FieldRow>
 
-      <FieldRow label="Confirm Password" error={errors.confirm}>
-        <PasswordInput value={form.confirm} onChange={set('confirm')} placeholder="Re-enter password" />
+      <FieldRow label="Xác nhận mật khẩu" error={errors.confirm}>
+        <PasswordInput value={form.confirm} onChange={set('confirm')} placeholder="Nhập lại mật khẩu" />
       </FieldRow>
 
       <div>
@@ -355,10 +355,10 @@ function SignupView({ onLogin, onSuccess }: {
             {agree && <Check size={10} strokeWidth={3} className="text-white" />}
           </div>
           <span className="text-xs text-neutral-500 leading-relaxed">
-            I agree to Ostsome's{' '}
-            <a href="#" className="text-[#F16C10] hover:underline font-medium">Terms of Service</a>{' '}
-            and{' '}
-            <a href="#" className="text-[#F16C10] hover:underline font-medium">Privacy Policy</a>
+            Tôi đồng ý với{' '}
+            <a href="#" className="text-[#F16C10] hover:underline font-medium">Điều khoản Dịch vụ</a>{' '}
+            và{' '}
+            <a href="#" className="text-[#F16C10] hover:underline font-medium">Chính sách Bảo mật</a> của Ostsome
           </span>
         </label>
         {errors.agree && <p className="text-xs text-red-500 mt-1 ml-7">{errors.agree}</p>}
@@ -370,13 +370,13 @@ function SignupView({ onLogin, onSuccess }: {
         className="w-full bg-[#F16C10] hover:bg-[#d65f0e] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 mt-1"
       >
         {loading
-          ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Creating account…</>
-          : 'Create My FOST Account'}
+          ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Đang tạo tài khoản…</>
+          : 'Tạo Tài Khoản FOST'}
       </button>
 
       <p className="text-center text-sm text-neutral-500">
-        Already a member?{' '}
-        <button onClick={onLogin} className="text-[#F16C10] font-bold hover:underline">Log in</button>
+        Đã là thành viên?{' '}
+        <button onClick={onLogin} className="text-[#F16C10] font-bold hover:underline">Đăng nhập</button>
       </p>
     </div>
   );
@@ -389,12 +389,12 @@ function ForgotView({ onBack, onSent }: { onBack: () => void; onSent: (email: st
   const [loading, setLoading] = useState(false);
 
   function validateEmailField() {
-    if (email && !isValidEmail(email)) setError('Enter a valid email address');
+    if (email && !isValidEmail(email)) setError('Nhập một địa chỉ email hợp lệ');
   }
 
   async function handleSubmit() {
-    if (!email) { setError('Please enter your email address'); return; }
-    if (!isValidEmail(email)) { setError('Enter a valid email address'); return; }
+    if (!email) { setError('Vui lòng nhập địa chỉ email của bạn'); return; }
+    if (!isValidEmail(email)) { setError('Nhập một địa chỉ email hợp lệ'); return; }
     setLoading(true);
     try {
       await customerResetPassword(email);
@@ -408,20 +408,20 @@ function ForgotView({ onBack, onSent }: { onBack: () => void; onSent: (email: st
   return (
     <div className="flex flex-col gap-5">
       <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-black transition self-start">
-        <ArrowLeft size={15} /> Back to login
+        <ArrowLeft size={15} /> Quay lại đăng nhập
       </button>
 
       <div className="text-center">
         <div className="w-14 h-14 rounded-full bg-[#F16C10]/10 flex items-center justify-center mx-auto mb-4">
           <Lock size={24} className="text-[#F16C10]" />
         </div>
-        <h2 className="text-xl font-bold text-black mb-2">Reset your password</h2>
+        <h2 className="text-xl font-bold text-black mb-2">Đặt lại mật khẩu</h2>
         <p className="text-sm text-neutral-500 leading-relaxed">
-          Enter your email and we'll send you a link to reset your password.
+          Nhập email của bạn và chúng tôi sẽ gửi liên kết để đặt lại mật khẩu.
         </p>
       </div>
 
-      <FieldRow label="Email Address" error={error}>
+      <FieldRow label="Địa chỉ Email" error={error}>
         <div className="relative">
           <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
           <input
@@ -429,7 +429,7 @@ function ForgotView({ onBack, onSent }: { onBack: () => void; onSent: (email: st
             value={email}
             onChange={e => { setEmail(e.target.value); setError(''); }}
             onBlur={validateEmailField}
-            placeholder="jane@example.com"
+            placeholder="lan@example.com"
             className={`w-full border rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#F16C10] transition text-black placeholder-neutral-400 ${error ? 'border-red-300 bg-red-50' : 'border-neutral-200'}`}
           />
         </div>
@@ -441,8 +441,8 @@ function ForgotView({ onBack, onSent }: { onBack: () => void; onSent: (email: st
         className="w-full bg-[#F16C10] hover:bg-[#d65f0e] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2"
       >
         {loading
-          ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Sending…</>
-          : 'Send Reset Link'}
+          ? <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Đang gửi…</>
+          : 'Gửi Liên Kết Đặt Lại'}
       </button>
     </div>
   );
@@ -456,13 +456,13 @@ function ForgotSentView({ email, onBack }: { email: string; onBack: () => void }
         <Mail size={28} className="text-green-500" />
       </div>
       <div>
-        <h2 className="text-xl font-bold text-black mb-2">Check your inbox</h2>
-        <p className="text-sm text-neutral-500 leading-relaxed">We've sent a password reset link to</p>
+        <h2 className="text-xl font-bold text-black mb-2">Kiểm tra hộp thư của bạn</h2>
+        <p className="text-sm text-neutral-500 leading-relaxed">Chúng tôi đã gửi liên kết đặt lại mật khẩu đến</p>
         <p className="text-sm font-bold text-black mt-1">{email}</p>
       </div>
       <div className="bg-neutral-50 rounded-xl border border-neutral-100 px-5 py-4 text-xs text-neutral-500 leading-relaxed w-full">
-        Didn't receive it? Check your spam folder, or{' '}
-        <button onClick={onBack} className="text-[#F16C10] font-semibold hover:underline">try a different email</button>.
+        Không nhận được email? Kiểm tra thư mục spam, hoặc{' '}
+        <button onClick={onBack} className="text-[#F16C10] font-semibold hover:underline">thử email khác</button>.
       </div>
     </div>
   );
@@ -475,17 +475,17 @@ function SignupSuccessView({ firstName, onClose }: { firstName: string; onClose:
         <Crown size={28} className="text-[#F16C10]" />
       </div>
       <div>
-        <h2 className="text-xl font-bold text-black mb-2">Welcome, {firstName}! 🎉</h2>
+        <h2 className="text-xl font-bold text-black mb-2">Chào mừng, {firstName}! 🎉</h2>
         <p className="text-sm text-neutral-500 leading-relaxed">
-          You now have access to member pricing, early drops, and exclusive events.
+          Bạn hiện đã có quyền truy cập giá thành viên, ưu tiên sản phẩm mới, và sự kiện độc quyền.
         </p>
       </div>
       <div className="grid grid-cols-2 gap-3 w-full">
         {[
-          { emoji: '🏷️', label: 'Member Pricing', sub: 'Unlocked' },
-          { emoji: '⚡', label: 'Early Access', sub: 'Activated' },
-          { emoji: '🧪', label: 'Product Testing', sub: 'Eligible' },
-          { emoji: '🎟️', label: 'Events', sub: 'Invite-eligible' },
+          { emoji: '🏷️', label: 'Giá Thành Viên', sub: 'Đã mở khóa' },
+          { emoji: '⚡', label: 'Ưu Tiên Trải Nghiệm', sub: 'Đã kích hoạt' },
+          { emoji: '🧪', label: 'Dùng Thử Sản Phẩm', sub: 'Đủ điều kiện' },
+          { emoji: '🎟️', label: 'Sự Kiện', sub: 'Có thể được mời' },
         ].map(p => (
           <div key={p.label} className="flex flex-col items-center gap-1 p-3 bg-neutral-50 rounded-xl border border-neutral-100">
             <span className="text-lg">{p.emoji}</span>
@@ -498,7 +498,7 @@ function SignupSuccessView({ firstName, onClose }: { firstName: string; onClose:
         onClick={onClose}
         className="w-full bg-[#F16C10] hover:bg-[#d65f0e] text-white font-bold py-3.5 rounded-xl transition text-sm"
       >
-        Start Shopping
+        Bắt Đầu Mua Sắm
       </button>
     </div>
   );
@@ -512,11 +512,11 @@ export function FostAuthModal({ initialView = 'login', onClose }: FostAuthModalP
   const [newUser, setNewUser] = useState({ firstName: '', lastName: '', email: '' });
 
   const titles: Record<AuthView, string> = {
-    login: 'FOST Member Login',
-    signup: 'Join FOST',
-    forgot: 'Reset Password',
-    'forgot-sent': 'Email Sent',
-    'signup-success': 'Welcome to FOST',
+    login: 'Đăng Nhập Thành Viên FOST',
+    signup: 'Tham Gia FOST',
+    forgot: 'Đặt Lại Mật Khẩu',
+    'forgot-sent': 'Đã Gửi Email',
+    'signup-success': 'Chào Mừng Đến Với FOST',
   };
 
   function handleSignupSuccess(firstName: string, lastName: string, email: string, token: string | null) {

@@ -36,7 +36,7 @@ export function CartDrawer() {
           <div className="flex items-center gap-3">
             <ShoppingBag size={20} className="text-[#F16C10]" />
             <h2 className="text-base font-bold text-black">
-              Your Cart {totalItems > 0 && <span className="text-neutral-400 font-normal">({totalItems})</span>}
+              Giỏ Hàng Của Bạn {totalItems > 0 && <span className="text-neutral-400 font-normal">({totalItems})</span>}
             </h2>
           </div>
           <button
@@ -52,12 +52,12 @@ export function CartDrawer() {
           <div className="px-6 py-3 bg-neutral-50 border-b border-neutral-100">
             {freeShipping ? (
               <p className="text-xs text-green-600 font-semibold text-center">
-                🎉 You've unlocked free shipping!
+                🎉 Bạn đã được miễn phí vận chuyển!
               </p>
             ) : (
               <div>
                 <p className="text-xs text-neutral-500 mb-2 text-center">
-                  Add <span className="font-bold text-black">{shippingGap.toLocaleString('vi-VN')}₫</span> more for free shipping
+                  Thêm <span className="font-bold text-black">{shippingGap.toLocaleString('vi-VN')}₫</span> nữa để được miễn phí vận chuyển
                 </p>
                 <div className="w-full bg-neutral-200 rounded-full h-1.5">
                   <div
@@ -78,11 +78,11 @@ export function CartDrawer() {
                 <ShoppingBag size={28} className="text-neutral-300" />
               </div>
               <div>
-                <p className="text-base font-semibold text-black mb-1">Your cart is empty</p>
-                <p className="text-sm text-neutral-400">Add something you love to get started</p>
+                <p className="text-base font-semibold text-black mb-1">Giỏ hàng của bạn đang trống</p>
+                <p className="text-sm text-neutral-400">Thêm sản phẩm bạn yêu thích để bắt đầu</p>
               </div>
               <button onClick={closeCart} className="text-sm text-[#F16C10] font-semibold hover:underline">
-                Continue shopping →
+                Tiếp tục mua sắm →
               </button>
             </div>
           ) : (
@@ -110,7 +110,7 @@ export function CartDrawer() {
                       </p>
                     )}
                     {!item.shopifyVariantId && (
-                      <p className="text-[10px] text-amber-500 mb-1">⚠ Variant not linked to Shopify</p>
+                      <p className="text-[10px] text-amber-500 mb-1">⚠ Biến thể chưa liên kết với Shopify</p>
                     )}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 border border-neutral-200 rounded-lg px-2 py-1">
@@ -160,25 +160,25 @@ export function CartDrawer() {
         {items.length > 0 && (
           <div className="px-6 py-5 border-t border-neutral-100 bg-white">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-sm text-neutral-500">Subtotal</span>
+              <span className="text-sm text-neutral-500">Tạm tính</span>
               <span className={`text-base font-bold ${isFostMember ? 'text-neutral-400 line-through' : 'text-black'}`}>
                 {subtotal.toLocaleString('vi-VN')}₫
               </span>
             </div>
             {isFostMember && (
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-[#F16C10] font-semibold">FOST member savings (5%)</span>
+                <span className="text-sm text-[#F16C10] font-semibold">Ưu đãi thành viên FOST (5%)</span>
                 <span className="text-sm font-bold text-[#F16C10]">– {fostSavings.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             {isFostMember && (
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-black font-semibold">FOST total</span>
+                <span className="text-sm text-black font-semibold">Tổng FOST</span>
                 <span className="text-base font-bold text-black">{fostSubtotal.toLocaleString('vi-VN')}₫</span>
               </div>
             )}
             <p className="text-xs text-neutral-400 mb-4">
-              {freeShipping ? 'Free shipping applied' : `+ 30.000₫ estimated shipping`}
+              {freeShipping ? 'Đã áp dụng miễn phí vận chuyển' : `+ 30.000₫ phí vận chuyển ước tính`}
             </p>
             <button
               onClick={handleCheckout}
@@ -186,16 +186,16 @@ export function CartDrawer() {
               className="w-full bg-[#F16C10] hover:bg-[#d65f0e] disabled:opacity-60 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition text-base"
             >
               {checkoutLoading ? (
-                <><Loader2 size={18} className="animate-spin" /> Taking you to checkout…</>
+                <><Loader2 size={18} className="animate-spin" /> Đang chuyển đến thanh toán…</>
               ) : (
-                <>Checkout <ArrowRight size={18} /></>
+                <>Thanh Toán <ArrowRight size={18} /></>
               )}
             </button>
             <button
               onClick={closeCart}
               className="w-full mt-3 text-sm text-neutral-400 hover:text-black transition font-medium"
             >
-              Continue shopping
+              Tiếp tục mua sắm
             </button>
           </div>
         )}

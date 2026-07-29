@@ -252,16 +252,16 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
 
   function getMissingOptionsMessage(): string | null {
     if (needsOption1 && !selectedOption1 && needsOption2 && !selectedOption2) {
-      return `Please select a ${option1Name} and ${option2Name} before adding to cart.`;
+      return `Vui lòng chọn ${option1Name} và ${option2Name} trước khi thêm vào giỏ hàng.`;
     }
     if (needsOption1 && !selectedOption1) {
-      return `Please select a ${option1Name} before adding to cart.`;
+      return `Vui lòng chọn ${option1Name} trước khi thêm vào giỏ hàng.`;
     }
     if (needsOption2 && !selectedOption2) {
-      return `Please select a ${option2Name} before adding to cart.`;
+      return `Vui lòng chọn ${option2Name} trước khi thêm vào giỏ hàng.`;
     }
     if (!selectedVariantAvailable) {
-      return 'Sorry, this option is currently out of stock.';
+      return 'Rất tiếc, tùy chọn này hiện đã hết hàng.';
     }
     return null;
   }
@@ -438,14 +438,14 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
             >
               <X size={16} className="text-neutral-600" />
             </button>
-            <h2 className="text-lg font-bold text-black mb-2">Limited stock</h2>
+            <h2 className="text-lg font-bold text-black mb-2">Hàng sắp hết</h2>
             {stockWarning.available > 0 ? (
               <p className="text-sm text-neutral-600 mb-5">
-                You asked for {stockWarning.requested}, but only {stockWarning.available} {stockWarning.available === 1 ? 'is' : 'are'} currently in stock. Would you like to add {stockWarning.available} instead?
+                Bạn yêu cầu {stockWarning.requested} sản phẩm, nhưng chỉ còn {stockWarning.available} sản phẩm trong kho. Bạn có muốn thêm {stockWarning.available} sản phẩm thay thế không?
               </p>
             ) : (
               <p className="text-sm text-neutral-600 mb-5">
-                Sorry, this option just sold out and can't be added right now.
+                Rất tiếc, sản phẩm này vừa hết hàng và không thể thêm vào giỏ ngay bây giờ.
               </p>
             )}
             <div className="flex gap-3">
@@ -453,14 +453,14 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                 onClick={() => setStockWarning(null)}
                 className="flex-1 text-sm font-semibold text-neutral-600 border border-neutral-200 py-2.5 rounded-xl hover:bg-neutral-50 transition"
               >
-                Cancel
+                Hủy
               </button>
               {stockWarning.available > 0 && (
                 <button
                   onClick={confirmAddAvailableQty}
                   className="flex-1 text-sm font-bold text-white bg-[#F16C10] hover:bg-[#d9610e] py-2.5 rounded-xl transition"
                 >
-                  Add {stockWarning.available}
+                  Thêm {stockWarning.available}
                 </button>
               )}
             </div>
@@ -488,36 +488,36 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
             />
 
             <div className="p-5">
-              <h2 className="text-lg font-bold text-black mb-1">🎉 Congratulations!</h2>
-              <p className="text-sm font-semibold text-[#F16C10] mb-3">Welcome to the OSTSOME × Rubyoung Lucky Draw! 🎟️</p>
+              <h2 className="text-lg font-bold text-black mb-1">🎉 Chúc mừng!</h2>
+              <p className="text-sm font-semibold text-[#F16C10] mb-3">Chào mừng đến với Vòng Quay May Mắn OSTSOME × Rubyoung! 🎟️</p>
 
-              <p className="text-sm text-neutral-600 mb-3">We have 4 exciting prizes waiting for you:</p>
+              <p className="text-sm text-neutral-600 mb-3">Chúng tôi có 4 phần quà hấp dẫn đang chờ bạn:</p>
               <ul className="text-sm text-neutral-700 space-y-1 mb-4">
-                <li>🎁 Free Gift</li>
-                <li>🛍️ 1-for-1 Deal (Please select two items, then enter the code to redeem the offer)</li>
-                <li>💵 $100 Voucher</li>
-                <li>💳 $60 Voucher</li>
+                <li>🎁 Quà Tặng Miễn Phí</li>
+                <li>🛍️ Ưu Đãi Mua 1 Tặng 1 (Vui lòng chọn hai sản phẩm, sau đó nhập mã để nhận ưu đãi)</li>
+                <li>💵 Voucher $100</li>
+                <li>💳 Voucher $60</li>
               </ul>
 
-              <p className="text-sm font-semibold text-neutral-700 mb-2">Simply follow these steps:</p>
+              <p className="text-sm font-semibold text-neutral-700 mb-2">Chỉ cần làm theo các bước sau:</p>
               <ol className="text-sm text-neutral-600 space-y-1 mb-5">
-                <li>1. Scan the QR code.</li>
-                <li>2. You'll be directed to the Rubyoung homepage.</li>
-                <li>3. Tap <strong>Buy Now</strong>.</li>
-                <li>4. Enter your shipping details and complete your order.</li>
+                <li>1. Quét mã QR.</li>
+                <li>2. Bạn sẽ được chuyển đến trang chủ Rubyoung.</li>
+                <li>3. Nhấn <strong>Mua Ngay</strong>.</li>
+                <li>4. Nhập thông tin giao hàng và hoàn tất đơn hàng.</li>
               </ol>
 
               <button
                 onClick={() => { setShowLuckyDraw(false); handleBuyNow(); }}
                 className="w-full bg-black hover:bg-neutral-800 text-white font-bold py-3.5 rounded-xl transition-colors text-sm uppercase tracking-wide"
               >
-                Buy Now
+                Mua Ngay
               </button>
               <button
                 onClick={() => setShowLuckyDraw(false)}
                 className="w-full mt-2 text-xs text-neutral-400 hover:text-neutral-600 py-2 transition-colors"
               >
-                Maybe later
+                Để sau
               </button>
             </div>
           </div>
@@ -530,7 +530,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
           className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-[#F16C10] transition-colors"
         >
           <ChevronLeft size={16} />
-          Back to Products
+          Quay Lại Sản Phẩm
         </button>
       </div>
 
@@ -579,7 +579,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
               )}
               {hasDiscount && (
                 <div className="absolute top-4 left-4 bg-[#F16C10] text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                  -{discountPct}% OFF
+                  -{discountPct}%
                 </div>
               )}
             </div>
@@ -618,7 +618,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                   <Star key={s} size={14} className={s <= 4 ? 'text-amber-400 fill-amber-400' : 'text-neutral-200 fill-neutral-200'} />
                 ))}
               </div>
-              <span className="text-xs text-neutral-400">(24 reviews)</span>
+              <span className="text-xs text-neutral-400">(24 đánh giá)</span>
               {soldCount !== null && soldCount > 0 && (
                 <span className="text-xs font-bold text-[#F16C10]">· Đã bán {soldCount.toLocaleString('vi-VN')}</span>
               )}
@@ -665,7 +665,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
             )}
 
             <p className="text-xs text-neutral-500 mb-6 bg-neutral-50 border border-neutral-100 rounded-lg px-3 py-2">
-              Or 3 payments of <strong className="text-black">{Math.round((isFostMember ? getFostPrice(activePrice) : activePrice) / 3).toLocaleString('vi-VN')}₫</strong> with Atome. Taxes included.
+              Hoặc trả góp 3 lần <strong className="text-black">{Math.round((isFostMember ? getFostPrice(activePrice) : activePrice) / 3).toLocaleString('vi-VN')}₫</strong> với Atome. Đã bao gồm thuế.
             </p>
 
             {/* Option 1 */}
@@ -872,7 +872,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
             <div className="border-t border-neutral-100 mb-6" />
 
             <div>
-              <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-4">About this product</h2>
+              <h2 className="text-sm font-bold text-black uppercase tracking-wide mb-4">Về sản phẩm này</h2>
               <div
                 className="text-sm text-neutral-600 leading-relaxed product-description"
                 dangerouslySetInnerHTML={{ __html: product.bodyHtml }}
@@ -978,7 +978,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
                     <button
                       key={i}
                       onClick={() => scrollToFeature(i)}
-                      aria-label={`Feature ${i + 1}`}
+                      aria-label={`Tính năng ${i + 1}`}
                       className={`w-2.5 h-2.5 rounded-full transition-all ${
                         activeFeature === i ? 'bg-[#F16C10] scale-125' : 'bg-neutral-300 hover:bg-neutral-400'
                       }`}
@@ -991,7 +991,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
             {/* Labeled text sections — Compatibility, Specifications,
                 What's in the Box, Reference Docs. */}
             {[
-              { label: 'Compatibility', content: product.metafields.compatibility },
+              { label: 'Khả năng tương thích', content: product.metafields.compatibility },
               { label: 'Thông số kỹ thuật', content: product.metafields.specifications },
               { label: 'Trọn bộ sản phẩm', content: product.metafields.whatsInTheBox },
               { label: 'Tài liệu tham khảo', content: product.metafields.referenceDocs },

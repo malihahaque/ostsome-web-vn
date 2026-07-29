@@ -104,6 +104,16 @@ const STATUS_ICONS: Record<string, typeof Truck> = {
   Cancelled: X,
 };
 
+// Display-only Vietnamese labels — order.status itself stays in English
+// since it's compared against directly (order.status === 'Delivered', etc.)
+// and keys STATUS_STYLES/STATUS_ICONS above.
+const STATUS_LABELS_VI: Record<string, string> = {
+  Delivered: 'Đã giao',
+  Shipped: 'Đang giao',
+  Processing: 'Đang xử lý',
+  Cancelled: 'Đã hủy',
+};
+
 // ─── MY ORDERS ────────────────────────────────────────────────────────────────
 function MyOrders() {
   const { shopifyToken } = useAuth();
@@ -119,7 +129,7 @@ function MyOrders() {
           const o = e.node;
           return {
             id: o.name,
-            date: new Date(o.processedAt).toLocaleDateString('en-SG', { day: 'numeric', month: 'short', year: 'numeric' }),
+            date: new Date(o.processedAt).toLocaleDateString('vi-VN', { day: 'numeric', month: 'short', year: 'numeric' }),
             status: o.fulfillmentStatus === 'FULFILLED' ? 'Delivered'
               : o.fulfillmentStatus === 'IN_TRANSIT' ? 'Shipped'
               : o.financialStatus === 'PAID' ? 'Processing'
@@ -150,8 +160,8 @@ function MyOrders() {
     return (
       <div className="flex flex-col items-center py-20 gap-4 text-center">
         <ShoppingBag size={48} className="text-neutral-200" />
-        <p className="text-base font-semibold text-neutral-400">No orders yet</p>
-        <p className="text-sm text-neutral-400">Your order history will appear here once you make a purchase.</p>
+        <p className="text-base font-semibold text-neutral-400">Chưa có đơn hàng nào</p>
+        <p className="text-sm text-neutral-400">Lịch sử đơn hàng của bạn sẽ hiện ở đây sau khi bạn mua hàng.</p>
       </div>
     );
   }
@@ -176,10 +186,10 @@ function MyOrders() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-bold text-black font-mono">{order.id}</p>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${STATUS_STYLES[order.status]}`}>
-                      {order.status}
+                      {STATUS_LABELS_VI[order.status] ?? order.status}
                     </span>
                   </div>
-                  <p className="text-xs text-neutral-400 mt-0.5">{order.date} · {order.items.length} item{order.items.length !== 1 ? 's' : ''}</p>
+                  <p className="text-xs text-neutral-400 mt-0.5">{order.date} · {order.items.length} sản phẩm</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -205,7 +215,7 @@ function MyOrders() {
                       <div className="flex-1 min-w-0">
                         <p className="text-[10px] font-bold text-[#F16C10] uppercase tracking-widest">{item.vendor}</p>
                         <p className="text-sm font-semibold text-black line-clamp-1">{item.title}</p>
-                        <p className="text-xs text-neutral-400">Qty: {item.qty}</p>
+                        <p className="text-xs text-neutral-400">SL: {item.qty}</p>
                       </div>
                       <p className="text-sm font-bold text-black shrink-0">{item.price.toLocaleString('vi-VN')}₫</p>
                     </div>
@@ -214,15 +224,15 @@ function MyOrders() {
                 <div className="flex gap-2 flex-wrap">
                   {order.status === 'Delivered' && (
                     <button className="flex items-center gap-1.5 text-xs font-semibold text-neutral-600 border border-neutral-200 px-3 py-2 rounded-lg hover:bg-white transition">
-                      <RotateCcw size={12} /> Reorder
+                      <RotateCcw size={12} /> Đặt Lại
                     </button>
                   )}
                   <button className="flex items-center gap-1.5 text-xs font-semibold text-neutral-600 border border-neutral-200 px-3 py-2 rounded-lg hover:bg-white transition">
-                    <Star size={12} /> Leave a Review
+                    <Star size={12} /> Đánh Giá
                   </button>
                   {order.status === 'Shipped' && (
                     <button className="flex items-center gap-1.5 text-xs font-semibold text-[#F16C10] border border-[#F16C10]/30 px-3 py-2 rounded-lg hover:bg-[#F16C10]/5 transition">
-                      <Truck size={12} /> Track Order
+                      <Truck size={12} /> Theo Dõi Đơn Hàng
                     </button>
                   )}
                 </div>
@@ -299,7 +309,7 @@ function MyProfile() {
         phone: form.phone || undefined,
       });
       if (!profileResult.success) {
-        setSaveError(profileResult.errors[0] ?? 'Could not save profile');
+        setSaveError(profileResult.errors[0] ?? 'Không thể lưu hồ sơ');
         setSaving(false);
         return;
       }
@@ -308,12 +318,12 @@ function MyProfile() {
       if (form.address.trim() || form.postal.trim()) {
         const addressResult = await saveCustomerAddress(shopifyToken, addressId, {
           address1: form.address,
-          city: 'Singapore',
+          city: '',
           zip: form.postal,
-          country: 'Singapore',
+          country: 'Vietnam',
         });
         if (!addressResult.success) {
-          setSaveError(addressResult.errors[0] ?? 'Could not save address');
+          setSaveError(addressResult.errors[0] ?? 'Không thể lưu địa chỉ');
           setSaving(false);
           return;
         }
@@ -324,15 +334,15 @@ function MyProfile() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
-      setSaveError('Something went wrong saving your profile. Please try again.');
+      setSaveError('Đã có lỗi khi lưu hồ sơ của bạn. Vui lòng thử lại.');
     }
     setSaving(false);
   }
 
   function handlePwSave() {
-    if (!pwForm.current) { setPwError('Enter your current password'); return; }
-    if (pwForm.next.length < 8) { setPwError('New password must be at least 8 characters'); return; }
-    if (pwForm.next !== pwForm.confirm) { setPwError('Passwords do not match'); return; }
+    if (!pwForm.current) { setPwError('Nhập mật khẩu hiện tại của bạn'); return; }
+    if (pwForm.next.length < 8) { setPwError('Mật khẩu mới phải có ít nhất 8 ký tự'); return; }
+    if (pwForm.next !== pwForm.confirm) { setPwError('Mật khẩu không khớp'); return; }
     setPwError('');
     setChangingPw(false);
     setPwForm({ current: '', next: '', confirm: '' });
@@ -373,7 +383,7 @@ function MyProfile() {
 
       {saved && (
         <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm font-medium px-4 py-3 rounded-xl">
-          <Check size={15} /> Profile updated successfully
+          <Check size={15} /> Cập nhật hồ sơ thành công
         </div>
       )}
 
@@ -386,34 +396,34 @@ function MyProfile() {
       {/* Personal info */}
       <div className="bg-white border border-neutral-100 rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
-          <h3 className="text-sm font-bold text-black">Personal Information</h3>
+          <h3 className="text-sm font-bold text-black">Thông Tin Cá Nhân</h3>
           {editing ? (
             <div className="flex gap-2">
               <button onClick={() => setEditing(false)} className="flex items-center gap-1 text-xs text-neutral-400 hover:text-black border border-neutral-200 px-3 py-1.5 rounded-lg transition">
-                <X size={12} /> Cancel
+                <X size={12} /> Hủy
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
                 className="flex items-center gap-1 text-xs text-white bg-[#F16C10] hover:bg-[#d65f0e] disabled:opacity-60 px-3 py-1.5 rounded-lg transition"
               >
-                <Save size={12} /> {saving ? 'Saving…' : 'Save'}
+                <Save size={12} /> {saving ? 'Đang lưu…' : 'Lưu'}
               </button>
             </div>
           ) : (
             <button onClick={() => setEditing(true)} className="flex items-center gap-1 text-xs text-neutral-500 hover:text-black border border-neutral-200 px-3 py-1.5 rounded-lg transition">
-              <Edit2 size={12} /> Edit
+              <Edit2 size={12} /> Chỉnh sửa
             </button>
           )}
         </div>
         <div className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="First Name" value={form.firstName} editKey="firstName" />
-          <Field label="Last Name" value={form.lastName} editKey="lastName" />
+          <Field label="Tên" value={form.firstName} editKey="firstName" />
+          <Field label="Họ" value={form.lastName} editKey="lastName" />
           <Field label="Email" value={form.email} editKey="email" type="email" />
-          <Field label="Phone" value={form.phone} editKey="phone" type="tel" />
+          <Field label="Số điện thoại" value={form.phone} editKey="phone" type="tel" />
           <div className="flex flex-col gap-1">
-            <Field label="Date of Birth" value={form.dob} editKey="dob" type="date" />
-            {editing && <p className="text-[10px] text-neutral-400">Not saved yet — coming soon</p>}
+            <Field label="Ngày sinh" value={form.dob} editKey="dob" type="date" />
+            {editing && <p className="text-[10px] text-neutral-400">Chưa được lưu — sắp ra mắt</p>}
           </div>
         </div>
       </div>
@@ -423,19 +433,19 @@ function MyProfile() {
         <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
           <div className="flex items-center gap-2">
             <MapPin size={14} className="text-[#F16C10]" />
-            <h3 className="text-sm font-bold text-black">Default Delivery Address</h3>
+            <h3 className="text-sm font-bold text-black">Địa Chỉ Giao Hàng Mặc Định</h3>
           </div>
           {!editing && (
             <button onClick={() => setEditing(true)} className="flex items-center gap-1 text-xs text-neutral-500 hover:text-black border border-neutral-200 px-3 py-1.5 rounded-lg transition">
-              <Edit2 size={12} /> Edit
+              <Edit2 size={12} /> Chỉnh sửa
             </button>
           )}
         </div>
         <div className="px-5 py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <Field label="Address" value={form.address} editKey="address" />
+            <Field label="Địa chỉ" value={form.address} editKey="address" />
           </div>
-          <Field label="Postal Code" value={form.postal} editKey="postal" />
+          <Field label="Mã bưu điện" value={form.postal} editKey="postal" />
         </div>
       </div>
 
@@ -444,13 +454,13 @@ function MyProfile() {
         <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
           <div className="flex items-center gap-2">
             <Lock size={14} className="text-[#F16C10]" />
-            <h3 className="text-sm font-bold text-black">Password</h3>
+            <h3 className="text-sm font-bold text-black">Mật khẩu</h3>
           </div>
           <button
             onClick={() => setChangingPw(c => !c)}
             className="flex items-center gap-1 text-xs text-neutral-500 hover:text-black border border-neutral-200 px-3 py-1.5 rounded-lg transition"
           >
-            <Edit2 size={12} /> Change
+            <Edit2 size={12} /> Đổi
           </button>
         </div>
         {changingPw ? (
@@ -458,7 +468,7 @@ function MyProfile() {
             {(['current', 'next', 'confirm'] as const).map(k => (
               <div key={k} className="flex flex-col gap-1.5">
                 <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-                  {k === 'current' ? 'Current Password' : k === 'next' ? 'New Password' : 'Confirm New Password'}
+                  {k === 'current' ? 'Mật khẩu hiện tại' : k === 'next' ? 'Mật khẩu mới' : 'Xác nhận mật khẩu mới'}
                 </label>
                 <input
                   type="password"
@@ -470,8 +480,8 @@ function MyProfile() {
             ))}
             {pwError && <p className="text-xs text-red-500">{pwError}</p>}
             <div className="flex gap-2 mt-1">
-              <button onClick={() => { setChangingPw(false); setPwError(''); }} className="flex-1 text-sm text-neutral-400 border border-neutral-200 py-2.5 rounded-xl hover:bg-neutral-50 transition">Cancel</button>
-              <button onClick={handlePwSave} className="flex-1 text-sm text-white bg-[#F16C10] hover:bg-[#d65f0e] py-2.5 rounded-xl font-bold transition">Update Password</button>
+              <button onClick={() => { setChangingPw(false); setPwError(''); }} className="flex-1 text-sm text-neutral-400 border border-neutral-200 py-2.5 rounded-xl hover:bg-neutral-50 transition">Hủy</button>
+              <button onClick={handlePwSave} className="flex-1 text-sm text-white bg-[#F16C10] hover:bg-[#d65f0e] py-2.5 rounded-xl font-bold transition">Cập Nhật Mật Khẩu</button>
             </div>
           </div>
         ) : (
@@ -492,8 +502,8 @@ function SavedItems({ onSelectProduct }: { onSelectProduct: (p: Product) => void
     return (
       <div className="flex flex-col items-center py-20 gap-4 text-center">
         <Heart size={48} className="text-neutral-200" />
-        <p className="text-base font-semibold text-neutral-400">Nothing saved yet</p>
-        <p className="text-sm text-neutral-400">Tap the heart on any product to save it here.</p>
+        <p className="text-base font-semibold text-neutral-400">Chưa có gì được lưu</p>
+        <p className="text-sm text-neutral-400">Nhấn vào biểu tượng trái tim trên sản phẩm để lưu vào đây.</p>
       </div>
     );
   }
@@ -516,7 +526,7 @@ function SavedItems({ onSelectProduct }: { onSelectProduct: (p: Product) => void
             <button
               onClick={e => { e.stopPropagation(); setSaved(s => s.filter(p => p.handle !== product.handle)); }}
               className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-red-400 hover:bg-white shadow transition"
-              aria-label="Remove from saved"
+              aria-label="Xóa khỏi mục đã lưu"
             >
               <Heart size={13} className="fill-red-400" />
             </button>
@@ -540,40 +550,40 @@ function MemberPerks() {
   const perks = [
     {
       icon: Tag,
-      title: 'Member-only Pricing',
-      desc: 'Unlock exclusive prices on selected products — visible only when logged in.',
+      title: 'Giá Ưu Đãi Riêng Cho Thành Viên',
+      desc: 'Mở khóa giá ưu đãi cho các sản phẩm được chọn — chỉ hiển thị khi đã đăng nhập.',
       status: 'Active',
       color: 'bg-orange-50 border-orange-100',
       iconColor: 'text-[#F16C10]',
     },
     {
       icon: Zap,
-      title: 'Early Access to Launches',
-      desc: 'Be first to shop new drops and restocks, 48 hours before the public.',
+      title: 'Ưu Tiên Trải Nghiệm Sản Phẩm Mới',
+      desc: 'Mua sắm trước các sản phẩm mới và hàng bổ sung, 48 giờ trước công chúng.',
       status: 'Active',
       color: 'bg-blue-50 border-blue-100',
       iconColor: 'text-blue-500',
     },
     {
       icon: Users,
-      title: 'Product Testing',
-      desc: 'Test upcoming products and share your feedback before they go on sale.',
+      title: 'Dùng Thử Sản Phẩm',
+      desc: 'Dùng thử các sản phẩm sắp ra mắt và chia sẻ ý kiến trước khi mở bán.',
       status: 'Eligible',
       color: 'bg-purple-50 border-purple-100',
       iconColor: 'text-purple-500',
     },
     {
       icon: Gift,
-      title: 'Flash Sales & Surprise Deals',
-      desc: 'Member-only flash sales dropped directly to your email. No public announcements.',
+      title: 'Flash Sale & Ưu Đãi Bất Ngờ',
+      desc: 'Flash sale dành riêng cho thành viên, gửi thẳng đến email của bạn. Không công bố công khai.',
       status: 'Active',
       color: 'bg-pink-50 border-pink-100',
       iconColor: 'text-pink-500',
     },
     {
       icon: CalendarHeart,
-      title: 'Exclusive Events',
-      desc: 'Invitations to launch events, brand collabs, and behind-the-scenes access.',
+      title: 'Sự Kiện Độc Quyền',
+      desc: 'Thư mời tham dự sự kiện ra mắt, hợp tác thương hiệu, và trải nghiệm hậu trường.',
       status: 'Invite-eligible',
       color: 'bg-green-50 border-green-100',
       iconColor: 'text-green-500',
@@ -584,6 +594,14 @@ function MemberPerks() {
     Active: 'bg-green-50 text-green-600 border-green-200',
     Eligible: 'bg-purple-50 text-purple-600 border-purple-200',
     'Invite-eligible': 'bg-blue-50 text-blue-600 border-blue-200',
+  };
+
+  // Display-only Vietnamese labels — perk.status stays in English above
+  // since it keys statusStyle.
+  const statusLabelVi: Record<string, string> = {
+    Active: 'Đang hoạt động',
+    Eligible: 'Đủ điều kiện',
+    'Invite-eligible': 'Có thể được mời',
   };
 
   return (
@@ -597,8 +615,8 @@ function MemberPerks() {
             <Crown size={18} />
             <span className="text-sm font-bold uppercase tracking-wider">FOST Member</span>
           </div>
-          <p className="text-2xl font-bold mb-1">All Perks Active</p>
-          <p className="text-white/70 text-sm">Member since June 2026</p>
+          <p className="text-2xl font-bold mb-1">Tất Cả Quyền Lợi Đang Hoạt Động</p>
+          <p className="text-white/70 text-sm">Thành viên từ tháng 6 năm 2026</p>
         </div>
       </div>
 
@@ -613,7 +631,7 @@ function MemberPerks() {
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <p className="text-sm font-bold text-black">{perk.title}</p>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${statusStyle[perk.status]}`}>
-                  {perk.status}
+                  {statusLabelVi[perk.status] ?? perk.status}
                 </span>
               </div>
               <p className="text-xs text-neutral-500 leading-relaxed">{perk.desc}</p>
@@ -631,9 +649,9 @@ export function AccountPage({ onBack, onSelectProduct, initialTab = 'orders' }: 
   const { user } = useAuth();
 
   const tabs: { key: Tab; label: string; icon: typeof Package; count?: number }[] = [
-    { key: 'orders',  label: 'My Orders',     icon: Package },
-    { key: 'profile', label: 'My Profile',    icon: User },
-    { key: 'perks',   label: 'Member Perks',  icon: Crown },
+    { key: 'orders',  label: 'Đơn Hàng Của Tôi',   icon: Package },
+    { key: 'profile', label: 'Hồ Sơ Của Tôi',      icon: User },
+    { key: 'perks',   label: 'Quyền Lợi Thành Viên', icon: Crown },
   ];
 
   return (
@@ -644,7 +662,7 @@ export function AccountPage({ onBack, onSelectProduct, initialTab = 'orders' }: 
           onClick={onBack}
           className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-black transition mb-6"
         >
-          <ChevronLeft size={16} /> Back to Shop
+          <ChevronLeft size={16} /> Quay Lại Cửa Hàng
         </button>
 
         {/* Page header */}
