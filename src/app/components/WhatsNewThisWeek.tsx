@@ -5,29 +5,44 @@ import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
 import satechiImg from '../../imports/Satechi charging dock.png';
 
-// The original 3 picks here (Blink500 mic, Satechi charger, BlueAnt
-// Soundblade) only had 1 real match in the VN catalog — the other 2
-// handles didn't exist, so they got silently dropped by the
-// .filter(Boolean) below, leaving just 1 card. Swapped in 2 real handles
-// already verified elsewhere on the site (Shure mic used in Hero.tsx /
-// LaunchExclusive.tsx; Skullcandy headphones used in ShoppableSetup.tsx)
-// to restore all 3 slots this grid is actually designed for.
-const featured = [
-  { handle: 'micro-thu-am-shure-mv7-plus', label: 'Vừa Ra Mắt', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
-  { handle: 'satechi-165w-usb-c-4-port-pd-gan-charger', label: 'Hàng Mới Về', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
-  { handle: 'skullcandy-crusher-anc-2', label: 'Nhân Viên Chọn', labelIcon: Star, labelColor: 'bg-amber-500' },
+// Real backup logic: only 2 of the last 3 handles tried actually existed in
+// the live VN catalog (even the Shure mic — despite being used elsewhere on
+// the site — doesn't resolve here). Rather than hardcoding exactly 3 handles
+// again and hoping they all still exist, this is now a POOL of candidates,
+// ordered roughly by confidence (Satechi charger and Skullcandy headphones
+// are confirmed showing live right now; the rest are handles used elsewhere
+// on the site but not individually re-verified against this exact catalog).
+// The section always renders with whichever 3 candidates actually resolve,
+// in pool order — so if any one of these goes out of stock or gets its
+// handle changed in Shopify, the next candidate quietly fills its slot
+// instead of leaving a gap. Slot labels (Vừa Ra Mắt / Hàng Mới Về / Nhân
+// Viên Chọn) are tied to POSITION, not to a specific product, precisely so
+// this substitution can happen without a label ending up on the wrong item.
+const CANDIDATE_HANDLES = [
+  'satechi-165w-usb-c-4-port-pd-gan-charger', // confirmed live
+  'skullcandy-crusher-anc-2',                 // confirmed live
+  'tai-nghe-bluetooth-skullcandy-method-360-anc-bảo-hanh-1-nam-chống-ồn-pin-40-giờ-chống-ồn-chủ-dộng', // "confirmed real handle" per Hero.tsx
+  'looki-l1-ai-multimodal-wearable-thiết-bị-deo-ai-ghi-hinh-rảnh-tay-32g-quay-video-full-hd-1080p-3-micro-ai-tạo-vlog-comics-bộ-nhớ-32gb-bảo-mật-quyền-rieng-tư-mau-trắng', // "confirmed real handle" per Hero.tsx
+  'therabody-theracup',            // used live in ShoppableSetup.tsx
+  'sung-massage-theragun-relief',  // used live in ShoppableSetup.tsx
+  'satechi-m1-wireless-mouse',     // used live in LaunchExclusive.tsx
 ];
 
-// Maps each featured handle to its premium hero image, falling back to the
-// live Shopify product image for anything not explicitly listed here. These
-// premium images are full-bleed lifestyle photography (people, scenes, desks)
-// rather than product-on-white shots, so they need object-cover with no
-// padding instead of the object-contain+padding treatment used for the
-// Shopify fallback images. Only the Satechi charger has one of these on
-// hand right now — the Shure mic and Skullcandy headphones fall back to
-// their regular Shopify product photos (object-contain), which is a
-// perfectly fine look, just not the lifestyle-photo treatment. Swap in a
-// real lifestyle photo here for either for a closer match to the charger.
+const SLOT_META = [
+  { label: 'Vừa Ra Mắt', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
+  { label: 'Hàng Mới Về', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
+  { label: 'Nhân Viên Chọn', labelIcon: Star, labelColor: 'bg-amber-500' },
+];
+
+// Maps a handle to its premium hero image, falling back to the live
+// Shopify product image for anything not explicitly listed here. These
+// premium images are full-bleed lifestyle photography (people, scenes,
+// desks) rather than product-on-white shots, so they need object-cover
+// with no padding instead of the object-contain+padding treatment used
+// for the Shopify fallback images. Only the Satechi charger has one of
+// these on hand right now — everything else in the pool falls back to
+// its regular Shopify product photo, which is a fine look, just not the
+// lifestyle-photo treatment.
 const PREMIUM_IMAGES: Record<string, string> = {
   'satechi-165w-usb-c-4-port-pd-gan-charger': satechiImg,
 };
@@ -47,12 +62,12 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
   const { user } = useAuth();
   const isFostMember = Boolean(user);
 
-  const featuredProducts: FeaturedProduct[] = featured
-    .map(({ handle, label, labelIcon, labelColor }) => {
-      const p = products.find(p => p.handle === handle);
-      return p ? { ...p, label, labelIcon, labelColor } : null;
-    })
-    .filter(Boolean) as FeaturedProduct[];
+  const resolved = CANDIDATE_HANDLES
+    .map(handle => products.find(p => p.handle === handle))
+    .filter((p): p is Product => Boolean(p))
+    .slice(0, 3);
+
+  const featuredProducts: FeaturedProduct[] = resolved.map((p, i) => ({ ...p, ...SLOT_META[i] }));
 
   // Show skeleton cards while loading
   if (featuredProducts.length === 0) return (
@@ -97,7 +112,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-          {featuredProducts.slice(0, 3).map((product, i) => {
+          {featuredProducts.map((product, i) => {
             const LabelIcon = product.labelIcon;
             const imgSrc = getHeroImage(product.handle, product.images[0]);
             const isLifestyle = isLifestylePhoto(product.handle);
