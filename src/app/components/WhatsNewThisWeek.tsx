@@ -3,15 +3,19 @@ import { useProducts } from '../hooks/useProducts';
 import type { Product } from '../data/products';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
-import blink500Img from '../../imports/Blink500 microphone.png';
 import satechiImg from '../../imports/Satechi charging dock.png';
-import soundbladeImg from '../../imports/Soundblade BlueAnt.png';
 
-// Trimmed to 3 best sellers per Mals — Shure MV7+ and KEF LSX II LT removed.
+// The original 3 picks here (Blink500 mic, Satechi charger, BlueAnt
+// Soundblade) only had 1 real match in the VN catalog — the other 2
+// handles didn't exist, so they got silently dropped by the
+// .filter(Boolean) below, leaving just 1 card. Swapped in 2 real handles
+// already verified elsewhere on the site (Shure mic used in Hero.tsx /
+// LaunchExclusive.tsx; Skullcandy headphones used in ShoppableSetup.tsx)
+// to restore all 3 slots this grid is actually designed for.
 const featured = [
-  { handle: 'micro-thu-am-blink500-b2', label: 'Vừa Ra Mắt', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
+  { handle: 'micro-thu-am-shure-mv7-plus', label: 'Vừa Ra Mắt', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
   { handle: 'satechi-165w-usb-c-4-port-pd-gan-charger', label: 'Hàng Mới Về', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
-  { handle: 'loa-soundbar-may-tinh-blueant-soundblade-120w', label: 'Nhân Viên Chọn', labelIcon: Star, labelColor: 'bg-amber-500' },
+  { handle: 'skullcandy-crusher-anc-2', label: 'Nhân Viên Chọn', labelIcon: Star, labelColor: 'bg-amber-500' },
 ];
 
 // Maps each featured handle to its premium hero image, falling back to the
@@ -19,11 +23,13 @@ const featured = [
 // premium images are full-bleed lifestyle photography (people, scenes, desks)
 // rather than product-on-white shots, so they need object-cover with no
 // padding instead of the object-contain+padding treatment used for the
-// Shopify fallback images.
+// Shopify fallback images. Only the Satechi charger has one of these on
+// hand right now — the Shure mic and Skullcandy headphones fall back to
+// their regular Shopify product photos (object-contain), which is a
+// perfectly fine look, just not the lifestyle-photo treatment. Swap in a
+// real lifestyle photo here for either for a closer match to the charger.
 const PREMIUM_IMAGES: Record<string, string> = {
-  'micro-thu-am-blink500-b2': blink500Img,
   'satechi-165w-usb-c-4-port-pd-gan-charger': satechiImg,
-  'loa-soundbar-may-tinh-blueant-soundblade-120w': soundbladeImg,
 };
 
 function getHeroImage(handle: string, fallback: string): string {
