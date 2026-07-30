@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, Eye, Star } from 'lucide-react';
+import { Eye, Star } from 'lucide-react';
 import type { Product } from '../data/products';
 import { useAuth } from './AuthContext';
 import { getFostPrice } from '../data/pricing';
@@ -80,8 +80,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         <h3 className="text-sm font-semibold text-black leading-snug mb-3 line-clamp-2 flex-1">
           {product.title}
         </h3>
-        <div className="flex items-center justify-between mt-auto">
-          <div className="flex flex-col">
+        <div className="flex flex-col">
             <div className="flex items-center gap-0.5 mb-1">
               {[1, 2, 3, 4, 5].map(s => (
                 <Star key={s} size={10} className={s <= 4 ? 'text-amber-400 fill-amber-400' : 'text-neutral-200 fill-neutral-200'} />
@@ -114,19 +113,6 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
               </>
             )}
           </div>
-          <button
-            className={`w-9 h-9 rounded-full border flex items-center justify-center shrink-0 transition-all ${
-              isSoldOut
-                ? 'border-neutral-100 text-neutral-300 cursor-not-allowed'
-                : 'border-neutral-200 text-neutral-500 hover:bg-[#F16C10] hover:border-[#F16C10] hover:text-white'
-            }`}
-            onClick={(e) => { e.stopPropagation(); }}
-            disabled={isSoldOut}
-            aria-label={isSoldOut ? 'Hết hàng' : 'Thêm vào giỏ hàng'}
-          >
-            <ShoppingCart size={15} />
-          </button>
-        </div>
       </div>
     </div>
   );
