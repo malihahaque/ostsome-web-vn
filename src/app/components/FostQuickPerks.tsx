@@ -24,7 +24,7 @@ type FostQuickPerksProps = {
 // nothing else references it.
 export function FostQuickPerks({ onJoin, onLogin }: FostQuickPerksProps) {
   return (
-    <section className="pt-14 pb-8 bg-white">
+    <section className="pt-10 pb-6 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Text column */}

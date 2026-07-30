@@ -33,7 +33,7 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
   const isFostMember = Boolean(user);
 
   return (
-    <section className="py-12 md:py-16 bg-white">
+    <section className="py-8 md:py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Header */}
         <div className="flex items-start justify-between mb-8">

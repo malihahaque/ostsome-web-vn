@@ -79,7 +79,7 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
   ).slice(0, active.maxProducts ?? DEFAULT_MAX_PRODUCTS);
 
   return (
-    <section className="py-12 md:py-16 bg-white">
+    <section className="py-8 md:py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 text-left md:text-center">
           <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2">Khám Phá Theo Phong Cách</h2>

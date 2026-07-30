@@ -71,7 +71,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
 
   // Show skeleton cards while loading
   if (featuredProducts.length === 0) return (
-    <section className="py-12 md:py-16 bg-neutral-50">
+    <section className="py-8 md:py-12 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 flex items-end justify-between">
           <div>
@@ -96,7 +96,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
   );
 
   return (
-    <section className="py-12 md:py-16 bg-neutral-50">
+    <section className="py-8 md:py-12 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 flex items-end justify-between">
           <div className="text-left md:text-center md:flex-1">

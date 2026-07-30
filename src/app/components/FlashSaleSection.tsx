@@ -26,7 +26,7 @@ export function FlashSaleSection({ onSelectProduct, onViewAll }: FlashSaleSectio
   if (flashProducts.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-14 bg-white">
+    <section className="py-8 md:py-10 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <FlashSaleHeading />

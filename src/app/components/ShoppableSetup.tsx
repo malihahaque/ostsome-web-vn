@@ -133,7 +133,7 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
   };
 
   return (
-    <section className="py-8 md:py-16 bg-white overflow-hidden">
+    <section className="py-6 md:py-10 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 mb-4 md:mb-8">
         <div className="text-left md:text-center">
           <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2">Khám Phá Góc Setup</h2>
