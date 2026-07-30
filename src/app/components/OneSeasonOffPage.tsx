@@ -26,25 +26,25 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
               onClick={onBack}
               className="flex items-center gap-1 text-neutral-400 hover:text-white text-sm font-medium mb-6 transition-colors"
             >
-              <ChevronLeft size={16} /> Back
+              <ChevronLeft size={16} /> Quay lại
             </button>
           )}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: '#F16C10' }}>
-                🔥 Clearance Sale
+                🔥 Xả Kho
               </p>
               <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-3">
-                One Season Off.
+                Cuối Mùa Giảm Giá.
               </h1>
               <p className="text-neutral-400 text-sm md:text-base max-w-lg">
-                Selected gear from past drops, now making room for what's next.
-                All items are brand new — just last season. Limited stock.
+                Sản phẩm được chọn lọc từ các đợt hàng trước, nay nhường chỗ cho sản phẩm mới.
+                Tất cả đều mới 100% — chỉ là hàng mùa trước. Số lượng có hạn.
               </p>
             </div>
             <div className="text-left md:text-right shrink-0">
-              <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Clearance Off</div>
-              <div className="text-6xl md:text-7xl font-black leading-none" style={{ color: '#F16C10' }}>Up to</div>
+              <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Ưu Đãi Xả Kho</div>
+              <div className="text-6xl md:text-7xl font-black leading-none" style={{ color: '#F16C10' }}>Đến</div>
               <div className="text-6xl md:text-7xl font-black text-white leading-none">50%</div>
             </div>
           </div>
@@ -54,7 +54,7 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
       {/* Disclaimer */}
       <div className="bg-orange-50 border-b border-orange-100 py-2 px-4 text-center">
         <p className="text-xs font-medium" style={{ color: '#F16C10' }}>
-          ⚠️ Clearance prices are final. No further discounts apply. While stocks last. All prices include VAT.
+          ⚠️ Giá xả kho là giá cuối cùng. Không áp dụng thêm ưu đãi nào khác. Đến khi hết hàng. Đã bao gồm VAT.
         </p>
       </div>
 
@@ -103,19 +103,19 @@ export function OneSeasonOffPage({ onBack, onSelectProduct }: Props) {
                     </div>
                     {isFostMember ? (
                       <>
+                        <span className="text-xs line-through block" style={{ color: '#6F6A63' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-base font-black" style={{ color: '#F16C10' }}>{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
-                          <span className="text-xs line-through" style={{ color: '#6F6A63' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save {(deal.srp - getFostPrice(deal.promo)).toLocaleString('vi-VN')}₫</p>
+                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">Bạn tiết kiệm {(deal.srp - getFostPrice(deal.promo)).toLocaleString('vi-VN')}₫</p>
                       </>
                     ) : (
                       <>
+                        <span className="text-xs line-through block" style={{ color: '#6F6A63' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-base font-black" style={{ color: '#F16C10' }}>{deal.promo.toLocaleString('vi-VN')}₫</span>
-                          <span className="text-xs line-through" style={{ color: '#6F6A63' }}>{deal.srp.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">You save {saving}₫</p>
+                        <p className="text-[10px] font-semibold mt-0.5 text-green-600">Bạn tiết kiệm {saving}₫</p>
                       </>
                     )}
                   </div>

@@ -42,23 +42,23 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
   const notificationFeed = [
     {
       icon: '🔔',
-      label: 'Just Dropped',
+      label: 'Vừa Ra Mắt',
       title: 'Shure MV7+ Podcast Mic',
-      sub: '10.100.000₫ · View now →',
+      sub: '10.100.000₫ · Xem ngay →',
       productHandle: 'micro-thu-am-shure-mv7-plus',
     },
     {
       icon: '🔥',
-      label: 'Deal',
+      label: 'Ưu Đãi',
       title: 'KEF LSX II LT Speakers',
-      sub: '28.100.000₫ · Shop now →',
+      sub: '28.100.000₫ · Mua ngay →',
       productHandle: 'kef-lsx-ii-lt-wireless-speakers',
     },
     {
       icon: '👑',
-      label: 'FOST Rewards',
-      title: 'Log in as a FOST member',
-      sub: 'Unlock exclusive FOST prices →',
+      label: 'Ưu Đãi FOST',
+      title: 'Đăng nhập với tư cách thành viên FOST',
+      sub: 'Mở khóa giá FOST độc quyền →',
       isFost: true,
     },
   ];
@@ -246,7 +246,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
               <button
                 onClick={openCart}
                 className="relative hover:text-[#F16C10] transition-colors"
-                aria-label={`Cart (${totalItems} items)`}
+                aria-label={`Giỏ hàng (${totalItems} sản phẩm)`}
               >
                 <ShoppingCart size={24} />
                 {totalItems > 0 && (
@@ -263,7 +263,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                     <button
                       onClick={() => setProfileOpen(o => !o)}
                       className="w-9 h-9 rounded-full bg-[#F16C10] text-white text-xs font-bold flex items-center justify-center hover:bg-[#d65f0e] transition"
-                      aria-label="My account"
+                      aria-label="Tài khoản của tôi"
                     >
                       {user.firstName.charAt(0).toUpperCase()}{user.lastName.charAt(0).toUpperCase()}
                     </button>
@@ -290,10 +290,10 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
 
                           <div className="py-2">
                             {[
-                              { label: 'My Orders',    emoji: '📦', tab: 'orders'  },
-                              { label: 'My Profile',   emoji: '👤', tab: 'profile' },
-                              { label: 'Saved Items',  emoji: '❤️', tab: 'saved'   },
-                              { label: 'Member Perks', emoji: '🏷️', tab: 'perks'   },
+                              { label: 'Đơn Hàng Của Tôi', emoji: '📦', tab: 'orders'  },
+                              { label: 'Hồ Sơ Của Tôi',    emoji: '👤', tab: 'profile' },
+                              { label: 'Đã Lưu',           emoji: '❤️', tab: 'saved'   },
+                              { label: 'Quyền Lợi Thành Viên', emoji: '🏷️', tab: 'perks'   },
                             ].map(item => (
                               <button
                                 key={item.label}
@@ -312,7 +312,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                               className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition text-left font-medium"
                             >
                               <LogOut size={14} />
-                              Log out
+                              Đăng Xuất
                             </button>
                           </div>
                         </div>
@@ -323,7 +323,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                   <button
                     onClick={onNavToLogin}
                     className="hover:text-[#F16C10] transition-colors"
-                    aria-label="Login / Account"
+                    aria-label="Đăng nhập / Tài khoản"
                   >
                     <User size={24} />
                   </button>
@@ -333,7 +333,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
               <button
                 onClick={() => setMenuOpen(true)}
                 className="hover:text-[#F16C10] transition-colors"
-                aria-label="Menu"
+                aria-label="Menu điều hướng"
               >
                 <Menu size={24} />
               </button>
@@ -469,7 +469,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                   <input
                     autoFocus
                     type="text"
-                    placeholder="Search products, brands…"
+                    placeholder="Tìm sản phẩm, thương hiệu…"
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     className="flex-1 text-base outline-none py-2 text-black placeholder-neutral-400"
@@ -519,14 +519,14 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
                   onClick={handleSearchEnter}
                   className="w-full text-center text-sm text-[#F16C10] font-semibold py-3 hover:underline"
                 >
-                  See all results for "{searchQuery}" →
+                  Xem tất cả kết quả cho "{searchQuery}" →
                 </button>
               </div>
             )}
 
             {searchQuery.trim().length > 1 && searchResults.length === 0 && (
               <div className="max-w-3xl mx-auto px-4 pb-6 border-t border-neutral-100 pt-4 text-center text-sm text-neutral-400">
-                No products found for "{searchQuery}"
+                Không tìm thấy sản phẩm cho "{searchQuery}"
               </div>
             )}
           </div>
@@ -545,7 +545,7 @@ export function Header({ onNavToProducts, onNavToHome, onNavToBrands, onNavToCat
           />
           <div className="relative z-10 bg-white w-full max-w-sm h-full shadow-2xl overflow-y-auto">
             <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100">
-              <span className="font-bold text-black">Menu</span>
+              <span className="font-bold text-black">Menu Điều Hướng</span>
               <button
                 onClick={() => setMenuOpen(false)}
                 className="text-neutral-400 hover:text-black transition"

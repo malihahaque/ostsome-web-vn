@@ -40,25 +40,25 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="bg-[#F16C10] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full">
-                ▶ Launch Exclusive
+                ▶ Ưu Đãi Ra Mắt
               </span>
             </div>
             <h2 className="text-[26px] md:text-4xl font-black text-black uppercase leading-tight">
-              Be First To Shop.<br className="md:hidden" /> Get The Best.
+              Mua Sớm.<br className="md:hidden" /> Nhận Giá Tốt Nhất.
             </h2>
             <p className="text-neutral-500 text-sm md:text-base mt-1 max-w-sm">
-              Early shoppers on OSTSOME enjoy exclusive launch pricing on our top picks. Shop early, save more.
+              Khách hàng mua sớm trên OSTSOME được hưởng giá ưu đãi ra mắt cho các sản phẩm nổi bật. Mua sớm, tiết kiệm nhiều hơn.
             </p>
           </div>
           <div className="hidden md:flex flex-col items-end text-right shrink-0 ml-6">
-            <span className="text-4xl font-black text-[#F16C10]">Up to 15%</span>
-            <span className="text-xs text-neutral-400 uppercase tracking-widest">Early Bird Off</span>
+            <span className="text-4xl font-black text-[#F16C10]">Đến 15%</span>
+            <span className="text-xs text-neutral-400 uppercase tracking-widest">Ưu Đãi Sớm</span>
             {onViewAll && (
               <button
                 onClick={onViewAll}
                 className="mt-3 text-xs font-bold text-[#F16C10] hover:underline uppercase tracking-wide"
               >
-                View All Deals →
+                Xem Tất Cả Ưu Đãi →
               </button>
             )}
           </div>
@@ -116,13 +116,13 @@ export function LaunchExclusive({ onSelectProduct, onViewAll }: Props) {
         {onViewAll && (
           <div className="mt-6 text-center md:hidden">
             <button onClick={onViewAll} className="text-sm font-bold text-[#F16C10] hover:underline uppercase tracking-wide">
-              View All Launch Deals →
+              Xem Tất Cả Ưu Đãi Ra Mắt →
             </button>
           </div>
         )}
 
         <p className="text-center text-xs text-neutral-400 mt-6">
-          * Launch pricing available for a limited time only. While stocks last.
+          * Giá ưu đãi ra mắt chỉ áp dụng trong thời gian có hạn. Đến khi hết hàng.
         </p>
       </div>
     </section>

@@ -50,9 +50,9 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
     .filter(Boolean) as { deal: ClearanceDeal; product: Product }[];
 
   const trustItems = [
-    { icon: '🏷️', title: 'EXCLUSIVE TECH', sub: 'Big brands. Real savings.' },
-    { icon: '%',   title: 'UNBEATABLE PRICES', sub: 'Up to 50% off original retail.' },
-    { icon: '⏱️', title: 'WHILE STOCKS LAST', sub: "Once it's gone, it's gone." },
+    { icon: '🏷️', title: 'CÔNG NGHỆ ĐỘC QUYỀN', sub: 'Thương hiệu lớn. Tiết kiệm thật.' },
+    { icon: '%',   title: 'GIÁ KHÔNG THỂ TỐT HƠN', sub: 'Giảm đến 50% so với giá bán lẻ gốc.' },
+    { icon: '⏱️', title: 'ĐẾN KHI HẾT HÀNG', sub: 'Hết là hết, không còn cơ hội.' },
   ];
 
   return (
@@ -73,24 +73,24 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
                 <span className="font-black absolute" style={{ fontSize: '8rem', color: 'rgba(241,108,16,0.11)', right: '-0.5rem', top: '50%', transform: 'translateY(-44%) rotate(-7deg)', letterSpacing: '-0.05em', lineHeight: 1 }}>50%</span>
               </div>
               <div className="relative z-10 flex flex-col gap-4">
-                <p className="text-xs font-black uppercase tracking-[0.25em] flex items-center gap-1.5" style={{ color: '#F16C10' }}>🔥 Clearance</p>
+                <p className="text-xs font-black uppercase tracking-[0.25em] flex items-center gap-1.5" style={{ color: '#F16C10' }}>🔥 Xả Kho</p>
                 <div>
-                  <h2 className="font-black leading-none mb-2" style={{ fontSize: '2.4rem', color: '#111111' }}>One Season Off.</h2>
-                  <p className="text-sm" style={{ color: '#6F6A63', lineHeight: 1.6 }}>Premium tech, legendary brands —<br />now at prices that shouldn't exist.</p>
+                  <h2 className="font-black leading-none mb-2" style={{ fontSize: '2.4rem', color: '#111111' }}>Cuối Mùa Giảm Giá.</h2>
+                  <p className="text-sm" style={{ color: '#6F6A63', lineHeight: 1.6 }}>Công nghệ cao cấp, thương hiệu huyền thoại —<br />nay với mức giá không tưởng.</p>
                 </div>
                 {/* 50% + stamp */}
                 <div className="flex items-center gap-3">
                   <div className="flex items-start gap-1 leading-none">
                     <div className="flex flex-col font-black uppercase" style={{ fontSize: '0.65rem', color: '#111111', lineHeight: 1.3, paddingTop: '0.7rem' }}>
-                      <span>UP</span><span>TO</span>
+                      <span>ĐẾN</span>
                     </div>
                     <span className="font-black" style={{ fontSize: '4.5rem', color: '#F16C10', lineHeight: 1 }}>50%</span>
-                    <span className="font-black uppercase self-end" style={{ fontSize: '0.85rem', color: '#111111', paddingBottom: '0.4rem' }}>OFF</span>
+                    <span className="font-black uppercase self-end" style={{ fontSize: '0.85rem', color: '#111111', paddingBottom: '0.4rem' }}>GIẢM</span>
                   </div>
                   <div className="flex-shrink-0 flex items-center justify-center rounded-full border-[3px]" style={{ width: 76, height: 76, borderColor: '#111111', transform: 'rotate(-10deg)' }}>
                     <div className="text-center leading-snug">
-                      <div className="font-black uppercase" style={{ fontSize: '0.55rem', letterSpacing: '0.08em', color: '#111111' }}>LIMITED</div>
-                      <div className="font-black uppercase" style={{ fontSize: '0.55rem', letterSpacing: '0.08em', color: '#111111' }}>STOCK</div>
+                      <div className="font-black uppercase" style={{ fontSize: '0.55rem', letterSpacing: '0.08em', color: '#111111' }}>SỐ LƯỢNG</div>
+                      <div className="font-black uppercase" style={{ fontSize: '0.55rem', letterSpacing: '0.08em', color: '#111111' }}>CÓ HẠN</div>
                     </div>
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
                   onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#111111'; (e.currentTarget as HTMLButtonElement).style.color = '#FFF8F5'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#111111'; }}
                 >
-                  Shop All Clearance →
+                  Xem Tất Cả Ưu Đãi →
                 </button>
               </div>
             </div>
@@ -165,17 +165,17 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
         {/* Compact info strip */}
         <div className="px-4 pt-5 pb-4 flex items-center justify-between">
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-1 mb-1" style={{ color: '#F16C10' }}>🔥 Clearance</p>
-            <h2 className="text-2xl font-black leading-tight" style={{ color: '#111111' }}>One Season Off.</h2>
-            <p className="text-xs mt-0.5" style={{ color: '#6F6A63' }}>Premium tech at prices that shouldn't exist.</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-1 mb-1" style={{ color: '#F16C10' }}>🔥 Xả Kho</p>
+            <h2 className="text-2xl font-black leading-tight" style={{ color: '#111111' }}>Cuối Mùa Giảm Giá.</h2>
+            <p className="text-xs mt-0.5" style={{ color: '#6F6A63' }}>Công nghệ cao cấp với mức giá không tưởng.</p>
           </div>
           {/* Compact 50% badge */}
           <div className="shrink-0 ml-4 text-right">
             <div className="flex items-start justify-end gap-0.5 leading-none">
-              <span className="font-black text-[0.5rem] uppercase mt-1" style={{ color: '#111111' }}>UP<br/>TO</span>
+              <span className="font-black text-[0.5rem] uppercase mt-1" style={{ color: '#111111' }}>ĐẾN</span>
               <span className="font-black" style={{ fontSize: '3rem', color: '#F16C10', lineHeight: 1 }}>50%</span>
             </div>
-            <div className="text-[0.5rem] font-black uppercase" style={{ color: '#111111' }}>OFF · LIMITED STOCK</div>
+            <div className="text-[0.5rem] font-black uppercase" style={{ color: '#111111' }}>GIẢM · SỐ LƯỢNG CÓ HẠN</div>
           </div>
         </div>
 
@@ -217,7 +217,7 @@ export function OneSeasonOff({ onSelectProduct, onViewAll }: Props) {
             <div className="flex-shrink-0 flex items-center justify-center rounded-xl cursor-pointer" style={{ width: 100, backgroundColor: '#111111' }} onClick={onViewAll}>
               <div className="text-center px-3">
                 <div className="text-white font-black text-lg mb-1">→</div>
-                <div className="text-white font-black uppercase text-[0.55rem] tracking-wide leading-tight">Shop All<br/>Clearance</div>
+                <div className="text-white font-black uppercase text-[0.55rem] tracking-wide leading-tight">Xem Tất Cả<br/>Ưu Đãi</div>
               </div>
             </div>
           </div>

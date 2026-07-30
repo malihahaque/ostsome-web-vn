@@ -59,9 +59,9 @@ export function BrandsPage({ onSelectBrand, onBack }: BrandsPageProps) {
           </button>
         )}
         <div className="mb-8">
-          <h2 className="text-[26px] md:text-4xl font-bold text-black uppercase">Our Brands</h2>
+          <h2 className="text-[26px] md:text-4xl font-bold text-black uppercase">Thương Hiệu</h2>
           <p className="text-sm text-neutral-500 mt-1">
-            {loading ? 'Loading…' : `${brands.length} brands`}
+            {loading ? 'Đang tải…' : `${brands.length} thương hiệu`}
           </p>
         </div>
 
@@ -119,7 +119,7 @@ export function BrandsPage({ onSelectBrand, onBack }: BrandsPageProps) {
                   {meta && (
                     <span className="text-[10px] text-neutral-400 leading-tight mb-1">{meta.description}</span>
                   )}
-                  <span className="text-xs text-[#F16C10] font-medium">{count} products</span>
+                  <span className="text-xs text-[#F16C10] font-medium">{count} sản phẩm</span>
                 </button>
               );
             })}

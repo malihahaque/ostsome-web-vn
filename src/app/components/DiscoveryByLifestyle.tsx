@@ -24,24 +24,24 @@ type Lifestyle = {
 const lifestyles: Lifestyle[] = [
   {
     id: 1,
-    title: 'Work Anywhere',
-    description: 'Your office. Your rules.',
+    title: 'Làm Việc Mọi Nơi',
+    description: 'Văn phòng của bạn. Quy tắc của bạn.',
     icon: Briefcase,
     image: workAnywhereImg,
     navCategory: 'Desk Setup',
   },
   {
     id: 2,
-    title: 'Capture Life',
-    description: 'Every moment. Every memory. Print it, keep it.',
+    title: 'Lưu Giữ Khoảnh Khắc',
+    description: 'Mọi khoảnh khắc. Mọi kỷ niệm. In ra, giữ lại.',
     icon: Camera,
     image: captureLifeImg,
     navCategory: 'Mobile Creator',
   },
   {
     id: 5,
-    title: 'Tết Gift Guide',
-    description: 'Thoughtful tech gifts for the ones you love.',
+    title: 'Cẩm Nang Quà Tết',
+    description: 'Món quà công nghệ ý nghĩa cho người bạn yêu thương.',
     icon: Gift,
     image: giftImg,
     // Deliberately null — this lifestyle spans multiple categories, so it
@@ -82,8 +82,8 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
     <section className="py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 text-left md:text-center">
-          <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2">Discovery by Lifestyle</h2>
-          <p className="text-[14px] md:text-base text-neutral-600">Your setup. Your rules. Your vibe.</p>
+          <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2">Khám Phá Theo Phong Cách</h2>
+          <p className="text-[14px] md:text-base text-neutral-600">Không gian của bạn. Quy tắc của bạn. Phong cách của bạn.</p>
         </div>
 
         {/* Tab selector */}
@@ -126,7 +126,7 @@ export function DiscoveryByLifestyle({ onNavToCategory, onNavToProducts, onSelec
             </div>
             <h3 className="text-white text-xl font-bold mb-1">{active.title}</h3>
             <p className="text-white/90 text-sm mb-1">{active.description}</p>
-            <span className="text-white text-sm font-medium group-hover:translate-x-1 transition">Explore all →</span>
+            <span className="text-white text-sm font-medium group-hover:translate-x-1 transition">Khám phá tất cả →</span>
           </div>
         </div>
 

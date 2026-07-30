@@ -3,23 +3,23 @@ import { Zap, Package, Award, MapPin } from 'lucide-react';
 const reasons = [
   {
     icon: Zap,
-    title: 'Early Launches',
-    description: 'Access drops before they hit mainstream retail',
+    title: 'Ra Mắt Sớm',
+    description: 'Trải nghiệm sản phẩm mới trước khi phổ biến trên thị trường',
   },
   {
     icon: Package,
-    title: 'Exclusive Drops',
-    description: "Limited editions you won't find anywhere else",
+    title: 'Hàng Độc Quyền',
+    description: 'Phiên bản giới hạn không tìm thấy ở nơi khác',
   },
   {
     icon: Award,
-    title: 'Curated Picks',
-    description: 'Every product tested by real enthusiasts',
+    title: 'Lựa Chọn Được Kiểm Định',
+    description: 'Mọi sản phẩm đều được người đam mê công nghệ thực tế trải nghiệm',
   },
   {
     icon: MapPin,
-    title: 'Regional Support',
-    description: 'Local warranty, same-day dispatch in SG',
+    title: 'Hỗ Trợ Tại Chỗ',
+    description: 'Bảo hành trong nước, giao hàng nhanh trong ngày',
   },
 ];
 
@@ -28,7 +28,7 @@ export function WhyEnthusiasts() {
     <section className="py-10 bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">Why Enthusiasts Follow OSTSOME</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white">Vì Sao Người Đam Mê Công Nghệ Chọn OSTSOME</h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {reasons.map((reason, index) => {

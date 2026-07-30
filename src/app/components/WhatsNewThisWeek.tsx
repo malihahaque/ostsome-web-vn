@@ -9,9 +9,9 @@ import soundbladeImg from '../../imports/Soundblade BlueAnt.png';
 
 // Trimmed to 3 best sellers per Mals — Shure MV7+ and KEF LSX II LT removed.
 const featured = [
-  { handle: 'micro-thu-am-blink500-b2', label: 'Just Dropped', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
-  { handle: 'satechi-165w-usb-c-4-port-pd-gan-charger', label: 'New Arrival', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
-  { handle: 'loa-soundbar-may-tinh-blueant-soundblade-120w', label: 'Staff Pick', labelIcon: Star, labelColor: 'bg-amber-500' },
+  { handle: 'micro-thu-am-blink500-b2', label: 'Vừa Ra Mắt', labelIcon: Sparkles, labelColor: 'bg-cyan-500' },
+  { handle: 'satechi-165w-usb-c-4-port-pd-gan-charger', label: 'Hàng Mới Về', labelIcon: Zap, labelColor: 'bg-[#F16C10]' },
+  { handle: 'loa-soundbar-may-tinh-blueant-soundblade-120w', label: 'Nhân Viên Chọn', labelIcon: Star, labelColor: 'bg-amber-500' },
 ];
 
 // Maps each featured handle to its premium hero image, falling back to the
@@ -54,8 +54,8 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 flex items-end justify-between">
           <div>
-            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Best Sellers</h2>
-            <p className="text-[14px] md:text-base text-neutral-600">We find it first. You get it first.</p>
+            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Bán Chạy Nhất</h2>
+            <p className="text-[14px] md:text-base text-neutral-600">Chúng tôi tìm trước. Bạn nhận trước.</p>
           </div>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
@@ -79,14 +79,14 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-6 md:mb-10 flex items-end justify-between">
           <div className="text-left md:text-center md:flex-1">
-            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Best Sellers</h2>
-            <p className="text-[14px] md:text-base text-neutral-600">We find it first. You get it first.</p>
+            <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2 uppercase">Bán Chạy Nhất</h2>
+            <p className="text-[14px] md:text-base text-neutral-600">Chúng tôi tìm trước. Bạn nhận trước.</p>
           </div>
           <button
             onClick={onShopAll}
             className="shrink-0 ml-4 text-sm font-semibold text-[#F16C10] hover:text-black transition-colors whitespace-nowrap"
           >
-            Shop All →
+            Xem Tất Cả →
           </button>
         </div>
 
@@ -126,7 +126,7 @@ export function WhatsNewThisWeek({ onShopAll, onSelectProduct }: { onShopAll?: (
                     ) : (
                       <span className="text-base md:text-xl font-bold text-black">{product.price.toLocaleString('vi-VN')}₫</span>
                     )}
-                    <button className="text-[#F16C10] hover:text-black font-medium text-xs md:text-sm transition-colors">View →</button>
+                    <button className="text-[#F16C10] hover:text-black font-medium text-xs md:text-sm transition-colors">Xem →</button>
                   </div>
                 </div>
               </div>

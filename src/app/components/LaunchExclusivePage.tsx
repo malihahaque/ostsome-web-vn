@@ -43,25 +43,25 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
               onClick={onBack}
               className="flex items-center gap-1 text-neutral-400 hover:text-white text-sm font-medium mb-6 transition-colors"
             >
-              <ChevronLeft size={16} /> Back
+              <ChevronLeft size={16} /> Quay lại
             </button>
           )}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-1.5 bg-[#F16C10] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full mb-4">
-                ▶ Launch Exclusive
+                ▶ Ưu Đãi Ra Mắt
               </div>
               <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-3">
-                Be First To Shop.<br />Get The Best.
+                Mua Sớm.<br />Nhận Giá Tốt Nhất.
               </h1>
               <p className="text-neutral-400 text-sm md:text-base max-w-lg">
-                Early Ostsome shoppers get exclusive early bird discounts across 5 brands.
-                Shop early, save more — limited time, while stocks last.
+                Khách hàng mua sớm trên Ostsome được hưởng ưu đãi ra mắt độc quyền trên 5 thương hiệu.
+                Mua sớm, tiết kiệm nhiều hơn — thời gian có hạn, đến khi hết hàng.
               </p>
             </div>
             <div className="text-left md:text-right shrink-0">
-              <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Early Bird Off</div>
-              <div className="text-6xl md:text-7xl font-black text-[#F16C10] leading-none">Up to</div>
+              <div className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Ưu Đãi Sớm</div>
+              <div className="text-6xl md:text-7xl font-black text-[#F16C10] leading-none">Đến</div>
               <div className="text-6xl md:text-7xl font-black text-white leading-none">15%</div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
       {/* Disclaimer */}
       <div className="bg-[#FFF4EC] border-b border-orange-100 py-2 px-4 text-center">
         <p className="text-xs text-[#F16C10] font-medium">
-          ⏱ Launch pricing is for a limited time only. While stocks last. All prices include VAT.
+          ⏱ Giá ưu đãi ra mắt chỉ áp dụng trong thời gian có hạn. Đến khi hết hàng. Đã bao gồm VAT.
         </p>
       </div>
 
@@ -117,19 +117,19 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
                     </div>
                     {isFostMember ? (
                       <>
+                        <span className="text-xs text-neutral-400 line-through block">{deal.srp.toLocaleString('vi-VN')}₫</span>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-base font-black text-[#F16C10]">{getFostPrice(deal.promo).toLocaleString('vi-VN')}₫</span>
-                          <span className="text-xs text-neutral-400 line-through">{deal.promo.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save {(deal.srp - getFostPrice(deal.promo)).toLocaleString('vi-VN')}₫</p>
+                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">Bạn tiết kiệm {(deal.srp - getFostPrice(deal.promo)).toLocaleString('vi-VN')}₫</p>
                       </>
                     ) : (
                       <>
+                        <span className="text-xs text-neutral-400 line-through block">{deal.srp.toLocaleString('vi-VN')}₫</span>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-base font-black text-[#F16C10]">{deal.promo.toLocaleString('vi-VN')}₫</span>
-                          <span className="text-xs text-neutral-400 line-through">{deal.srp.toLocaleString('vi-VN')}₫</span>
                         </div>
-                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">You save {saving}₫</p>
+                        <p className="text-[10px] text-green-600 font-semibold mt-0.5">Bạn tiết kiệm {saving}₫</p>
                       </>
                     )}
                   </div>
@@ -142,16 +142,16 @@ export function LaunchExclusivePage({ onBack, onSelectProduct, onJoinFost }: Pro
 
       {/* FOST footer CTA */}
       <div className="bg-black text-white py-14 text-center px-4">
-        <p className="text-neutral-400 text-xs mb-2 uppercase tracking-widest font-bold">Friends of Ostsome</p>
-        <h2 className="text-2xl md:text-3xl font-black mb-3">FOST Members Get First Dibs</h2>
+        <p className="text-neutral-400 text-xs mb-2 uppercase tracking-widest font-bold">Bạn Bè Của Ostsome</p>
+        <h2 className="text-2xl md:text-3xl font-black mb-3">Thành Viên FOST Được Ưu Tiên</h2>
         <p className="text-neutral-400 text-sm max-w-md mx-auto mb-6">
-          Join FOST for free and be the first to hear about launch deals, event invites, and member-only pricing.
+          Tham gia FOST miễn phí để là người đầu tiên biết về ưu đãi ra mắt, thư mời sự kiện, và giá dành riêng cho thành viên.
         </p>
         <button
           onClick={onJoinFost}
           className="bg-[#F16C10] hover:bg-orange-600 text-white font-black text-sm uppercase tracking-widest px-8 py-3 rounded-full transition-colors"
         >
-          Join FOST — It's Free
+          Tham Gia FOST — Miễn Phí
         </button>
       </div>
     </div>

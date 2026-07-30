@@ -46,7 +46,7 @@ export function BrandDetail({ brand, onBack, onSelectProduct }: BrandDetailProps
             onClick={onBack}
             className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors mb-8"
           >
-            <ChevronLeft size={16} /> All Brands
+            <ChevronLeft size={16} /> Tất Cả Thương Hiệu
           </button>
 
           <div className="flex items-center gap-5">
@@ -62,7 +62,7 @@ export function BrandDetail({ brand, onBack, onSelectProduct }: BrandDetailProps
             )}
             <div>
               <h2 className="text-[26px] md:text-4xl font-bold text-white uppercase mb-1">{brand}</h2>
-              <p className="text-sm text-white/60">{loading ? 'Loading…' : `${brandProducts.length} products`}</p>
+              <p className="text-sm text-white/60">{loading ? 'Đang tải…' : `${brandProducts.length} sản phẩm`}</p>
             </div>
           </div>
 
@@ -88,8 +88,8 @@ export function BrandDetail({ brand, onBack, onSelectProduct }: BrandDetailProps
         ) : (
           <div className="text-center py-24">
             <p className="text-4xl mb-4">📦</p>
-            <p className="text-lg font-semibold text-black mb-2">No products found</p>
-            <p className="text-sm text-neutral-500">Check back soon.</p>
+            <p className="text-lg font-semibold text-black mb-2">Không tìm thấy sản phẩm</p>
+            <p className="text-sm text-neutral-500">Vui lòng quay lại sau.</p>
           </div>
         )}
       </div>

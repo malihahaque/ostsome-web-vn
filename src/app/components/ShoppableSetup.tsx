@@ -42,8 +42,8 @@ const scenes: Scene[] = [
   {
     id: 'work-anywhere',
     image: cafeSetup,
-    navigatorText: 'SET UP ANYWHERE YOU WORK',
-    navigatorTextShort: 'WORK ANYWHERE',
+    navigatorText: 'LÀM VIỆC Ở BẤT CỨ ĐÂU',
+    navigatorTextShort: 'LÀM VIỆC MỌI NƠI',
     products: [
       {
         id: 1,
@@ -78,8 +78,8 @@ const scenes: Scene[] = [
   {
     id: 'recovery-ritual',
     image: yogaSetup,
-    navigatorText: 'YOUR RECOVERY RITUAL, ANYWHERE',
-    navigatorTextShort: 'RECOVERY RITUAL',
+    navigatorText: 'THÓI QUEN PHỤC HỒI, MỌI LÚC MỌI NƠI',
+    navigatorTextShort: 'PHỤC HỒI CƠ THỂ',
     products: [
       {
         id: 5,
@@ -136,8 +136,8 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
     <section className="py-8 md:py-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 mb-4 md:mb-8">
         <div className="text-left md:text-center">
-          <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2">Shop The Setup</h2>
-          <p className="text-[14px] md:text-base text-neutral-600 leading-relaxed md:leading-normal">Tap on the products to see details</p>
+          <h2 className="text-[26px] md:text-4xl font-bold text-black mb-2">Khám Phá Góc Setup</h2>
+          <p className="text-[14px] md:text-base text-neutral-600 leading-relaxed md:leading-normal">Nhấn vào sản phẩm để xem chi tiết</p>
         </div>
       </div>
 
@@ -190,7 +190,7 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
                 >
                   <button
                     className="w-10 h-10 md:w-4 md:h-4 flex items-center justify-center -ml-3 -mt-3 md:m-0 cursor-pointer"
-                    aria-label={`View ${product.name}`}
+                    aria-label={`Xem ${product.name}`}
                   >
                     <span className="w-4 h-4 bg-white rounded-full shadow-lg border-2 border-[#F16C10] hover:scale-125 transition-transform inline-block" />
                   </button>
@@ -217,7 +217,7 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
                           <div className="text-[14px] md:text-sm font-bold text-black mb-1">{product.name}</div>
                           <div className="text-[16px] md:text-lg font-bold text-[#F16C10]">{formatVND(product.price)}</div>
                           {realProduct && (
-                            <div className="text-[11px] font-semibold text-[#F16C10] mt-1">View Product →</div>
+                            <div className="text-[11px] font-semibold text-[#F16C10] mt-1">Xem Sản Phẩm →</div>
                           )}
                           <div className={`absolute bottom-0 translate-y-1/2 rotate-45 w-2 h-2 bg-white border-r border-b border-neutral-200 ${arrowPositionClass}`} />
                         </div>
@@ -243,14 +243,14 @@ export function ShoppableSetup({ onSelectProduct }: { onSelectProduct?: (product
               <button
                 onClick={prevScene}
                 className="w-8 h-8 flex items-center justify-center border border-neutral-200 rounded-full hover:border-[#F16C10] hover:text-[#F16C10] transition-colors bg-white"
-                aria-label="Previous Setup"
+                aria-label="Setup trước"
               >
                 <ChevronLeftIcon />
               </button>
               <button
                 onClick={nextScene}
                 className="w-8 h-8 flex items-center justify-center border border-neutral-200 rounded-full hover:border-[#F16C10] hover:text-[#F16C10] transition-colors bg-white"
-                aria-label="Next Setup"
+                aria-label="Setup tiếp theo"
               >
                 <ChevronRightIcon />
               </button>

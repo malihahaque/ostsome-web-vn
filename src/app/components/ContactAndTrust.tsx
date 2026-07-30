@@ -1,9 +1,9 @@
 import { Truck, CreditCard, ShieldCheck, MapPin, Phone, Mail, Calendar, ExternalLink } from 'lucide-react';
 
 const trustBadges = [
-  { icon: Truck, title: 'GIAO HÀNG\nMIỄN PHÍ', subtitle: 'Free shipping' },
+  { icon: Truck, title: 'GIAO HÀNG\nMIỄN PHÍ', subtitle: 'Miễn phí vận chuyển' },
   { icon: CreditCard, title: 'TRẢ GÓP 0%\nQUA THẺ', subtitle: '(TẠI CỬA HÀNG)' },
-  { icon: ShieldCheck, title: 'HỖ TRỢ\n24/7', subtitle: '24/7 Support' },
+  { icon: ShieldCheck, title: 'HỖ TRỢ\n24/7', subtitle: 'Hỗ trợ 24/7' },
 ];
 
 const contactRows = [
@@ -87,7 +87,7 @@ export function ContactAndTrust() {
               rel="noopener noreferrer"
               className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 bg-white text-[#F16C10] text-xs font-semibold px-3 py-2 rounded-lg shadow-md hover:bg-neutral-50 transition-colors"
             >
-              Open in Maps <ExternalLink size={12} />
+              Xem trên Google Maps <ExternalLink size={12} />
             </a>
             <iframe
               title="OSTSOME Vietnam location"
