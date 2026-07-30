@@ -9,7 +9,6 @@ import { WhatsNewThisWeek } from './components/WhatsNewThisWeek';
 import { ShoppableSetup } from './components/ShoppableSetup';
 import { DiscoveryByLifestyle } from './components/DiscoveryByLifestyle';
 import { OurStory } from './components/OurStory';
-import { FostMembership } from './components/FostMembership';
 import { FostMembershipPage } from './components/FostMembershipPage';
 import { ProductListing } from './components/ProductListing';
 import { ProductDetail } from './components/ProductDetail';
@@ -384,11 +383,6 @@ function AppInner() {
           <FostQuickPerks
             onJoin={() => setAuthModal({ open: true, view: 'signup' })}
             onLogin={() => setAuthModal({ open: true, view: 'login' })}
-          />
-          <FostMembership
-            onJoin={() => setAuthModal({ open: true, view: 'signup' })}
-            onLogin={() => setAuthModal({ open: true, view: 'login' })}
-            onLearnMore={() => goTo({ page: 'fost-membership' })}
           />
           <WhatsNewThisWeek onShopAll={handleNavToProducts} onSelectProduct={handleSelectProduct} />
           <DiscoveryByLifestyle onNavToCategory={handleNavToNavCategory} onNavToProducts={handleNavToProducts} onSelectProduct={handleSelectProduct} />
