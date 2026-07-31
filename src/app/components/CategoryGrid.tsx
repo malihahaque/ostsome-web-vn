@@ -2,6 +2,21 @@ import { Dumbbell, HeartPulse, Volume2, Headphones, Smartphone, Laptop, Mic, Gam
 import { useProducts } from '../hooks/useProducts';
 import { GENERIC_CATEGORIES, mapGenericCategory, type GenericCategoryKey } from '../data/genericCategories';
 import type { Product } from '../data/products';
+import technologyIcon from '../../imports/technology icon.jpeg';
+import facemaskIcon from '../../imports/facemask icon.jpeg';
+import laptopIcon from '../../imports/laptop icon.jpeg';
+import phoneIcon from '../../imports/phone icon.jpeg';
+
+// Fixed brand icons for specific categories, per VN team request — these
+// take priority over the usual "pull a cover photo from the first
+// in-stock product" logic below, since a random product photo doesn't
+// represent these categories as well as a purpose-made icon does.
+const CATEGORY_IMAGE_OVERRIDES: Partial<Record<GenericCategoryKey, string>> = {
+  'phu-kien-di-dong': phoneIcon,
+  'phu-kien-laptop': laptopIcon,
+  'suc-khoe-lam-dep': facemaskIcon,
+  'khac': technologyIcon,
+};
 
 // Only used as a placeholder for the rare case a category has no product
 // image at all — the photo itself is the primary visual now, no badge.
@@ -49,7 +64,7 @@ export function CategoryGrid({ onNavToGenericCategory }: CategoryGridProps) {
     .map(cat => {
       const items = byCategory[cat.key] ?? [];
       const cover = items.find(p => p.availableForSale && p.images[0]) ?? items.find(p => p.images[0]);
-      return { ...cat, count: items.length, coverImage: cover?.images[0] ?? null };
+      return { ...cat, count: items.length, coverImage: CATEGORY_IMAGE_OVERRIDES[cat.key] ?? cover?.images[0] ?? null };
     });
 
   return (
