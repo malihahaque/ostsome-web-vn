@@ -226,7 +226,7 @@ export async function getCart(cartId: string): Promise<{ id: string } | null> {
 
 export async function createCart(discountCodes?: string[], customerAccessToken?: string): Promise<ShopifyCart> {
   const query = `
-    mutation CreateCart($discountCodes: [String!], $buyerIdentity: CartBuyerIdentityInput) {
+    mutation CreateCart($discountCodes: [String!], $buyerIdentity: CartBuyerIdentityInput) @inContext(language: VI) {
       cartCreate(input: { discountCodes: $discountCodes, buyerIdentity: $buyerIdentity }) {
         cart {
           id checkoutUrl totalQuantity
@@ -269,7 +269,7 @@ export async function createCart(discountCodes?: string[], customerAccessToken?:
 
 export async function addToCart(cartId: string, variantId: string, quantity: number): Promise<ShopifyCart> {
   const query = `
-    mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
+    mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) @inContext(language: VI) {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
         cart {
           id checkoutUrl totalQuantity
@@ -304,7 +304,7 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
 
 export async function removeFromCart(cartId: string, lineId: string): Promise<ShopifyCart> {
   const query = `
-    mutation RemoveFromCart($cartId: ID!, $lineIds: [ID!]!) {
+    mutation RemoveFromCart($cartId: ID!, $lineIds: [ID!]!) @inContext(language: VI) {
       cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
         cart {
           id checkoutUrl totalQuantity
@@ -339,7 +339,7 @@ export async function removeFromCart(cartId: string, lineId: string): Promise<Sh
 
 export async function updateCartLine(cartId: string, lineId: string, quantity: number): Promise<ShopifyCart> {
   const query = `
-    mutation UpdateCart($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    mutation UpdateCart($cartId: ID!, $lines: [CartLineUpdateInput!]!) @inContext(language: VI) {
       cartLinesUpdate(cartId: $cartId, lines: $lines) {
         cart {
           id checkoutUrl totalQuantity
