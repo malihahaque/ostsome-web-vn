@@ -184,6 +184,7 @@ export function mapShopifyProduct(p: ShopifyProduct): Product {
     price: parseFloat(firstVariant?.price.amount ?? '0'),
     comparePrice,
     images: p.images.edges.map(e => e.node.url),
+    collections: p.collections.edges.map(e => e.node.title),
     bodyHtml: p.descriptionHtml,
     availableForSale,
     metafields: mapMetafields(p.metafields),

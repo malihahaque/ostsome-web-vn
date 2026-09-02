@@ -131,7 +131,27 @@ const VENDOR_OVERRIDES: Record<string, GenericCategoryKey> = {
 // blank-Type product — if the category keyword isn't in the title either,
 // there's genuinely nothing here to match on, and the real fix for those
 // is filling in the Type field in Shopify Admin, not another keyword.
-export function mapGenericCategory(productType: string, title?: string, vendor?: string): GenericCategoryKey {
+//
+// `collections` (titles of every Shopify collection the product belongs
+// to) is checked FIRST when available, ahead of the productType/title
+// keywords — collections are manually curated by the merchandising team,
+// so they're a much more reliable signal than freeform "Loại sản phẩm"
+// text or guessing off the title. The keyword matching below only kicks
+// in as a fallback for products with no collection that matches any of
+// these categories (or with no collections at all).
+export function mapGenericCategory(
+  productType: string,
+  title?: string,
+  vendor?: string,
+  collections?: string[]
+): GenericCategoryKey {
+  if (collections && collections.length > 0) {
+    const collectionText = collections.join(' ').toLowerCase();
+    for (const rule of RULES) {
+      if (rule.keywords.some(k => collectionText.includes(k))) return rule.key;
+    }
+  }
+
   const vendorOverride = VENDOR_OVERRIDES[(vendor ?? '').toLowerCase()];
   if (vendorOverride) return vendorOverride;
 

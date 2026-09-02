@@ -23,11 +23,7 @@ export type Product = {
   images: string[];
   bodyHtml: string;
   availableForSale: boolean;
-  // Optional: the large static `products` array below predates this field
-  // and isn't updated to include it — this file is a legacy/fallback data
-  // set, not what the live site actually renders (that comes from Shopify
-  // via useProducts.ts). Made optional rather than touching all ~9700
-  // lines of static entries below just to satisfy the type.
+  collections?: string[];        // ← add this line
   metafields?: ProductMetafields;
 };
 
