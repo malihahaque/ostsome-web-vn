@@ -23,18 +23,17 @@ const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
 const footerLinkColumns = [
   {
     heading: 'Về công ty',
-    links: ['Giới thiệu công ty', 'Tuyển dụng', 'Gửi góp ý, khiếu nại'],
+    links: [
+      { label: 'Giới thiệu công ty', href: '/gioi-thieu-cong-ty' },
+      { label: 'Gửi góp ý, khiếu nại', href: '#' },
+    ],
   },
   {
     heading: 'Thông tin khác',
     links: [
-      'Lịch sử mua hàng',
-      'Chính sách bảo hành',
-      'Chính sách đổi trả',
-      'Quy định xuất hóa đơn điện tử',
-      'Liên hệ hợp tác bán hàng',
-      'Mạng xã hội OSTSOME Website',
-      'Chính sách thanh toán',
+      { label: 'Chính sách bảo hành', href: '#' },
+      { label: 'Chính sách đổi trả', href: '#' },
+      { label: 'Liên hệ hợp tác bán hàng', href: '#' },
     ],
   },
 ];
@@ -106,10 +105,10 @@ export function ContactAndTrust() {
               <div key={col.heading}>
                 <h4 className="text-sm font-bold text-black mb-3">{col.heading}</h4>
                 <ul className="flex flex-col gap-2">
-                  {col.links.map(label => (
-                    <li key={label}>
-                      <a href="#" className="text-sm text-neutral-500 hover:text-[#F16C10] transition-colors">
-                        {label}
+                  {col.links.map(link => (
+                    <li key={link.label}>
+                      <a href={link.href} className="text-sm text-neutral-500 hover:text-[#F16C10] transition-colors">
+                        {link.label}
                       </a>
                     </li>
                   ))}

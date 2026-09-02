@@ -30,12 +30,13 @@ import { FostQuickPerks } from './components/FostQuickPerks';
 import { ContactAndTrust } from './components/ContactAndTrust';
 import { FlashSaleSection } from './components/FlashSaleSection';
 import { FlashSalePage } from './components/FlashSalePage';
+import { AboutCompanyPage } from './components/AboutCompanyPage';
 import type { Tab as AccountTab } from './components/AccountPage';
 import { useProducts } from './hooks/useProducts';
 import type { Product } from './data/products';
 import type { GenericCategoryKey } from './data/genericCategories';
 
-type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'flash-sale' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership';
+type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'flash-sale' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership' | 'about-company';
 
 // Everything needed to fully restore a screen — this is what gets stored in
 // browser history so the back/forward buttons can actually move between
@@ -78,6 +79,8 @@ function buildUrl(state: NavState): string {
       return '/clearance';
     case 'fost-membership':
       return '/fost';
+    case 'about-company':
+      return '/gioi-thieu-cong-ty';
     case 'checkout':
       return '/checkout';
     case 'home':
@@ -272,6 +275,8 @@ function AppInner() {
       goTo({ page: 'one-season-off' }, { replace: true, scroll: false });
     } else if (path === '/fost') {
       goTo({ page: 'fost-membership' }, { replace: true, scroll: false });
+    } else if (path === '/gioi-thieu-cong-ty') {
+      goTo({ page: 'about-company' }, { replace: true, scroll: false });
     } else if (path === '/flash-sale') {
       goTo({ page: 'flash-sale' }, { replace: true, scroll: false });
     } else if (window.location.hash !== '#admin') {
@@ -477,6 +482,10 @@ function AppInner() {
           onJoin={() => setAuthModal({ open: true, view: 'signup' })}
           onLogin={() => setAuthModal({ open: true, view: 'login' })}
         />
+      )}
+
+      {page === 'about-company' && (
+        <AboutCompanyPage onBack={() => goTo({ page: 'home' })} />
       )}
 
       {page === 'account' && (
