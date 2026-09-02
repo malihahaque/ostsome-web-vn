@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ShoppingCart, Star, Shield, Truck, RefreshCw, Check, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ShoppingCart, Star, Shield, Truck, RefreshCw, Check, X, ZoomIn } from 'lucide-react';
 import type { Product } from '../data/products';
 import { useCart } from './CartContext';
 import { useAuth } from './AuthContext';
@@ -51,6 +51,10 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
   const [shopifyVariantNodes, setShopifyVariantNodes] = useState<ShopifyProduct['variants']['edges'][number]['node'][]>([]);
   const [variantsLoaded, setVariantsLoaded] = useState(false);
   const [stockWarning, setStockWarning] = useState<{ requested: number; available: number; intent: 'cart' | 'checkout' } | null>(null);
+  // Full-screen image lightbox, opened by clicking the main product photo —
+  // reuses activeImg/allImages so the lightbox and the inline gallery always
+  // stay in sync (advancing one advances the other).
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   // Show lucky draw popup if arrived via QR (URL contains /products/)
   useEffect(() => {
@@ -160,6 +164,22 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
   // the fetch resolves, we treat everything as available to avoid a flash
   // of grey swatches on first paint.
   const SWIPE_THRESHOLD_PX = 40;
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setLightboxOpen(false);
+      else if (e.key === 'ArrowLeft') setActiveImg((i) => (i - 1 + allImages.length) % allImages.length);
+      else if (e.key === 'ArrowRight') setActiveImg((i) => (i + 1) % allImages.length);
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [lightboxOpen, allImages.length]);
 
   function handleGalleryTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
@@ -580,6 +600,78 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
         </div>
       )}
 
+      {/* Full-size image lightbox — opened by clicking the main product
+          photo. Shares activeImg/allImages with the inline gallery so
+          navigating here (arrows, thumbnails, swipe) stays in sync with
+          the small gallery underneath once closed. */}
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition z-10"
+            aria-label="Đóng"
+          >
+            <X size={20} />
+          </button>
+
+          <div
+            className="relative w-full h-full flex flex-col items-center justify-center px-4 py-16 touch-pan-y"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleGalleryTouchStart}
+            onTouchMove={handleGalleryTouchMove}
+            onTouchEnd={handleGalleryTouchEnd}
+          >
+            <img
+              src={allImages[activeImg] ?? product.images[0]}
+              alt={product.title}
+              className="max-w-full max-h-full object-contain select-none"
+              onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200&q=80'; }}
+            />
+
+            {allImages.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setActiveImg((i) => (i - 1 + allImages.length) % allImages.length); }}
+                  className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition"
+                  aria-label="Ảnh trước"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setActiveImg((i) => (i + 1) % allImages.length); }}
+                  className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition"
+                  aria-label="Ảnh tiếp theo"
+                >
+                  <ChevronRight size={22} />
+                </button>
+
+                <div className="absolute bottom-4 inset-x-0 flex items-center justify-center gap-2 px-4">
+                  <div className="flex gap-2 overflow-x-auto max-w-full pb-1">
+                    {allImages.map((img, i) => (
+                      <button
+                        key={i}
+                        onClick={(e) => { e.stopPropagation(); setActiveImg(i); }}
+                        className={`shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 transition-all ${i === activeImg ? 'border-[#F16C10]' : 'border-white/30 hover:border-white/60'}`}
+                      >
+                        <img
+                          src={img}
+                          alt={`View ${i + 1}`}
+                          className="w-full h-full object-contain bg-white p-1"
+                          onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&q=80'; }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4 pb-24 lg:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
 
@@ -592,12 +684,22 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
               onTouchMove={handleGalleryTouchMove}
               onTouchEnd={handleGalleryTouchEnd}
             >
-              <img
-                src={allImages[activeImg] ?? product.images[0]}
-                alt={product.title}
-                className="w-full h-full object-contain p-8 transition-opacity duration-300"
-                onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80'; }}
-              />
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                className="w-full h-full cursor-zoom-in"
+                aria-label="Xem ảnh cỡ lớn"
+              >
+                <img
+                  src={allImages[activeImg] ?? product.images[0]}
+                  alt={product.title}
+                  className="w-full h-full object-contain p-8 transition-opacity duration-300"
+                  onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80'; }}
+                />
+              </button>
+              <div className="absolute bottom-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center text-black shadow opacity-100 md:opacity-0 md:group-hover:opacity-100 transition pointer-events-none">
+                <ZoomIn size={15} />
+              </div>
               {allImages.length > 1 && (
                 <>
                   <button
