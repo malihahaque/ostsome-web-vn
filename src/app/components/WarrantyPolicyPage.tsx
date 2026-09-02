@@ -67,9 +67,7 @@ export function WarrantyPolicyPage({ onBack }: WarrantyPolicyPageProps) {
           <div className="flex flex-col gap-4 text-sm md:text-base text-neutral-600 leading-relaxed">
             <p>
               Các sản phẩm được bán trực tiếp bởi OSTSOME VIỆT NAM có thời hạn bảo hành căn cứ
-              theo thông báo trên Website: OSTSOME.COM.VN. Đây là thời gian bảo hành cho thân
-              máy, các phụ kiện đi kèm như: Nguồn, pin, cáp sạc,… có thời gian bảo hành bằng một
-              nửa thời gian bảo hành cho thân máy.
+              theo thông báo trên Website: OSTSOME.COM.VN. 
             </p>
             <NoteBox>
               Thời hạn bảo hành sản phẩm không được làm mới khi sửa chữa hoặc bảo hành tại

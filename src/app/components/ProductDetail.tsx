@@ -997,7 +997,7 @@ export function ProductDetail({ product, onBack, onCheckout, onSelectProduct }: 
             <div className="grid grid-cols-3 gap-3 mb-8">
               {[
                 { icon: Truck, label: 'Miễn phí giao hàng', sub: 'Đơn từ 2.000.000₫' },
-                { icon: Shield, label: 'Bảo hành chính hãng', sub: '1 NĂM' },
+                { icon: Shield, label: 'Bảo hành chính hãng', sub: '' },
                 { icon: RefreshCw, label: 'Trả hàng miễn phí', sub: '10 ngày' },
               ].map(({ icon: Icon, label, sub }) => (
                 <div key={label} className="flex flex-col items-center text-center p-3 bg-neutral-50 rounded-xl">

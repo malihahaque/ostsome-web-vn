@@ -2,14 +2,14 @@ import { Truck, CreditCard, ShieldCheck, MapPin, Phone, Mail, Calendar, External
 
 const trustBadges = [
   { icon: Truck, title: 'GIAO HÀNG\nMIỄN PHÍ', subtitle: 'Miễn phí vận chuyển' },
-  { icon: CreditCard, title: 'TRẢ GÓP 0%\nQUA THẺ', subtitle: '(TẠI CỬA HÀNG)' },
+  { icon: CreditCard, title: 'BẢO HÀNH CHÍNH HÃNG', subtitle: ''},
   { icon: ShieldCheck, title: 'HỖ TRỢ\n24/7', subtitle: 'Hỗ trợ 24/7' },
 ];
 
 const contactRows = [
   { icon: MapPin, text: 'Tầng Trệt, Tháp D00.04 -00.05, Chung cư Sadora, 2 Số 13, An Khánh, Hồ Chí Minh' },
   { icon: Phone, text: '028 66765010' },
-  { icon: Mail, text: 'support@streamcastasia-vn.com' },
+  { icon: Mail, text: 'cs@ostsome.com.vn' },
   { icon: Calendar, text: 'Thứ Hai đến Thứ Sáu: 9h-18h\nThứ Bảy, Chủ nhật & Ngày lễ nghỉ.' },
 ];
 
