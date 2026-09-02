@@ -410,7 +410,7 @@ export async function customerRegister(input: {
   email: string;
   password: string;
   phone?: string;
-}): Promise<{ success: boolean; errors: string[] }> {
+}): Promise<{ success: boolean; errors: string[]; customerId: string | null }> {
   const query = `
     mutation CustomerRegister($input: CustomerCreateInput!) {
       customerCreate(input: $input) {
@@ -429,9 +429,13 @@ export async function customerRegister(input: {
 
   const result = data.customerCreate;
   if (result.customerUserErrors.length > 0) {
-    return { success: false, errors: result.customerUserErrors.map(e => e.message) };
+    return { success: false, errors: result.customerUserErrors.map(e => e.message), customerId: null };
   }
-  return { success: true, errors: [] };
+  // Storefront and Admin APIs share the same global ID scheme for Customer,
+  // so this id (e.g. "gid://shopify/Customer/1234567890") is exactly what
+  // the Admin API's customerUpdate mutation expects — no separate lookup
+  // needed to go tag this customer server-side.
+  return { success: true, errors: [], customerId: result.customer?.id ?? null };
 }
 
 export async function customerResetPassword(email: string): Promise<boolean> {

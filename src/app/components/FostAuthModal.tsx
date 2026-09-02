@@ -257,6 +257,24 @@ function SignupView({ onLogin, onSuccess }: {
         setLoading(false);
         return;
       }
+      // Tag this new customer as a FOST member in Shopify Admin, so the
+      // FOST discount's customer-segment eligibility (segment: tag =
+      // 'fost-member') actually includes them. This calls a Netlify
+      // function rather than the Admin API directly, since Admin tokens
+      // must never be exposed client-side. Fire-and-forget on purpose —
+      // every registered account IS a FOST member regardless of whether
+      // this tag call succeeds, so a flaky network call here shouldn't
+      // block or fail the signup itself. If it does fail, the account
+      // still exists and can be tagged manually or backfilled later.
+      if (result.customerId) {
+        fetch('/.netlify/functions/tag-fost-member', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customerId: result.customerId }),
+        }).catch(err => {
+          console.error('Failed to tag new customer as FOST member:', err);
+        });
+      }
       // Auto-login after registration
       const tokenResult = await customerLogin(form.email, form.password);
       if (tokenResult) {
