@@ -408,6 +408,7 @@ function AppInner() {
           product={selectedProduct}
           onBack={handleBackFromProduct}
           onCheckout={handleGoToCheckout}
+          onSelectProduct={handleSelectProduct}
         />
       )}
 
