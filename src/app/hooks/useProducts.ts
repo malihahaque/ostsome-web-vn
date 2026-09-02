@@ -24,6 +24,33 @@ function mapCategory(productType: string): string {
   return 'Smart Life';
 }
 
+// Words that mark a collection as a brand landing page rather than an
+// actual product category (e.g. "Satechi Home Page") — these get skipped
+// even though they're real Shopify collections, since showing one next to
+// the vendor name (which already displays "Satechi") is redundant.
+const BRAND_LANDING_COLLECTION_MARKERS = ['home page', 'trang chủ', 'trang chu'];
+
+// Picks the category pill shown next to the vendor name on the product
+// page from the product's REAL Shopify collections, rather than guessing
+// from productType. Skips any collection that's just the vendor's name or
+// a brand landing page — those aren't useful as a "category" label since
+// the vendor is already shown right next to this pill. Falls back to the
+// productType heuristic only if the product has no other usable collection
+// (e.g. it's only in a single vendor-only collection, or has none at all).
+function pickCategory(p: ShopifyProduct): string {
+  const vendorLower = p.vendor.trim().toLowerCase();
+  const candidate = p.collections.edges
+    .map(e => e.node.title)
+    .find(title => {
+      const t = title.trim().toLowerCase();
+      if (t === vendorLower) return false;
+      if (BRAND_LANDING_COLLECTION_MARKERS.some(marker => t.includes(marker))) return false;
+      return true;
+    });
+
+  return candidate ?? mapCategory(p.productType);
+}
+
 function mapNavCategory(vendor: string, productType: string): string {
   const v = vendor.toLowerCase();
   const t = productType.toLowerCase();
@@ -152,7 +179,7 @@ export function mapShopifyProduct(p: ShopifyProduct): Product {
     title: p.title,
     vendor: p.vendor,
     type: p.productType,
-    category: mapCategory(p.productType),
+    category: pickCategory(p),
     navCategory: mapNavCategory(p.vendor, p.productType),
     price: parseFloat(firstVariant?.price.amount ?? '0'),
     comparePrice,
