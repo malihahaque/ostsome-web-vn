@@ -25,15 +25,15 @@ const footerLinkColumns = [
     heading: 'Về công ty',
     links: [
       { label: 'Giới thiệu công ty', href: '/gioi-thieu-cong-ty' },
-      { label: 'Gửi góp ý, khiếu nại', href: '#' },
+      { label: 'Gửi góp ý, khiếu nại', href: '/gop-y-khieu-nai' },
     ],
   },
   {
     heading: 'Thông tin khác',
     links: [
-      { label: 'Chính sách bảo hành', href: '#' },
-      { label: 'Chính sách đổi trả', href: '#' },
-      { label: 'Liên hệ hợp tác bán hàng', href: '#' },
+      { label: 'Chính sách bảo hành', href: '/chinh-sach-bao-hanh' },
+      { label: 'Chính sách đổi trả', href: '/chinh-sach-doi-tra' },
+      { label: 'Liên hệ hợp tác bán hàng', href: '/lien-he-hop-tac-ban-hang' },
     ],
   },
 ];

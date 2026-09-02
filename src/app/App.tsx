@@ -31,12 +31,16 @@ import { ContactAndTrust } from './components/ContactAndTrust';
 import { FlashSaleSection } from './components/FlashSaleSection';
 import { FlashSalePage } from './components/FlashSalePage';
 import { AboutCompanyPage } from './components/AboutCompanyPage';
+import { FeedbackComplaintsPage } from './components/FeedbackComplaintsPage';
+import { WarrantyPolicyPage } from './components/WarrantyPolicyPage';
+import { ReturnsExchangePolicyPage } from './components/ReturnsExchangePolicyPage';
+import { PartnershipPage } from './components/PartnershipPage';
 import type { Tab as AccountTab } from './components/AccountPage';
 import { useProducts } from './hooks/useProducts';
 import type { Product } from './data/products';
 import type { GenericCategoryKey } from './data/genericCategories';
 
-type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'flash-sale' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership' | 'about-company';
+type Page = 'home' | 'products' | 'product-detail' | 'brands' | 'brand-detail' | 'nav-category' | 'generic-category' | 'flash-sale' | 'checkout' | 'account' | 'admin' | 'launch-exclusive' | 'one-season-off' | 'fost-membership' | 'about-company' | 'feedback-complaints' | 'warranty-policy' | 'returns-exchange-policy' | 'partnership';
 
 // Everything needed to fully restore a screen — this is what gets stored in
 // browser history so the back/forward buttons can actually move between
@@ -81,6 +85,14 @@ function buildUrl(state: NavState): string {
       return '/fost';
     case 'about-company':
       return '/gioi-thieu-cong-ty';
+    case 'feedback-complaints':
+      return '/gop-y-khieu-nai';
+    case 'warranty-policy':
+      return '/chinh-sach-bao-hanh';
+    case 'returns-exchange-policy':
+      return '/chinh-sach-doi-tra';
+    case 'partnership':
+      return '/lien-he-hop-tac-ban-hang';
     case 'checkout':
       return '/checkout';
     case 'home':
@@ -277,6 +289,14 @@ function AppInner() {
       goTo({ page: 'fost-membership' }, { replace: true, scroll: false });
     } else if (path === '/gioi-thieu-cong-ty') {
       goTo({ page: 'about-company' }, { replace: true, scroll: false });
+    } else if (path === '/gop-y-khieu-nai') {
+      goTo({ page: 'feedback-complaints' }, { replace: true, scroll: false });
+    } else if (path === '/chinh-sach-bao-hanh') {
+      goTo({ page: 'warranty-policy' }, { replace: true, scroll: false });
+    } else if (path === '/chinh-sach-doi-tra') {
+      goTo({ page: 'returns-exchange-policy' }, { replace: true, scroll: false });
+    } else if (path === '/lien-he-hop-tac-ban-hang') {
+      goTo({ page: 'partnership' }, { replace: true, scroll: false });
     } else if (path === '/flash-sale') {
       goTo({ page: 'flash-sale' }, { replace: true, scroll: false });
     } else if (window.location.hash !== '#admin') {
@@ -486,6 +506,22 @@ function AppInner() {
 
       {page === 'about-company' && (
         <AboutCompanyPage onBack={() => goTo({ page: 'home' })} />
+      )}
+
+      {page === 'feedback-complaints' && (
+        <FeedbackComplaintsPage onBack={() => goTo({ page: 'home' })} />
+      )}
+
+      {page === 'warranty-policy' && (
+        <WarrantyPolicyPage onBack={() => goTo({ page: 'home' })} />
+      )}
+
+      {page === 'returns-exchange-policy' && (
+        <ReturnsExchangePolicyPage onBack={() => goTo({ page: 'home' })} />
+      )}
+
+      {page === 'partnership' && (
+        <PartnershipPage onBack={() => goTo({ page: 'home' })} />
       )}
 
       {page === 'account' && (
